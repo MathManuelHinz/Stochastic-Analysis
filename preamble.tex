@@ -1,0 +1,260 @@
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,footskip=0.25in]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{ dsfont }
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{adjustbox}
+\usepackage{mathrsfs}
+\usepackage[chapter]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{marginnote}
+\usepackage{xhfill}
+\usepackage{mparhack}
+\usepackage{pagecolor}
+
+\definecolor{mygray}{RGB}{239,240,241}
+\definecolor{mycolor}{RGB}{146,0,88}
+\usetikzlibrary{babel}
+\usetikzlibrary{cd}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+
+\geometry{
+	left=10mm, % left margin
+	textwidth=150mm, % main text block
+	marginparsep=5mm, % gutter between main text block and margin notes
+	marginparwidth=40mm, % width of margin notes
+  bmargin=2cm % height of foot note space
+}
+\graphicspath{ {./figures/} }
+
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+
+\newlength\FHoffset
+\setlength\FHoffset{1cm}
+
+\addtolength\headwidth{2\FHoffset}
+
+\fancyheadoffset{\FHoffset}
+
+% these lengths will control the headrule trimming to the left and right 
+\newlength\FHleft
+\newlength\FHright
+
+% here the trimmings are controlled by the user
+\setlength\FHleft{1cm}
+\setlength\FHright{-3.25cm}
+
+% The new definition of headrule that will take into acount the trimming(s)
+\newbox\FHline
+\setbox\FHline=\hbox{\hsize=\paperwidth%
+  \hspace*{\FHleft}%
+  \rule{\dimexpr\headwidth-\FHleft-\FHright\relax}{\headrulewidth}\hspace*{\FHright}%
+}
+\renewcommand\headrule{\vskip-.7\baselineskip\copy\FHline}
+
+\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
+\fancyhead[R]{}
+\fancyhead[L]{}
+\fancyhead[C]{\hspace{3.25cm}\chaptername\ \thechapter\ --\ \leftmark}
+\fancyfoot[L]{Page \thepage \hspace{1pt} of \pageref{LastPage}}
+\fancyfoot[C]{}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[L]{Page \thepage \hspace{1pt} of \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\def\C{\mathbb{C}}
+\def\R{\mathbb{R}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\Z{\mathbb{Z}}
+\def\cA{\mathcal{A}}
+\def\cM{\mathcal{M}}
+\def\cE{\mathcal{E}}
+\def\cF{\mathcal{F}}
+\def\cS{\mathcal{S}}
+\def\Mloc{\mathcal{M}_{\text{loc}}}
+\def\as{\text{ a.s. }}
+\def\cov{\text{Cov}}
+
+
+
+\newtheorem{theorem}[algorithm]{Theorem}
+\newtheorem{corollary}[algorithm]{Corollary}
+\newtheorem{lemma}[algorithm]{Lemma}
+\newtheorem{proposition}[algorithm]{Proposition}
+\newtheorem{definition}[algorithm]{Definition}
+\newtheorem*{*definition}{Definition}
+\newtheorem*{remark}{Remark}
+\newtheorem*{aremark}{Added remark}
+\newtheorem{example}[algorithm]{Example}
+\newtheorem*{adefinition}{Added definition}
+\newtheorem*{aexample}{Added example}
+\raggedright
+
+
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+
+\newcommand{\beginlecture}[2]{\noindent\xrfill[0.7ex]{1pt}Start of lecture #1 (#2)\xrfill[0.7ex]{1pt}\newline}
+\newcommand{\includeproblem}[2]{
+\begin{tcolorbox}[enhanced,breakable,
+	title=Problem #1]
+	\input{#2}
+\end{tcolorbox}}
+\newcommand{\includesolution}[2]{
+\begin{tcolorbox}[enhanced,breakable,
+	title=Solution #1]
+	\input{#2}
+\end{tcolorbox}}
+
+\tcolorboxenvironment{corollary}{
+  colback=blue!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{theorem}{
+  colback=blue!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{lemma}{
+  colback=blue!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{proposition}{
+  colback=blue!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{*definition}{
+  colback=blue!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{remark}{
+  colback=red!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{aremark}{
+  colback=red!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{example}{
+  colback=red!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{adefinition}{
+  colback=blue!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{aexample}{
+  colback=red!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{definition}{
+  colback=green!5!white,
+  boxrule=0pt,
+  boxsep=1pt,
+  left=0pt,right=0pt,top=2pt,bottom=2pt,
+  oversize=2pt,
+  sharp corners,
+  before skip=\topsep,
+  after skip=\topsep,
+}
+
+\tcolorboxenvironment{algorithm}{
+  colback=mygray,
+  boxrule=0pt,
+  boxsep=1pt,
+  oversize=2pt,
+  left=0pt,right=0pt,top=-12pt,bottom=0pt,
+  sharp corners,
+}
