@@ -64,7 +64,7 @@
   \hspace*{\FHleft}%
   \rule{\dimexpr\headwidth-\FHleft-\FHright\relax}{\headrulewidth}\hspace*{\FHright}%
 }
-\renewcommand\headrule{\vskip-.7\baselineskip\copy\FHline}
+\renewcommand\headrule{\color{mycolor}\vskip-.7\baselineskip\copy\FHline}
 
 \renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
 \fancyhead[R]{}
@@ -113,7 +113,8 @@
 \hypersetup{
     colorlinks=true, %set true if you want colored links
     linktoc=all,     %set to all if you want both sections and subsections linked
-    linkcolor=blue,  %choose some color if you want links to stand out
+    linkcolor=mycolor,  %choose some color if you want links to stand out
+    linkbordercolor=mycolor
 }
 
 
