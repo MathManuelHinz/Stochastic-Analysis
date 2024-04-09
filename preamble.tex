@@ -105,7 +105,8 @@
 \def\as{\text{ a.s. }}
 \def\cov{\text{Cov}}
 
-
+\counterwithout*{equation}{equation}
+\renewcommand{\theequation}{\arabic{equation}}
 
 \newtheorem{theorem}[algorithm]{Theorem}
 \newtheorem{corollary}[algorithm]{Corollary}
@@ -149,8 +150,10 @@
 \renewcommand{\cftsubsecleader}{\color{mycolor} \cftdotfill{\cftsecdotsep}}
 \renewcommand{\cftsubsubsecleader}{\color{mycolor} \cftdotfill{\cftsecdotsep}}
 
+\newcommand{\beginlecture}[2]{\marginnote{Start of lecture #1 (#2)}}
+\newcommand{\dhighlight}[1]{{\color{mycolor}{\underline{{\textbf{#1}}}}}}
+\newcommand{\highlight}[1]{{\color{mycolor}{\textbf{#1}}}}
 
-\newcommand{\beginlecture}[2]{\noindent\xrfill[0.7ex]{1pt}Start of lecture #1 (#2)\xrfill[0.7ex]{1pt}\newline}
 \newcommand{\includeproblem}[2]{
 \begin{tcolorbox}[enhanced,breakable,
 	title=Problem #1,frame style={color=mycolor}]
@@ -161,6 +164,12 @@
 	title=Solution #1,frame style={color=mycolor}]
 	\input{#2}
 \end{tcolorbox}}
+
+\renewcommand{\labelitemi}{$\textcolor{mycolor}{\bullet}$}
+\renewcommand{\labelitemii}{$\textcolor{mycolor}{\cdot}$}
+\renewcommand{\labelitemiii}{$\textcolor{mycolor}{\diamond}$}
+\renewcommand{\labelitemiv}{$\textcolor{mycolor}{\ast}$}
+
 
 \tcolorboxenvironment{corollary}{
   colback=blue!5!white,
