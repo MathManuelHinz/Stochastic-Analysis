@@ -446,8 +446,8 @@ $T_t\coloneqq \inf\{s\geq 0\mid \langle Y\rangle_s \geq t\}$
 \[\implies T_{A_t}=\inf\{s\geq 0\mid \langle Y\rangle_s\geq \langle Y\rangle_t\}=t\]
 
 \begin{align*}
-    1&=\frac{d}{dt}\left(T_{A_t}\right)=T_{\underbrace{A_t}_=u}'\cdot A_t\\
-    \implies \underbrace{T_u}_{=\frac{dT_u}{du}}'&=\frac{1}{A_{T_u}'} \implies T_u = \int_0^u \frac{1}{\sigma(Y_{T_s})^2}ds=\int_0^u \frac{1}{\sigma(W_s)^2}ds
+    1&=\frac{d}{dt}\left(T_{A_t}\right)=T_{\underbrace{A_t}_{=u}}'\cdot A_t\\
+    \implies \underbrace{T_u'}_{=\frac{dT_u}{du}}&=\frac{1}{A_{T_u}'} \implies T_u = \int_0^u \frac{1}{\sigma(Y_{T_s})^2}ds=\int_0^u \frac{1}{\sigma(W_s)^2}ds
 \end{align*}
 
 $\implies$ to construct a solution of $(\star\star)$: Given $W$ $\longrightarrow$ compute $T_u$ $\longrightarrow$ determine $A-t=T_t^{-1}\implies Y_t=W_{A_t}$
