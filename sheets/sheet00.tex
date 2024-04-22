@@ -1,0 +1,74 @@
+{\huge\dhighlight{Sheet 0:}}
+\begin{itemize}
+    \item Mail: Alexander.Becker@uni-bonn.de
+    \item Exercise sheet handed in Fr 10 am via eCampus
+    \item Groups of 3
+\end{itemize}
+
+Motivation:
+
+in the last semester: Introduction to stochastic analysis
+\begin{itemize}
+    \item Diffusion processes \& SDEs
+\end{itemize}
+Here: Deepen the knowledge \& have fun
+\begin{itemize}
+    \item Learn SDE techniques and get other results
+    \item Modify diffusion processes to behave in a certain way
+    \item Ex. diffusion bridge (Brownian bridge)
+    \item Condition a diffusion to stay in a domain\begin{itemize}
+        \item Ex. Condition BM to stay positive
+        \item Old SDE: $dB_t=dB_t$
+        \item New SDE: $dX_t = \frac{1}{X_t}dx+dB_t\to P(X_t\in\cdot)=P(B_t\in\cdot|B>0\text{ forever})$
+        \item $D\subset\R^d$ open domain, $X$ diffusion process, with generator $L=\Sigma b\partial_i+\frac{1}{2}\sum a^{ij}\partial_i\partial_j$ \[Y\coloneq( X|X\in D\text{ forever})\] get drift term $\nabla \log\phi_0$, where $\phi_0$ is the lowest eigenfuncion of $-L$ on $D$ with dirichlet boundary.
+    \end{itemize}
+\end{itemize}
+
+\dhighlight{Recap:}
+
+Brownian motion:
+
+\begin{adefinition}
+    $B_0=0$, independent \& $\mathcal{N}(0,t_i-t_{i-1})$ increments, $t\mapsto B_t(\omega)$ continuous.
+\end{adefinition}
+
+Regularity of path $t\mapsto B_t(\omega)$:
+\begin{itemize}
+    \item nowhere differentiable 
+    \item $\alpha-$locally Hölder continuous $\iff \alpha<\frac{1}{2}$
+    \item Quadratic variation $\langle B\rangle_t=t$
+    \item Generator $\frac{\Delta}{2}$
+    \item Recurrent $\iff ds2$?
+\end{itemize}
+
+Itô-Integral:
+
+\begin{enumerate}
+    \item If $X$ simple process $\implies$ RS-Integral
+    \item Itô isometry $\mathcal{E}\to\{L^2-\text{local martingale}\},\cE\subset L^2(d[M])$ dense
+    \item general $X:$ $\int XdM$ as $L^2$-limit
+\end{enumerate}
+\begin{aremark}[Itô formula]
+    \begin{itemize}
+        \item \[df(t,X_t)=\partial_t f(t,X_t)dt+\partial_xf(t,X_t)dX_t+\frac{1}{2}f(t,X_t)d\langle X\rangle_t\]
+        \item associative $\int Xd(\int Y dZ)=\int XYdZ$
+        \item If $M$ local martingale $\implies \int XdM$ local martingale
+    \end{itemize}
+\end{aremark}
+
+SDEs:
+
+$DX_t=b(t,X_t)dt+\sigma(t,X_t)dB_t$
+
+\begin{itemize}
+    \item ex./ uniqueness: $b,\sigma$ locally Lipschitz $\implies$ strong ex.+pathwise uniqueness until explosion time
+    \item globally Lipschitz (in space) and linear growth ($|b(t,x)|+|\sigma(t,x)|\leq C(1+|x|)$), $e=\infty$.
+\end{itemize}
+
+\includeproblem{00.1: SDE}{problems/00_1}
+\includesolution{00.1}{solutions/00_1}
+\includeproblem{00.2: Time change}{problems/00_2}
+\includesolution{00.2}{solutions/00_2}
+\includeproblem{00.3: SDE and PDE}{problems/00_3}
+\includesolution{00.3}{solutions/00_3}
+

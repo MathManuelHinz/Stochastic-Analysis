@@ -1,0 +1,32 @@
+\underline{1.:}
+\begin{align*}
+    dM_s&=du(t-s,X_s)\\
+    &=-\partial_s u(t-s,X_s)ds+\partial_x u(t-s,X_s) \underbrace{dX_s}_{b(X_s)ds+\sigma(X_s)dB_s\text{ by asso.}} + \frac{1}{2}\partial_{x}^2 u(t-s,X_s)\underbrace{d[X]_s}_{=\sigma^2(X_s)ds}\\
+    &=\underbrace{(-\partial_s u + b\partial_x u+\frac{1}{2}\sigma^2\partial_x^2u)}_{=0}(t-s,X_s)ds+\partial_x u(t-s,X_s)\sigma(X_s)dB_s\\
+    &\implies dM_s = \partial_x u(t-s,X_s)\sigma(X_s)dB_s
+\end{align*}
+
+(i.e.: $M_t-M_0=\int_0^t\dots dB_s$) 
+
+This is a purely stochastic integral against a (local) martingale $\implies$ martingale.
+
+\underline{2.:}
+
+\begin{itemize}
+    \item $M_s$ true martingale: \begin{enumerate}
+        \item $\forall t:\mathbb{E}(\sup_{[0,t]} |M|)<\infty$, for example: $M$ bounded
+        \item $\forall t:\mathbb{E}(\sup_{[0,t]} [M]_t)<\infty$
+    \end{enumerate}
+\end{itemize}
+
+$M_s\coloneqq u(t-s,X_s),u$ bounded $\implies M$ bounded $\implies M$ true martingale
+
+$w(s,x)\coloneqq u(t-s,x)$
+
+\begin{align*}
+    u(t,x)=w(0,x)=\mathbb{E}_x[w(0,X_0)]=\stackrel{\text{martingale}}{=}\mathbb{E}_x[w(t,X_t)]=\mathbb{E}_x[(u(0,X_t))]\stackrel{\text{PDE}}{=}\mathbb{E}_x[f(X_t)]
+\end{align*}
+
+Feynman-Kac formula (later more general). 
+
+Also solvable by Kolmogorov Backward / forward equation

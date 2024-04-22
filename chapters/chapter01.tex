@@ -123,7 +123,7 @@ In the last semester we proved:
     \end{itemize}
 \end{example}
 
-\begin{example}[No solutions]
+\begin{example}[No solutions]\label{ex:1.8}
     \begin{equation}
         \begin{cases}
             dX_t=-\frac{1}{2X_t}1_{X_t\neq 0}dt+dB_t\\
@@ -145,9 +145,309 @@ In the last semester we proved:
     \[\implies \forall b\in \R\int_0^t 1_{X_s=b}d \langle M\rangle_s=0\]
 \end{remark}
 
+\input{sheets/sheet00}
+
+\beginlecture{02}{16.04.24}
+
+\begin{example}[Non-uniqueness of law, non pathwise uniqueness, with solutions]
+    \[\begin{cases}
+        dX_t &= 1_{X_z}dB_t\\
+        x_0&=0
+    \end{cases}\]
+    Then \[X_t=0\forall t\geq 0\] and
+    \[X_t=B_t\forall t\geq 0\] 
+    both are solutions:\marginnote{$X_t=\int_0^t 1_{X_s\neq 0}dB_s$\\
+                                   $=\int_0^t (1-1_{X_s=0}dB_s)$\\
+                                   $B_t-\int_0^t1_{X_s=0}dB_s$}
+    \begin{align*}
+        X_t-B_t=-\int_{0}^t1_{X_s=0}dB_s\implies \langle X-B\rangle_t =\int_0^t 1_{X_s=0}d\langle B\rangle_s=0
+    \end{align*}
+
+    Let $\eta\sim\text{Ber}\left(\frac{1}{2}\right)$ independent of $(B_t)_{t\geq 0}$
+    and define 
+    \[\tilde{X}_t=\begin{cases}
+        0 & \eta=0\\
+        B_t & \eta=1
+    \end{cases}\]
+
+    $\implies \tilde{X}_t$ is adapted to $\sigma(\eta(B_s)_{0\leq s\leq t})$, but not to $\sigma((B_s)_{0\leq s\leq t})$ and therefore not a 
+    \hyperref[def:strong_solution]{strong solution}.
+
+\end{example}
+
+\begin{example}[No strong solution, weak solution, no pathwise uniqueness, no uniqueness in law]\label{ex:1.9}
+    \[\begin{cases}
+        dX_t&=1_{X_t\neq 1}\sgn(X_t)dB_t\\
+        X_0&=0
+    \end{cases}\]
+    Let $Y_t$ be a solution of \[\begin{cases}
+        dY_t&=\sgn(Y_t)dB_t\\
+        Y_0&=0
+    \end{cases}\]
+    $\implies X_t\coloneqq Y_{t\land \tau}$, where $\tau=\inf\{s\geq 0\mid Y_s=1\}$ is also a solution.
+\end{example}
+
+\begin{theorem}[Yamada-Watanabe]\label{thm:1.10-Yamada-Watanabe}
+    If both existence of weak solutions and pathwise uniqueness hold, uniqueness in law also holds.
+    
+    Moreover, $\forall$ choices of $(\Omega,\cF,(\cF_t)_{t\geq 0},\bP)$ and $(B_t)_{t\geq 0}$ then there exists a \hyperref[def:strong_solution]{strong solution}.
+\end{theorem}
+
+\section{Lévy characterization}
+
+\begin{example}\label{ex:1.11}
+    Consider the SDE 
+    \[\begin{cases}
+        dX_t&=O_tdB_t\\
+        X_0=x_0
+    \end{cases}\]
+    where both $X_t$ and $B_t$ are $d$-dimensional and \marginnote{i.e. $O_t$ is a rotation}
+    $O_t$ is an adapted process (matrix) s.t. $O_t^\intercal O_t=1\forall t\geq 0$
+
+    \begin{align*}
+        \implies X_t^k& = X_0^k+\sum_{l=1}^d\int_0^t O_s^{k,l}dB_s^l\\
+        \implies \langle X^k,X^{\tilde{k}}\rangle_t&=\sum_{l,\tilde{l}}^d\int_0^tO_s^{k,l}O_s^{\tilde{k},\tilde{l}}d\langle B^l,B^{\tilde{l}}\rangle_s=\sum_{l=1}^d\int_0^t O_s^{k,l}O_s^{\tilde{k},l}ds \\
+        &=\int_0^t \underbrace{\left(O_sO_s^\intercal\right)^{k,\tilde{k}}}_{=1}ds=\delta_{k,\tilde{k}}t\stackrel{\text{Lévy}}{\implies} (X_t)_{t\geq 0} \text{ is also a d-dim BM starting from } x_0
+    \end{align*}
+
+\end{example}
+
+\begin{theorem}[Yamada,Watanabe]\label{thm:1.12}
+    Let $dX_t=b(X_t)dt+\sigma(X_t)dB_t$ 
+    and assume that there exist both a increasing function $\rho(u)\geq 0$ s.t. $|\sigma(x)-\sigma(y)|\leq \rho(|x-y|)\forall x,y\in\R$
+    s.t. 
+    \[\int_0^\infty \frac{1}{\rho(u)}du=\infty\implies 0<u<C_1\implies \rho(u)\leq C_2 u^{0.5}\]
+    and some increasing concave function $\gamma_1(u)\geq 0$ s.t. 
+    \[|b(x)-b(y)|\leq \gamma_1(|x-y|)\forall x,y\in\R\] and 
+    \[\int_0^\infty\frac{1}{\gamma_1(u)}=\infty.\]
+    Then pathwise uniqueness holds.
+\end{theorem}
+
+\begin{theorem}[Storokhod]\label{thm::1.13-storokhod}
+    Assume that $\sigma,b$ are continuous bounded functions 
+    
+    $\implies$ there exist weak solutions to the SDE $dX_t=b(X_t)dt+\sigma(X_t)dB_t$.
+\end{theorem}
+
+\section{Weak solutions and martingale problems}
+
+Let $(X_t)_{t\geq 0}$ be a weka solution of the SDE \[\begin{cases}
+    dX_t&=b(t,X_t)dt+\sigma(t,X_t)dB_t\\X_0&=0
+\end{cases}\]
+on $(\Omega,\cF,(\cF_t)_{t\geq 0},\bP)$. 
+
+$ \implies X_t$ is a semimartingale s.t. $X_t^k=X_0^k+\int_0^t b(s,X_s)ds+\sum_{l=1}^n\int_0^t \sigma_{k,l}(s,X_s)dB_s^l$
+and \[\langle X^i,X^j\rangle_t=\int_0^t \underbrace{\sum_{l=1}^{n}\sigma_{i,l}(s,X_s)\sigma_{j,l}^\intercal(s,X_s)}_{=a_{i,j}(s,X_s)}ds\]
+
+\subsection{Itô-Doeblin formula}
+
+Itô formula leads to 
+
+\begin{proposition}\label{prop:1.14}
+    For $f\in C^{1,2}(\R_+\times\R^d)$, then 
+    \[f(t,X_t)=f(0,X_0)+\int_0^t(\sigma^\intercal\nabla f)(s,X_s)dB_s+\int_0^t\left[\left(\frac{\partial}{\partial s}+\mathcal{L}\right)\right](s,x_s)ds\]
+
+    where\marginnote{$\mathcal{L}$ is called the \highlight{generator}} $(\mathcal{L}f)(t,x)=\frac{1}{2}\sum_{k,l=1}^{n}a_{k,l}(t,x)\frac{\partial^2}{\partial x_k\partial x_l}f(t,x)+\sum_{k=1}^n b_k(t,x)\frac{\partial}{\partial x_k}f(t,x)$.
+
+\end{proposition}
+
+\begin{remark}
+   The Itô-Doeblin formula provides a connection between SDEs and PDEs as we 
+   have seen in the last part \dhighlight{Foundations of stochastic analysis}. 
+\end{remark}
+
+\begin{example}\label{ex:1.15}
+    Let $f\in C^{1,2}(\R_+\times \R_d)$ be a solution of the PDE 
+    \begin{align*}
+        \frac{\partial}{\partial t}f(t,x)+(\mathcal{L}f)(t,x)&=-g(t,x) & t\geq 0, x\in U\subseteq \R^d\\
+        f(t,x)&=\varphi(t,x) & t\geq 0,x\in\partial U.
+    \end{align*}
+    then $M_t\coloneqq f(t,X_t)+\int_0^t g(s,X_s)ds\in\Mloc$ by proposition \ref{prop:1.14}
+    and if $f,g$ are bounded $M_t\in\cM$.
+
+    \[T\coloneqq \inf\{s\geq 0|X_s\notin U\}\implies M_t^T\coloneqq M_{T\land t}\in \mathcal{M}.\]
+    Furthermore, if we assume $T<\infty\as$:
+    \[\bE[M_t]=\bE[\varphi(T,X_T)]+\bE[\int_0^Tg(s,X_s)ds]=\varphi(0,X_0)\]
+    where $X_0=x_0$.
+
+    There are two special cases:
+
+    $g=0\implies$ yields the exit distributions, while 
+    
+    $\varphi=0,g=1$ yields the mean exit times.
+\end{example}
+
+\begin{example}[Feynman-Kac formula]\label{ex1.16:feynman-kac}
+    Let $t\in\R_+$ be finite. Assume $f:\R^d\to\R$ and $K:[0,t]\times\R^d\to\R_+$ 
+    be continuous functions. Assume that $u$ is a $C^{1,2}$-solution (bounded,for simplicity) of 
+    \[\begin{cases}
+        \frac{\partial u}{\partial s}(s,x)=\frac{1}{2}\Delta u(s,x)-K(s,x)u(s,x) & s\in [0,t],x\in\R^d\\
+        u(0,x)=f(x)& x\in\R^d
+    \end{cases}\]
+    Then $u$ has the stochastic representation $u(t,x)=\bE_x\left[f(X_t)\exp\left(-\int_0^t K(t-s,X_s)ds\right)\right]$,
+    where $X_t$ is BM starting from $X_0=x$.
+\end{example}
+
+\begin{proof}[Sketch]
+    \begin{enumerate}
+        \item Define $r(s,x)\coloneqq u(t-s,x)$ for $s\in[0,t]$
+        \item Show: $M_s\coloneqq \exp(-A_s)r(s,x)$ with $A_s=\int_0^s K(u,X_u)du$ is a local martingale.
+    \end{enumerate}
+\end{proof}
+
+\begin{remark}
+    This is a reformulation of the formula from the last semester.
+\end{remark}
+
+\subsection{Martingale problem}
+
+A solution of an SDE is generically defined up to some \dhighlight{explosion time $\xi$},
+where it either diverges or it exists a given domain $U\subset\R^d$ (open).
+
+$\implies$ For $k\in\N$ define $U_k\coloneqq \{x\in U\mid |x|<k\land \text{dist}(x,U^c)\geq \frac{1}{k}\}$
+with $U=\bigcup_{k\geq 1} U_k$ and 
+\[T_k\coloneqq \{t\geq 0\mid x_t\notin U_k\}.\]
+A solution of the SDE $b(t,X_t)dt+ \sigma(t,X_t)dB_t$ is defined up to $\xi=\sup_{k\geq 1} T_k$.
 
 
+\beginlecture{03}{18.04.24}
+
+\begin{aremark}
+    uniqueness of solution to the heat equation $\frac{1}{2}\Delta u -Ku$: not unique!
+    Stochastic calculus: Paolo Baldi: 10.3-10.4
+\end{aremark}
 
 
+Define $(\star)$:
+
+\[dX_t b(t,X_t)dt+\sigma(t,X_t)dB_t\text{ with } X_0=x_0\]
+
+\begin{theorem}[Martingale problem]\label{thm:1.17}
+    If $X$ is a solution of $(\star)$ up to time $\zeta$, then $\forall f\in C^{1,2}(\R_+\times U)$
+    \[M_t=f(t,X_t)-\int_0^t\left(\frac{\partial}{\partial s}+\mathcal{L}\right)f(s,x_s)ds, t<s\]
+    is a local martingale up to $\zeta$ and $M_t^{T_k}$ are localizing martingales.
+\end{theorem}
+
+\begin{definition}[Martingale solutions]\label{def:1.18}
+    $(X_t)_{t\geq 0}$ is a \dhighlight{martingale solution} of $(\star)$
+    if $\forall f\in C^2(\R^d)$
+    \[M_t^f=f(X_t)-f(X_0)-\int_0^t(\mathcal{L}f)(X_s)ds\]
+    is a continuous local martingale. 
+\end{definition}
+
+\begin{theorem}[Equivalent definitions]\label{thm:1.19}
+    The following are equivalent (\st{for $X_t$ being a solution of $(\star)$}):
+    \begin{enumerate}
+        \item[(a)] $\forall f\in C^2(\R^d)$, \[M_t^f\coloneqq f(X_t)-f(X_0)-\int_0^t(\mathcal{L}f)(X_s)ds\] is a local martingale 
+        \item[(b)] The process in $\R^d$ given by \[M_t\coloneqq X_t-X_0-\int_0^t b(s,X_s)ds\] is a $d$-dimensional local martingale with $\langle M^i,M^j\rangle_t=\int_0^t a_{i,j}(s,X_s)ds=\langle X^i,X^j\rangle_t$ 
+        \item[(c)] $\forall f\in C^{1,2}(\R_+\times \R^d)$ \[\tilde{M}_t^f\coloneqq f(t,X_t)-f(0,X_0)-\int_0^t\left(\frac{\partial}{\partial s}+\mathcal{L}\right)(s,X-s)ds\] is a local martingale  
+    \end{enumerate}ds
+\end{theorem}
+
+\begin{proof}
+    \underline{$c\implies a$}: by choosing $f$ independent of $t$.
+
+    \underline{$ a \implies b$}: 1.: Choosing $f(X)=X_i$ implies\marginnote{We can maybe also proof this by calculating $X^2$?} 
+    \begin{align*}
+        M_t^f=X_t^i-X_0^i-\int_0^t b_i(s,X_s)ds\in\Mloc
+    \end{align*}
+    2.: $f(X)=X_iX_j$: 
+    \begin{align*}
+        (\mathcal{L}f)(x)&=\frac{1}{2}a_{ij}+\frac{1}{2}a_{ji}+b_iX_j b_jX_i\\
+        &a=a^\intercal\implies =a_{ij} b_iX_j b_j X_i\\
+        \implies& M_t^f X_t^i X_t^j-X_0^iX_0^j-\int_0^t\left[a_{ij}(s,X_s)+b_i(s,X_s)X_s^j+b_j(s,X_s)X_s^i\right]ds
+    \end{align*}
+    \marginnote{Here $dX_s^i$ is the same as $b_iX_s^j$ is the same up to a local martingale term and $\langle X^i,X^j\rangle_t=\int_0^t a_{ij}(s,X_s)ds=\langle M^i,M^j\rangle_t$} 
+    \begin{align*}
+        X_t^iX_t^j-X_0^iX_0^j&\stackrel{\text{Integration by parts}}{=}\int_0^t X_s^i dX_s^j+\int_0^t X-s^j dX_s^i + \langle X^i,X^j\rangle_t\\
+        &= M_t^f+\int_0^t [a_{ij}+b_iX_s^j+b_jX_s^i] ds
+    \end{align*}
 
 
+    \underline{$b\implies c$}: By Proposition \ref{prop:1.14} If (use the next theorem) $X$ was a weak solution $\implies \tilde{M}_t^f$ is a local martingale. 
+\end{proof}
+
+
+\begin{theorem}\label{thm:1.20}
+    Let $n=d$\marginnote{This also works for $n\neq d$, but with a different proof}, % FIX
+    assume $\sigma(t,x)$ is invertible
+    $\forall t,x$ and $\sigma^{-1}(t,x)$ is uniformly bounded. 
+    \begin{enumerate}
+        \item[(a)] $(X_t)_{t\geq 0}$ is a weak solution of the SDE $(\star)$ on $(\Omega,\cF,(\cF_t)_{t\geq 0},\mathbb{P};B)$
+        \item[(b)] $(X_t)_{t\geq 0}$ is a martingale solution of the SDE $(\star)$ 
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    $a\implies b$: True 
+
+    $b\implies a$: Goal construct a BM for the weak solution. 
+
+    By proposition \ref{prop:1.19} $a\implies b$ $dM_t=dX_t-b(t,X_t)dt\in\Mloc$ and $d\langle M^i,M^j\rangle_t={a_{k,l}}(t,X_t)dt$
+
+    \begin{align*}
+        \implies dX_t&=dM_t+b(t,X_t)dt\\
+        &=\sigma(t,X_t)d\tilde{B}_t+b(t,X-t)dt\\
+    \end{align*}
+    where $\tilde{B}_t\coloneqq \sigma(s,X_s)^{-1}dM_s$
+
+    To see: $\tilde{B}_t$ is a brownian motion.
+
+    \begin{align*}
+        \langle \tilde{B}^i,\tilde{B}^j\rangle_t&=\sum_{k,l}\int_0^t\sigma_{ij}^{-1}\sigma_{jl}^{-1} \underbrace{d\langle M^k,M^l\rangle_s}_{=\underbrace{a_{ij}}_{(\sigma^\intercal \sigma)_{kl}}ds}\\
+        &=\sum_{k,l,p}\int_0^t\sigma_{ik}^{-\intercal}\sigma_{kp}\sigma_{pl}^{\intercal}\sigma_{lj}^{-\intercal}ds\\
+        &=\delta_{ij}\int_0^t 1 ds=\delta_{ij}t
+    \end{align*}
+    Then by the Lévy characterization $\tilde{B}$ is a brownian motion.
+\end{proof}
+
+\begin{aremark}
+    This is the first way to construct a weak solution: Solve a martingale problem! This is used a lot in practice.
+\end{aremark}
+
+\section{Weak solutions and time change}
+
+\subsection{Time change}
+
+For $d=1$:
+
+\begin{theorem}\label{thm:1.21}[Dubins-Schwarz]
+    \begin{itemize}
+        \item Let $M\in\Mloc^0$ and $\langle M\rangle_\infty=\infty$ a.s. 
+        \item Let $T_t\coloneqq \inf\{s\geq |\langle M\rangle_s \geq t\}$
+    \end{itemize}
+    This implies    
+    \begin{enumerate}
+        \item $t\mapsto M_{T_t}$ os a $(\cF_{T_t})$ brownian motion
+        \item $M_t=B_{\langle M\rangle_t}$ for some standard brownian motion $B$
+    \end{enumerate}
+\end{theorem}
+
+$X_t=X_0+\int_0^t b(s,X_s)ds+\underbrace{\int_0^t \sigma(s,X_s)dB_s}_{=M_t}$.
+If $\langle M\rangle_\infty=\infty$ a.s.:
+\[X_t=X_0+\int_0^tb(s,X_s)ds+\tilde{B}_{\int_0^t \sigma^2(s,X_s)ds}\]
+
+\subsection{Time change in a martingale problem}
+
+Consider $d=1=n$.
+
+\[dY_t=\sigma(Y_t)dB_t \hspace{3cm}(\star\star)\]
+and $\sigma$ strictly positive positive continuous function.
+
+\begin{align*}
+    \langle Y\rangle_t=\int_0^t\sigma(Y_s)^2 ds\eqqcolon A_t
+\end{align*}
+By theorem \ref{thm:1.21} $\implies Y_t=W_{A_t}$ for some brownian motion $W$.
+
+Assume $A_t\infty=\infty$ a.s.
+
+$T_t\coloneqq \inf\{s\geq 0\mid \langle Y\rangle_s \geq t\}$
+
+\[\implies T_{A_t}=\inf\{s\geq 0\mid \langle Y\rangle_s\geq \langle Y\rangle_t\}=t\]
+
+\begin{align*}
+    1&=\frac{d}{dt}\left(T_{A_t}\right)=T_{\underbrace{A_t}_=u}'\cdot A_t\\
+    \implies \underbrace{T_u}_{=\frac{dT_u}{du}}'&=\frac{1}{A_{T_u}'} \implies T_u = \int_0^u \frac{1}{\sigma(Y_{T_s})^2}ds=\int_0^u \frac{1}{\sigma(W_s)^2}ds
+\end{align*}
+
+$\implies$ to construct a solution of $(\star\star)$: Given $W$ $\longrightarrow$ compute $T_u$ $\longrightarrow$ determine $A-t=T_t^{-1}\implies Y_t=W_{A_t}$

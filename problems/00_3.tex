@@ -1,0 +1,9 @@
+Let $f$ be a function supported on $[0,1]$, $u$ the solution of 
+\[\frac{1}{2}u(t,x)=\frac{1}{2}x(1-x)+\frac{d^2}{dx^2}u(t,x), \hspace{2cm} u(0,x)=f(x).\]
+Consider also the one-dimensional SDE (also known as Wright-Fisher diffusion)
+\[dX_t=\sqrt{X_t(1-X_t)dB_t}\]
+with $X_0=x\in(0,1)$.
+\begin{enumerate}
+    \item For any fixed $t>0$, define $M_s=u(t-s,X_s)$ for $s\in[0,t]$. Use Itô formula to show that $M_s$ is a local martingale
+    \item Assume that $f$ is bounded and there is a bounded solution of $u$. Show that $u(t,x)=\mathbb{E}_x(f(X_t))$.
+\end{enumerate}

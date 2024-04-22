@@ -26,6 +26,8 @@
 \usepackage{lastpage}
 \usepackage{fancyhdr}
 \usepackage{tocloft}
+\usepackage{soul}
+
 
 \definecolor{mygray}{RGB}{239,240,241}
 \definecolor{mycolor}{RGB}{146,0,88}
@@ -101,9 +103,12 @@
 \def\cE{\mathcal{E}}
 \def\cF{\mathcal{F}}
 \def\cS{\mathcal{S}}
+\def\bP{\mathbb{P}}
+\def\bE{\mathbb{E}}
 \def\Mloc{\mathcal{M}_{\text{loc}}}
 \def\as{\text{ a.s. }}
 \def\cov{\text{Cov}}
+\def\sgn{\text{sgn}}
 
 
 \newtheorem{theorem}[algorithm]{Theorem}
@@ -148,7 +153,7 @@
 \renewcommand{\cftsubsecleader}{\color{mycolor} \cftdotfill{\cftsecdotsep}}
 \renewcommand{\cftsubsubsecleader}{\color{mycolor} \cftdotfill{\cftsecdotsep}}
 
-\newcommand{\beginlecture}[2]{\marginnote{Start of lecture #1 (#2)}}
+\newcommand{\beginlecture}[2]{\label{VL#1}\marginnote{Start of lecture #1 (#2)}}
 \newcommand{\dhighlight}[1]{{\color{mycolor}{\underline{{\textbf{#1}}}}}}
 \newcommand{\highlight}[1]{{\color{mycolor}{\textbf{#1}}}}
 

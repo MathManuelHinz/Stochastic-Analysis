@@ -1,0 +1,29 @@
+\underline{1.:}
+
+Idea: Use Itô formula: $X_t=\sin(B_t)=f(B_t)$
+
+\marginnote{Careful: $\sqrt{1-X_t^2}$ is not inverse mapping, because it is always positive while $\cos(B_t)$ is not}
+\begin{align*}
+    dX_t &= df(B_t)\stackrel{\text{Itô}}{=}\partial_x \underbrace{\cos(B_t)}_{\sqrt{1-X_t^2}}dB_t-\frac{1}{2}\underbrace{\sin(B_t)}_{X_t}dt\\
+\end{align*}
+
+
+\underline{2.:}
+
+
+Consider the SDE
+\[dX_t=\begin{cases}
+    -\frac{1}{2} X_t dt + \sqrt{1-X_t^2}dB_t\\
+    X_0=x\in(-1,1)
+\end{cases}\]
+
+Coefficients: $b:[-1,1]\to\R, b(x)=-\frac{1}{2}x$ and $\sigma:[-1,1]\to\R.\sigma(x)=\sqrt{1-x^2}$
+
+\begin{align*}
+    [\sigma]_{1,2}=\sup\frac{|\sigma(x)-\sigma(y)|}{|x-y|^{1/2}}<\infty
+\end{align*}
+
+Probably $\sigma^2$ Lipschitz $\implies\sigma$ Hölder $\frac{1}{2}$
+
+\underline{3.:}
+
