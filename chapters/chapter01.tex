@@ -371,7 +371,7 @@ Define $(\star)$:
 \begin{theorem}\label{thm:1.20}
     Let $n=d$\marginnote{This also works for $n\neq d$, but with a different proof}, % FIX
     assume $\sigma(t,x)$ is invertible
-    $\forall t,x$ and $\sigma^{-1}(t,x)$ is uniformly bounded. 
+    $\forall t,x$ and $\sigma^{-1}(t,x)$ is uniformly bounded. T.f.a.e.:
     \begin{enumerate}
         \item[(a)] $(X_t)_{t\geq 0}$ is a weak solution of the SDE $(\star)$ on $(\Omega,\cF,(\cF_t)_{t\geq 0},\mathbb{P};B)$
         \item[(b)] $(X_t)_{t\geq 0}$ is a martingale solution of the SDE $(\star)$ 
@@ -431,11 +431,11 @@ If $\langle M\rangle_\infty=\infty$ a.s.:
 
 Consider $d=1=n$.
 
-\[dY_t=\sigma(Y_t)dB_t \hspace{3cm}(\star\star)\]
-and $\sigma$ strictly positive positive continuous function.
+\[dY_t=\tilde{\sigma}(Y_t)dB_t \hspace{3cm}(\star\star)\]
+and $\tilde{\sigma}$ strictly positive positive continuous function.
 
 \begin{align*}
-    \langle Y\rangle_t=\int_0^t\sigma(Y_s)^2 ds\eqqcolon A_t
+    \langle Y\rangle_t=\int_0^t\tilde{\sigma}(Y_s)^2 ds\eqqcolon A_t
 \end{align*}
 By theorem \ref{thm:1.21} $\implies Y_t=W_{A_t}$ for some brownian motion $W$.
 
@@ -447,7 +447,174 @@ $T_t\coloneqq \inf\{s\geq 0\mid \langle Y\rangle_s \geq t\}$
 
 \begin{align*}
     1&=\frac{d}{dt}\left(T_{A_t}\right)=T_{\underbrace{A_t}_{=u}}'\cdot A_t\\
-    \implies \underbrace{T_u'}_{=\frac{dT_u}{du}}&=\frac{1}{A_{T_u}'} \implies T_u = \int_0^u \frac{1}{\sigma(Y_{T_s})^2}ds=\int_0^u \frac{1}{\sigma(W_s)^2}ds
+    \implies \underbrace{T_u'}_{=\frac{dT_u}{du}}&=\frac{1}{A_{T_u}'} \implies T_u = \int_0^u \frac{1}{\tilde{\sigma}(Y_{T_s})^2}ds=\int_0^u \frac{1}{\tilde{\sigma}(W_s)^2}ds
 \end{align*}
 
 $\implies$ to construct a solution of $(\star\star)$: Given $W$ $\longrightarrow$ compute $T_u$ $\longrightarrow$ determine $A-t=T_t^{-1}\implies Y_t=W_{A_t}$
+
+\beginlecture{04}{23-04-24}
+
+\begin{theorem}\label{thm:1.22}
+    Let $(X_u)_{u\geq 0}$ on $(\Omega,\cF,(\cF_t)_{t\geq 0},\bP)$ be a weak solution of 
+    \[dX_u=b(X_u)du+\sigma(X_u)dB_u\]
+    where $b:\R^d\to\R^d$,the drift and $\sigma:\R^d\to\R^d\times\R^d$ are locally bounded, 
+    $\sigma^{-1}$ exists for a.e. $x$ and is locally bounded.
+    
+    Consider a \dhighlight{time change} $T_u\coloneqq \int_0^u \rho(X_s)ds$,
+    where $\rho:\R^d\to\R_+$ s.t. 
+    \[T_u<\infty \forall u\geq 0\text{ and } T_\infty=\infty\as\]
+
+    $\implies$ Then $Y_t\coloneqq X_{A_t}$, where $A_t=T_t^{-1}$ is a weak 
+    solution of the SDE 
+    \[dY_t=\frac{b(Y_t)}{\rho(Y_t)}dt+\frac{\sigma(Y_t)}{\sqrt{\rho(Y_t)}}dB_t\]
+\end{theorem}
+
+\begin{remark}
+    Special case: $d=1,b=0,\sigma=1$: Then $X$ is a BM and $\rho=\frac{1}{\tilde{\sigma}^2(x)}\implies Y_t=X_{T_t^{-1}}$ solves 
+    \[dY_t=\tilde{\sigma}(Y_t)dB_t\]
+\end{remark}
+
+\begin{proof}
+    By theorem \ref{thm:1.20}, it is enough to see how the martingale problem after 
+    change of time becomes: 
+    \[\mathcal{L}=\mathcal{L}_{X_t}\stackrel{\text{time change}}{\longrightarrow}\mathcal{L}_{Y_t}=\tilde{\mathcal{L}}\]
+    $Y_t=X_{A_t};Y_0=X_{A_0}$. For $f\in C^2: M_t^f=f(X_t)-f(X_0)-\int_0^t (\mathcal{L}f)(X_s)ds$ is a local martingale w.r.t. $(\cF_t)_{t\geq 0}$.
+    \marginnote{The $A_0$ in the integral is probably $0$, but it does not matter, we do a change of variables anyway.}\[\implies N_t^f\coloneqq M_{A_t}^f=f(\underbrace{X_{A_t}}_{=Y_t})-f(\underbrace{=X_{A_0}}_{Y_0})-\int_{A_0}^{A_t}(\mathcal{L}f)(X_s)ds\]
+    is also a local martingale w.r.t. $(\cF_{A_t})_{t\geq 0}$.
+
+    Change of variable (to get rid of the $X_s$ in the integral):
+    \begin{align*}
+        \tau&=T_s\leftrightarrow A_t=s \implies X_s=X_{A_t}=Y_\tau \\
+        d\tau&=\rho(X_s)ds
+    \end{align*}
+
+    \begin{align*}
+        \implies N_t^f=f(Y_t)-f(Y_0)-\int_0^t(\mathcal{L}f)(Y_t)\frac{1}{\rho(Y_t)}d\tau
+    \end{align*} 
+    Since $\mathcal{L}f(x)=\sum_{k}b_k(x)\frac{\partial}{\partial x_k}f(x)+\sum_{k,l}a_{k,l}(x)\frac{\partial^2}{\partial x_k\partial x_l} f(x)$
+
+    \[\implies (\tilde{\mathcal{L}}f)(x)=\sum_{k}\frac{b_k(x)}{\rho(x)}\frac{\partial}{\partial x_k}f(x)+\sum_{k,l}\frac{\overbrace{a_{k,l}}^{(\sigma\sigma^\intercal)_{k,l}}}{\sqrt{{\rho(x)}{\rho(x)}}}(x)\frac{\partial^2}{\partial x_k\partial x_l} f(x)\]
+
+    $\implies$ It is a martingale problem for the SDE 
+    where the $\text{drift}\to\frac{\text{drift}}{\rho}$ and $\sigma\to \frac{\sigma}{\sqrt{\rho}}$
+
+\end{proof}
+
+\subsection{Weak solutions in d=1}
+
+We will do both time and ``space'' changes. 
+\begin{itemize}
+    \item 1-d SDE:\begin{equation}\label{eq:1.4}\begin{cases}
+        dX_t&=b(X_t)dt+\sigma(X_t)dB_t\\
+        X_0=x_0\in(\alpha,\beta)
+    \end{cases}\end{equation}
+    \item  $X_t$ a process in $(\alpha,\beta)$
+    \item Assume $b,\sigma:(\alpha,\beta)\to\R$ continuous, $\sigma(x)>0\forall x\in (\alpha,\beta)$
+    \item Do a change of coordinates $Y_t\coloneqq s(X_t)$ where $s:(\alpha,\beta)\to(s(\alpha),s(\beta))$, $C^2$ with $S'(x)>0,x\in (\alpha,\beta)$.
+    \item $s(x)$ is called the \dhighlight{scale function} and it is given by \[s(x)=\int_{x_0}^x\exp\left(-\int_{x_0}^{y}dz\frac{2b(z)}{\sigma(z)^2}\right)dy\]
+    \item $s$ satisfies $\frac{1}{2}\sigma^2(x)s''(x)+b(x)s'(x)=0\iff (\mathcal{L}s)(x)=0$ 
+\end{itemize}
+
+\begin{remark}
+    If $b(z)=0\implies s(x)=x-x_0\implies s'(x)=1$. If $s'(x)=1$, we say that the process is in its ``natural scale''
+\end{remark}
+
+By proposition \ref{prop:1.14}: $\mathcal{L}s=0,\dot{s}=0$.
+
+$\implies Y_t=s(X_t)$ is a local martingale satisfies $dY_t=s'(X_t)\sigma(X_t)dB_t$ \marginnote{the other terms cancel}.  
+
+$\iff Y_t$ is a solution of 
+
+\begin{equation}\label{eq:1.5}
+    \begin{cases}
+        dY_t&=\tilde{\sigma}(Y_t)dB_t\\
+        Y_0&=s(X_0)
+    \end{cases}
+\end{equation}
+where $\tilde{\sigma}(y)=s'(s^{-1}s(y))\sigma(s^{-1}(y))$.
+
+\marginnote{Therefore we can write the original SDE in terms of a BM}
+
+\begin{theorem}\label{thm:1.23:weak_solution_1d}
+    The following are equivalent:
+    \begin{enumerate}
+        \item The process $(X_t)_{t<\xi}$, where $\xi$ is the explosion time, on $(\Omega,\cF,(\cF_t)_{t\geq 0},\bP;(B_t)_{t\geq 0})$ is a solution of (\ref{eq:1.4}) up to tje stopping time $\xi$
+        \item The process $Y_t=s(X_t)_{t<\xi}$\marginnote{$s$ and $A_t$ have the same definition as before} on $(\Omega,\cF,(\cF_t)_{t\geq 0},\bP;(B_t)_{t\geq 0})$ is a solution of (\ref{eq:1.5}) up to $\xi$
+        \item The process $(Y_t)_{t<\xi}$ has the representation $Y_t=\tilde{B}_{A_t}$, where $\tilde{B}$ is a BM starting at $\tilde{B}_0=s(X_0)$ and $A_t=T_t^{-1}$ and $T_t=\int_0^t\frac{1}{\tilde{\sigma}^2(\tilde{B}_u)}du$
+    \end{enumerate}    
+\end{theorem}
+
+
+\dhighlight{\large{A degenerate case:}}
+
+Let $\sigma(x)=|x|^\alpha$ for some $\alpha\in \left(0,\frac{1}{2}\right)$.
+$\implies$
+\begin{equation}\label{eq:1.6}
+    \begin{cases}
+        dY_t &= |Y_t|^\alpha dB_t\\
+        Y_0&=y
+    \end{cases}
+\end{equation}
+
+$\implies T_t=\int_0^t\frac{1}{\sigma(\tilde{B}_u)^2}du$, $A_t=\int_0^t\sigma(Y_s)^2ds$ and $Y_t=\tilde{B}_{A_t}\implies \tilde{B}_0=y$.
+
+$T_t<\infty\as$?
+\begin{align*}
+    \bE(T_t)&=\int_0^t \bE\left(\frac{1}{\sigma(\tilde{B})^2}\right)du\\
+    &=\int_0^t \bE\left(\frac{1}{|\tilde{B}|^{2\alpha}}\right)du\\
+    &=\int_0^t\int_\R dx \frac{1}{|x|^{2\alpha}}\frac{\exp(-\frac{(x-y)^2}{2u})}{\sqrt{2\pi u}}\stackrel{0<2\alpha<1}{<}\infty
+\end{align*}
+
+$\implies A_t=T_t^{-1}$, then $Y_t=\tilde{B}_{A_t}$ is a solution of (\ref{eq:1.6}),
+i.e. $\forall y\in\R\exists$ a non-trivial solution of (\ref{eq:1.6}).
+
+For $Y_=0,Y_t=0$ is also a solution $\implies$
+\begin{itemize}
+    \item No uniqueness in law of (\ref{eq:1.6})
+    \item No pathwise uniqueness as well
+\end{itemize}
+
+\begin{remark}
+    In general: uniqueness in law of $1$-d SDEs is not to be expected if 
+    $\sigma(x)=0$ somewhere (and $\sigma$ continuous \dots) (i.e. if $\sigma$ is degenerate). 
+\end{remark}
+
+By theorem \ref{thm:1.12} as soon as $\sigma(x)=|x|^\alpha$ for some $\alpha\geq \frac{1}{2}$,
+then one has pathwise uniqueness.
+
+\dhighlight{\large{Hitting times and scale functions}}
+\highlight{Bessel process}: 
+\[\begin{cases}
+    dR_t&=\frac{d-1}{2R_t}dt+dW_t\\
+    R_0 &=r_0\in (0,\infty)\end{cases}\] 
+    
+$\implies b(x)=\frac{d-1}{2x},\sigma(x)=1$. 
+
+The scale function satisfies $\mathcal{L}s(x)=\frac{1}{2}s''(x)+\frac{d-1}{2x}s'(x)=0$
+
+\[\implies s(x)=\begin{cases}
+    \frac{x^{2-d}}{2-d} & d\neq 2\\
+    \ln(x) & d=2
+\end{cases}\]
+
+and therefore 
+
+\[(s_0,s_\infty)=\begin{cases}
+    (0,\infty) & d<2\\
+    (-\infty,\infty) & d=2\\
+    (-\infty,0 & d>2)
+\end{cases}\]
+
+Define the stopping time
+\[T_a^R\coloneqq \inf\{t\geq 0\mid R_t=a\}\]
+
+Choose an $\alpha<r_0<\beta$
+
+\[\implies \bP(T_\alpha^R<T_\beta^R)\stackrel{s'>0}{=}\bP(T_{s(\alpha)}^{s(R)}<T_{s(\beta)}^{s(R)})\]
+
+One computes\marginnote{WS exercises}
+\begin{align*}
+    \bP(T_a^{R}<T_\beta^R)=\frac{s(\beta)-s(r_0)}{s(\beta)-s(\alpha)}=\bP(T_{s(\alpha)}^{s(R)}<T_{s(\beta)}^{s(R)})
+\end{align*}
+
+This is generic, for Itô diffusions, provides that $\exists$ no killing\marginnote{unlike in \ref{ex1.16:feynman-kac}} in $(\alpha,\beta)$.
