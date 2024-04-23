@@ -64,4 +64,10 @@
 \input{warning}
 \input{general_information}
 \input{chapters/chapter01}
+\chapter*{List of Lectures}
+\addcontentsline{toc}{chapter}{List of Lectures}
+\begin{itemize}
+    \renewcommand*{\do}[1]{\item \hyperlink{#1}{Lecture \StrBehind{#1}{c}:} \input{journal/#1}}
+    \dolistloop{\lecturelist}
+\end{itemize}
 \end{document}

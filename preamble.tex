@@ -27,7 +27,8 @@
 \usepackage{fancyhdr}
 \usepackage{tocloft}
 \usepackage{soul}
-
+\usepackage{etoolbox}
+\usepackage{xstring}
 
 \definecolor{mygray}{RGB}{239,240,241}
 \definecolor{mycolor}{RGB}{146,0,88}
@@ -153,7 +154,9 @@
 \renewcommand{\cftsubsecleader}{\color{mycolor} \cftdotfill{\cftsecdotsep}}
 \renewcommand{\cftsubsubsecleader}{\color{mycolor} \cftdotfill{\cftsecdotsep}}
 
-\newcommand{\beginlecture}[2]{\label{VL#1}\marginnote{Start of lecture #1 (#2)}}
+\def\lecturelist{}
+
+\newcommand{\beginlecture}[2]{\hypertarget{lec#1}{}\listxadd{\lecturelist}{lec#1}\marginnote{Start of lecture #1 (#2)}}
 \newcommand{\dhighlight}[1]{{\color{mycolor}{\underline{{\textbf{#1}}}}}}
 \newcommand{\highlight}[1]{{\color{mycolor}{\textbf{#1}}}}
 
