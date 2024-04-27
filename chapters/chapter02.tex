@@ -1,0 +1,68 @@
+\chapter{SDE techniques}
+
+\dhighlight{Goal:} Study process by changing the measure.
+
+E.g.: $X_t=B_t$. $\underbrace{\text{Condition }X_t\geq 0\forall t\geq 0}_{\eqqcolon Y_t}$.
+
+% Figure
+
+
+\section{Girsanov theorem}
+
+Given $(\Omega,\cF,(\cF_t)_{t\geq 0})$ and two measures $\bP,\Q$\marginnote{The notes of Eberle switches the roles of $\bP,\Q$!}
+
+Assume $\bP\ll \Q$ and $\Q\ll\bP$
+and let $H=\frac{d\Q}{d\bP}$
+\[\implies Z_t\coloneqq \bE_\bP(H\mid \cF_t)=\frac{d\Q}{d\bP}\mid_{\cF_t}\]
+is a martingale.
+
+From last semester: $\forall Y\in L^1(\Q)\cap L^1(\bP),\cF_t$ measurable: %TODO: Check
+\begin{equation*}
+    \bE_\Q(Y\mid \cF_s)=\frac{bE_{\bP}(Y\cdot Z_t\Big\vert\cF_s)}{Z_s}\forall s<t
+\end{equation*}
+If $Z>0$ is $\Mloc,\exists L \in\Mloc$ s.t.:
+\[Z_t=e^{L_t-\frac{1}{2}\langle L\rangle_t}\to L_t = \ln(Z_0)+\int_0^t \frac{d Z_s}{Z_s}\] 
+
+There might be a problem, because $\ln(Z_0)$ might not be integrable, and therefore not a local martingale!
+
+\begin{theorem}[Girsanov]\label{thm:2.1:Girsanov}
+    Assume $Z>0$ is a martingale. If $M$ is a local martingale w.r.t. $\bP$, then 
+    \[\tilde{M}_t\coloneqq M_t-\langle M,L\rangle_t\] is a local martingale w.r.t. $\Q$
+    and \[\langle M\rangle_t=\langle \tilde{M}\rangle_t.\]
+    Moreover, if $M$ is a BM w.r.t. to $\bP$, then $\tilde{M}$ is a BM w.r.t. $\Q$.
+\end{theorem}
+
+\begin{remark}
+    In applications, given $\bP,(Z_t)_{t\geq 0}$
+    a positive continuous martingale, 
+    define $\Q$ on $\cF_\infty=\bigcup_{t\geq 0}\cF_t$ s.t. 
+    \[\frac{d\Q}{d\bP}\Big\vert_{\cF_t}=Z_t\]
+    $Z$ is uniformly integrable $\iff \Q\ll\bP$. 
+    \highlight{Problem:} In applications, 
+    $Z$ is not necessarily uniformly integrable.
+
+    $\implies$ restrict to $[0,T]\implies$ all fine.
+
+    $\Q\to\Q_T$ as in the last semester.
+\end{remark}
+
+
+\begin{aexample}
+    Let $\gamma\in\R^d,(B_t)_{t\geq 0}$ standard BM. 
+
+    Let $L_t\coloneqq \gamma\cdot B_t$ and $Z_t=\exp(L_t-\frac{1}{2}\langle L\rangle_t)=\exp(\gamma \cdot B_t-\frac{1}{2}|\gamma|^2t)$
+    
+\end{aexample}
+
+\begin{remark}
+    $\lim_{M\to\infty}\sup_{t\geq 0}\bE(|Z_t|1_{|Z_t|>M})\neq 0$.
+
+    Define $\Q$ on $\cF_\infty$ s.t. $\tilde{B}_t^k=B_t^k-\langle L,B^k\rangle=B_t^k-\gamma^kt$\marginnote{Construct $Q$ via $Z$}
+    is a BM with drift. Show: $Q\not\ll\bP$.
+
+    \[A=\left\{\lim_{t\to\infty}\frac{\tilde{B}_t+\gamma t}{t}=\gamma\right\}\in\cF_\infty\]
+    but: $\tilde{B}$ is a BM w.r.t. $\Q\implies \Q(A)=1$, $\tilde{B}$ is a BM with drift $-\gamma$ w.r.t 
+    $\bP(A)=0$.
+
+
+\end{remark}

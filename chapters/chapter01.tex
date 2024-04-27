@@ -618,3 +618,97 @@ One computes\marginnote{WS exercises}
 \end{align*}
 
 This is generic, for Itô diffusions, provides that $\exists$ no killing\marginnote{unlike in \ref{ex1.16:feynman-kac}} in $(\alpha,\beta)$.
+
+\beginlecture{05}{25.04.24}
+
+\subsection{Uniqueness of martingale solution}
+
+SDE $dX_t=b(t,X_t)dt+\sigma(t,X_t)dB_t$ with generator 
+\[\mathcal{L}=\sum_{k}b_k\frac{\partial}{\partial x_k}+\frac{1}{2}\sum_{k,l}(\sigma\sigma^\intercal)_{k,l}\frac{\partial^2}{\partial x_k\partial x_l}\]
+
+\begin{definition}\label{def:1.24:martingale_solution}
+    Let $\mathcal{C}=C(\R_+,\R^d)$ with $\sigma$-algebra $\cF$,
+    canonical filtration $(\cF_t)_{t\geq 0}$, canonical process $Z_t(\omega)\coloneqq \omega$.
+
+    We say that $\bP$ on $(\cC,\cF)$ is a \dhighlight{martingale solution} for the generator $\cL$ 
+    $\iff \forall f\in C^{1,2}(\R_+\times \R^d\to\R)$  
+    \begin{equation}\label{eq:1.7}
+        M_t^f\coloneqq f(t,Z_t)-f(0,Z_0)-\int_0^t\left( \frac{\partial}{\partial s}+\cL\right)f(s,Z_s)ds 
+    \end{equation}
+    is a martingale w.r.t. $\bP$.
+\end{definition}
+
+\begin{definition}\label{def:1.25}
+    A martingale problem (\ref{eq:1.7}) has a unique solution if for any two 
+    martingale solutions $\bP=\Q$ s.t. $\text{Law}_{\bP}(Z_0)=\text{Law}_{\Q}(Z_0)$
+    \[\implies \bP=\Q\]
+\end{definition}
+
+\begin{remark}
+    Uniqueness of martingale solutions corresponds to uniqueness in law of the weak solutions.
+\end{remark}
+
+Backwards Kolmogorov Equation (BKE):
+
+\begin{equation}\label{eq:1.8:BKE}
+    \frac{\partial}{\partial t}\varphi(t,x)=\cL\varphi(t,x)\forall x\in\R^d,t\geq 0
+\end{equation}
+
+\begin{theorem}\label{thm:1.26}\marginnote{The Kolmogorov forward equation is (related to) the Folker-Plank equation!}
+    Assume that $\forall$ initial condition 
+    \[\varphi(0,x)=\Psi(x),\Psi\in C_0^\infty(\R^d)\]
+    the (\ref{eq:1.8:BKE}) has a solution and $\varphi$ bounded for all finite time intervals. We have uniqueness of martingale solutions and therefore uniqueness of weak solutions!
+\end{theorem}
+
+\begin{proof}
+    Prove that $\forall 0\leq t_1<t_2<\dots<t_n$:
+    \[\text{Law}_{\bP}(Z_{t_1},Z_{t_2},\dots,Z_{t_n})=\text{Law}_{\Q}(Z_{t_1},Z_{t_2},\dots,Z_{t_n})\]
+
+    \highlight{1. One-time distribution:}
+
+    $\forall 0\leq s\leq r$: 
+    \begin{align*}
+        \left(\frac{\partial}{\partial s}+\cL\right)\varphi(r-s,x)\stackrel{(\ref{eq:1.8:BKE})}{=}0
+    \end{align*}
+
+    take $t\in[0,r]$: \marginnote{This needs the boundedness of $\varphi$, otherwise it might only be a local martingale. There are softer contidions we can put on the coefficients to achieve the same result. This might not be needed, because 
+                        $\varphi$ is $C^1$ in time anyways}
+    \begin{align*}
+        M_t^r&\coloneqq \varphi(r-t,Z_t)-\varphi(r,Z_0)-\int_0^t\underbrace{(\partial_s+\cL)\varphi(r-s,Z_s)}_{=0}ds\\
+        &=\varphi(r-t,Z_t)-\varphi(r,Z_0)\text{ is a martingale}
+    \end{align*}
+    for any solution $\bP$. 
+
+    \begin{eqnarray*}
+        0&=\bE_{\bP}\left(M_r^r-M_t^r\mid\cF_t \right) &= \bE(\varphi(0,Z_r)-\varphi(r-t,Z_t)\mid \cF_t)\\
+        \implies &\forall 0\leq t\leq r: \bE_\bP(\varphi(0,Z_r)\mid\cF_t)&=\bE_\bP(\varphi(r-t,Z_t)\mid\cF_t)\\
+        &&\stackrel{\as}{=}\varphi(r-t,Z_t)\\
+        &\bE(\underbrace{\varphi(0,Z_r)}_{\Psi(Z_r)})&\stackrel{t=0}{=}\bE_bP(\varphi(r,Z_0))
+    \end{eqnarray*}
+
+    $\forall $ other martingale solutions $\Q$:
+
+    \begin{eqnarray*}
+        \bE_\Q(\Psi(Z_r))=\bE_{\Q}(\varphi(r,Z_0))
+    \end{eqnarray*}
+
+    By assumption this implies $\text{Law}_\bP(Z_r)=\text{Law}_\Q(Z_r)$.
+
+    \highlight{2. Multi-time distributions:}
+
+    For $\Psi\in C_0^\infty$, denote $\varphi_\Psi$ the solution of (\ref{eq:1.8:BKE}) with initial condition $\Psi$:
+    \begin{eqnarray*}
+        \bE_\bP(\Psi(Z_r)\mid \cF_t)=\varphi_\Psi(r-t,Z_t)
+    \end{eqnarray*}
+
+    $0\leq r_2\leq r_1$ test for $g\in C_0^\infty$:
+    \begin{align*}
+        \bE_\bP(\Psi(Z_{r_1})g(X_{r_2}))&=\bE(\underbrace{\bE(\varphi_\Psi(Z_{r_1})|\cF_{r_2})}_{\varphi_\Psi(r_1-r_2,Z_{r_2})}g(Z_{r_2}))\\
+        &=\bE_\bP(\varphi_\Psi(r_1-r_2,Z_{r_2})g(Z_{r_2}))\\
+        &\stackrel{1.}{=}\bE_\Q(\varphi_\Psi(r_1-r_2,Z_{r_2})g(Z_{r_2}))\\
+        &=\bE_\Q(\Psi(Z_{r_1})g(Z_{r_2}))
+    \end{align*}
+
+    Iterating yields the statement.
+
+\end{proof}
