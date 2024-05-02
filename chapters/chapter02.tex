@@ -63,6 +63,201 @@ There might be a problem, because $\ln(Z_0)$ might not be integrable, and theref
     \[A=\left\{\lim_{t\to\infty}\frac{\tilde{B}_t+\gamma t}{t}=\gamma\right\}\in\cF_\infty\]
     but: $\tilde{B}$ is a BM w.r.t. $\Q\implies \Q(A)=1$, $\tilde{B}$ is a BM with drift $-\gamma$ w.r.t 
     $\bP(A)=0$.
-
-
 \end{remark}
+
+\beginlecture{06}{30.04.24}
+
+\subsection{Drift transformation of SDE}
+
+We once again start with
+
+\[\star=\begin{cases}
+    dX_t&=b(t,X_t)\\
+    X_0&=x_0
+\end{cases}\]
+with drift $b$ continuous.
+
+\highlight{Goal:} Get a weak solution of $\star$.
+
+Let $(X_t)_{t\geq 0}$ be a BM in $(\Omega,\cF(\cF_t)_{t\geq 0},\bP),X_0=x_0$.
+
+\highlight{Assume:} $Z_t\coloneqq \exp\left(\underbrace{\int_0^t b(s,X_s)dX_s}_{=L_t}-\frac{1}{2}\int_0^t |b(s,X_s)|^2ds\right)$ 
+is a martingale w.r.t. $\bP$.
+
+\begin{remark}
+    Thr assumption holds if 
+    \[|b(t,x)|\leq C(1+\Vert x\Vert)\text{ for some }C.\]
+\end{remark}
+
+$\implies \bE_\bP(Z_t)=1\forall t\geq 0$
+
+By Girsanov
+\begin{align*}
+    \tilde{X}_t=X_t-\langle L,X\rangle_t
+\end{align*}
+is a $\Q$-BM.
+
+But \begin{align*}
+    d\langle L,X\rangle_t&=b\cdot dX_t\cdot dX_t=b\cdot dt\\
+    \implies \tilde{X}_t &= X_t -\int_0^tb(s,X_s)ds\\
+    \text{w.r.t. }\Q:& dX_t = b(t,X_t)dt+\underbrace{d\tilde{B}_t}_{d\tilde{X}_t}
+\end{align*}
+
+Generalization: Start with 
+
+\[
+\star\star dX_t = b(t,X_t)dt+\sigma(t,X_t)dB_t    
+\]
+
+where $X,B$ are $d$-dimensional.
+
+\begin{proposition}\label{prop:2.2}\marginnote{In practice this is surprisingly useful in practice!}
+    Assume $(X,B)$ is a weak solution of $\star\star$ on $(\Omega,\cF,(\cF_t)_{t\geq 0},\bP)$.
+    If \[Z_t=\exp\left(\int_0^t c(s,X_s)dB_s-\frac{1}{2}\int_0^t c(s,X_s)^2ds\right)\]
+    is a martingale \marginnote{this is an implicit condition for $c$}
+    w.r.t. $\bP$, $\Q\ll\bP$ and $\cF_t$ s.t. $Z_t=\frac{d\Q_t}{d\bP}\text{Vert}_{\cF_t}$.
+
+    Then $(X_t)_{t\geq 0}$ on $(\Omega,\cF,(\cF_t)_{t\geq 0},\Q)$ is a weak soltuion of 
+    \[dX_t = [b(t,X_t)+\sigma(t,X_t)c(t,X_t)dt]+\sigma(t,X_t)d\tilde{B}_t\]
+    where $\tilde{B}$ is a d-dim BM.
+\end{proposition}
+
+\begin{proof}
+    \begin{align*}
+        d\langle L,B\rangle_t&\stackrel{L_t=\int_0^t c(s,X_s)dB_s}{=}c(t,X_t)dt\\
+        \implies& \tilde{B}_t\coloneqq B_t-\langle L,B\rangle_t \text{ is a }\Q \text{-BM}\\
+        \implies & dB_t = c(t,X_t)dt+d\tilde{B}_t
+    \end{align*}
+
+    From $\star\star$: $dX_t=b(t,X_t)dt+\sigma(t,X_t)c(t,X_t)dt+\sigma(t,X_t)d\tilde{B}_t=\star\star\star$
+\end{proof}
+
+\begin{equation*}%TODO: FIX
+    \begin{array}{|l|l|l|}\hline
+        \text{Measure} & \text{SDE } & \text{Generators}\\
+        \hline
+        \bP& dX_t b\cdot dt +\sigma \cdot dB_t& \mathcal{L}\sum_k b_k\frac{\partial}{\partial x_k}+\frac{1}{2}\sum_{k,l}(\sigma\sigma^\intercal)_{k,l}\frac{\partial^2}{\partial x_k\partial x_l}\\
+        \hline
+        \Q&[b+\sigma\cdot c] dt+\sigma d\tilde{B}_t & \tilde{\cL}=\cL+\sum_{k}\sum_l \sigma_{k,l}c_l\frac{\partial}{\partial x_k}=\cL + c\sigma^\intercal \nabla\\
+        \hline
+    \end{array}
+\end{equation*}
+
+$t\leq T$ for $\Q_t$. 
+
+\section{Doob-h transform}
+%TODO: Images
+\begin{enumerate}\marginnote{Essentially three cases in 1d}
+    \item From $B_t\to B_t$ conditioned on $\{B_1=0\}$ (measure zero set)
+    \item From $B_t\to B_t$ conditioned on $\{B_t\geq 0\forall t\geq 0\}$ (measure zero set)
+    \item From $B_t\to B_t$ conditioned on $\{B-t\geq 0\forall t\in [0,1],B_1=0\}$
+\end{enumerate}
+
+Let $(X_t,B_t)_{t\geq 0}$ be a weak solution of 
+\[(\star)=\begin{cases}
+    dX_t &= b(t,X_t)dT+\sigma(t,X_t)dB_t\\
+    X_0&=x_0\text{ fixed}
+\end{cases}\]
+Assume there exists $h\in C^{1,2}(\R_+\times\R^d)$ s.t. $h>0$ satisfying 
+\begin{equation*}
+    (\frac{\partial}{\partial t}+\cL)h=0\forall t,\in [0,T],x\in\R^d
+\end{equation*}
+where $\cL$ is the generator of the SDE $(\star)$.
+
+By theorem \ref{prop:1.14} $Z_t\coloneqq h(t,X_t)=h(0,X_0)+\int_0^t (\sigma \nabla h)(s,X_s)dB_s$.
+
+$Z_t$ is a positive local martingale. Assume $Z_t$ is a martingale.
+
+W.l.o.g. $Z_0=1$ (if not $h\mapsto \frac{h}{h(0,X_0)}$).
+
+$\implies d\Q_T =Z_T\cdot d\bP$. Let $L_t$ s.t. $Z_t=\exp(L_t-\frac{1}{2}\langle L\rangle_t)$.
+
+Girsanov, since $B_t$ is a $\bP$-BM, 
+
+$\tilde{B}_t\coloneqq B_t-\langle L,B\rangle_t$ is a $Q_T$-BM, where 
+\begin{align*}
+    \langle L, B\rangle_t =\sigma^\intercal\cdot \nabla\ln h \cdot d B_t
+\end{align*}
+
+because of 
+\begin{align*}
+    dL_t&=\frac{dZ_t}{Z_t}=\frac{\sigma^\intercal\cdot  \nabla h \cdot d B_t}{h(t,X_t)}=\sigma^\intercal\cdot \nabla\ln h \cdot d B_t\\
+\end{align*}
+
+And therefore $dB_t = d\tilde{B}_t+\sigma^\intercal \nabla \ln h dt$.
+
+From $(\star)\implies dX_t = (\underbrace{b(t,X_t)+\sigma(t,X_t)\sigma^\intercal(t,X_t)\nabla h(t,X_)}_{\coloneqq \tilde{b}})dt + \sigma(t,X-t)d\tilde{B}_t$
+
+\begin{proposition}\label{prop:2.3}
+    Let $X$ be a weak solution of $dX_t=b(t,X_t)+\sigma(t,X_t)dB_t$ on $[0,T]$ under $\bP$.
+
+    Then under $\Q_T, X$ is a weak solution of the SDE 
+    \[\begin{cases}
+        dX_t &= \tilde{b}(t,X_t)dt+\sigma(t,X_t)d\tilde{B}_t\\
+        X_0&=x_0
+    \end{cases}\]
+    where \dhighlight{$\tilde{b}=b+\sigma\sigma^\intercal \nabla \ln h$}.
+\end{proposition}
+
+\begin{remark}
+    In applications, often $h(x)\not> 0$ for all $x$!
+
+    E.g.: $h(t,x)=x\implies \left(\frac{\partial}{\partial t}+\cL \right)h=0$ ($X_t=B_t+x_0$), but $h(x)\leq 0$ for $x\leq 0$.
+
+    In this case first do the construction on $[0,\tau]$, where $\tau\coloneqq\inf\{t>0\mid B_t=0\}$
+
+    $\implies$ ok for $B_t^\tau\stackrel{\text{magically}}{\implies}$ the new SDE has drift:\marginnote{We realize there is no problem in the new measure}
+    \[\frac{\partial}{\partial x}\ln(h(x))=\frac{1}{h(x)}\frac{\partial h(x)}{\partial x}=\frac{1}{x}\] 
+\end{remark}
+
+\begin{example} % TODO: Numbering
+    If $X_t=B_t$ and $h(t,)=e^{\gamma x-\frac{1}{2}\vert \gamma\vert^2 t}$
+    \begin{align*}
+        \implies dX_t &= \nabla \ln h(t,X_t)dt + dB_t\\
+        &=\nabla(\gamma \cdot x)dt + dB_t \\
+        &=\gamma d_t + d B_t
+    \end{align*}
+
+    $\implies X_t$ is a BM with drift $\gamma$ w.r.t $\Q$.
+\end{example}
+
+\section{Diffusion Bridges}
+
+Consider a Markov process\marginnote{This is not true in general, if we don't have unique solutions} $(X_t)_{t\geq 0}$ which is a 
+diffusion starting from $X_0=x_0\in\R^d$. % TODO: Was ist eine Diffusion?
+
+We want to condition on the event $\{X_T=y\}$ for some given $T>0,y\in\R^d$.
+
+\dhighlight{Goal:} Find, $\forall y\in \R^d, \Q^y$ which is the conditional measure on $\{X_T=y\}$.
+
+Assume: $(X_t)_{t\geq 0}$ has transition density $P$ s.t. 
+\[\forall 0\leq s\leq t\leq T,\bP(X_t\in dz\mid X_s=x)=p(s,x;t,z)dz.\]
+
+$X_t$ solves \[\begin{cases}dX_t &= b(t,X_t)dt+\sigma(t,X_t)dB_t\\
+    X_0&=x_0
+\end{cases}.\]
+
+Define $h^y(s,x)\coloneqq \frac{p(s,x;T,y)}{p(0,x_0;T,y)}$ for $s\in [0,T),x\in\R^d$.
+
+\begin{remark}
+    $s<T$ since otherwise we get ingeneral singularities.
+\end{remark}
+
+\begin{lemma}\label{lem:2.4}
+    Let $Z_t^y\coloneqq h^y(t,X_t)$ is a martingale. 
+\end{lemma}
+
+\begin{proof}
+    Let $0\leq <t<T$:
+    \begin{align*}
+        \bE(Z_t^y\mid\cF_s)&=\bE(h^y(t,X_t)\mid \cF_s)\\
+        &\stackrel{\text{MP}}{=}\bE(h^y(t,X_t\mid X_s))\\
+        &=\int_{\R^d} h^y(t,x)p(s,X_s;t,x)dx\\
+        &=\int_{\R^d} \frac{p(t,x;T,y)}{p(0,x_0;T,y)}p(s,X_s;t,x)dx\\
+        &=\frac{1}{p(0,x_0;T,y)\int_{\R^d}p(s,X_s;t,x)p(t,x;T,y)dx}\\
+        &\stackrel{\text{Chapman-Kolmogorov}}{=} Z_s^y=
+    \end{align*}
+    \marginnote{$h^{y}(0,x_0)=1$}
+\end{proof}
+
+
