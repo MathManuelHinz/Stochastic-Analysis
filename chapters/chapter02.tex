@@ -150,7 +150,7 @@ $t\leq T$ for $\Q_t$.
 \begin{enumerate}\marginnote{Essentially three cases in 1d}
     \item From $B_t\to B_t$ conditioned on $\{B_1=0\}$ (measure zero set)
     \item From $B_t\to B_t$ conditioned on $\{B_t\geq 0\forall t\geq 0\}$ (measure zero set)
-    \item From $B_t\to B_t$ conditioned on $\{B-t\geq 0\forall t\in [0,1],B_1=0\}$
+    \item From $B_t\to B_t$ conditioned on $\{B_t\geq 0\forall t\in [0,1],B_1=0\}$
 \end{enumerate}
 
 Let $(X_t,B_t)_{t\geq 0}$ be a weak solution of 
@@ -210,7 +210,7 @@ From $(\star)\implies dX_t = (\underbrace{b(t,X_t)+\sigma(t,X_t)\sigma^\intercal
     \[\frac{\partial}{\partial x}\ln(h(x))=\frac{1}{h(x)}\frac{\partial h(x)}{\partial x}=\frac{1}{x}\] 
 \end{remark}
 
-\begin{example} % TODO: Numbering
+\begin{aexample} % TODO: Numbering
     If $X_t=B_t$ and $h(t,)=e^{\gamma x-\frac{1}{2}\vert \gamma\vert^2 t}$
     \begin{align*}
         \implies dX_t &= \nabla \ln h(t,X_t)dt + dB_t\\
@@ -219,7 +219,7 @@ From $(\star)\implies dX_t = (\underbrace{b(t,X_t)+\sigma(t,X_t)\sigma^\intercal
     \end{align*}
 
     $\implies X_t$ is a BM with drift $\gamma$ w.r.t $\Q$.
-\end{example}
+\end{aexample}
 
 \section{Diffusion Bridges}
 
@@ -259,5 +259,504 @@ Define $h^y(s,x)\coloneqq \frac{p(s,x;T,y)}{p(0,x_0;T,y)}$ for $s\in [0,T),x\in\
     \end{align*}
     \marginnote{$h^{y}(0,x_0)=1$}
 \end{proof}
+
+\beginlecture{07}{02.05.24}
+
+\begin{aremark}
+    \dhighlight{Goal:} Find a family $(\Q^y)_{y\in\R^d}$ s.t. for $A\in \cF_T$:
+    \[\bP(A)=\bE(\bP(A|X_T))\stackrel{?}{=}\bE(\Q^{X_T}(A))\]
+    and $\Q^y\left(\lim_{t\uparrow T} X_t=y\right)=1$
+\end{aremark}
+
+\begin{lemma}\label{lem:2.5}
+    We can take 
+    \[\Q^y(A)=\bE(1_{A}\cdot h^y(s,X_s))\forall A\in\cF_s\]
+    for $s\in [0,T]$.
+\end{lemma}
+
+\begin{proof}
+    For all $A\in\cF_s$, $g$ bounded measurable:
+    \begin{align*}
+        \bE(1_Ag(X_t))&=\bE(1_A\bE(g(X_T|\cF_s)))\\
+        &\stackrel{\text{MP}}{=}\bE(1_A\bE(g(X_T|X_s)))\\
+        &=\bE\left(1_A\int_{\R^d}p(s,X_s;T,x)g(x)dx\right)\\
+        &=\int_{\R^d}dx g(x)\bE(1_Ap(s,X_s;T,x))
+    \end{align*}
+    In particular, 
+    \begin{align*}
+        \bP(A)=\bE(1_A)=\int_{\R^d}dx\bE(1_A\cdot p(s,X_s;T,x))
+    \end{align*}
+    But 
+    \begin{align*}
+        \int_{\R^d}dx p(0,X_0;T,x)Q^x(A)&=\int_{R^d} p(0,x_0;T,x)\underbrace{\bE(1_Ah^x(s,X_s))}_{=\int dzp(0,x_0;s,z)h^x(s,z)1_A}\\
+        &=\int_{\R^d}\bE(1_Ap(s,X_s;T,x))\\
+        &=\bP(A).\qedhere
+    \end{align*}
+\end{proof}
+
+\begin{remark}
+    $Z_t^y=h^y(t,X_t)=h(0,X_0)+\text{ martingale }+\underbrace{\int_0^t( \partial_t +\mathcal{L})h^y(s,X_s)ds}_{=0}.$
+
+    One can verify: $(\partial_t+\mathcal{L})h^y(t,X_t)=0 \iff (\partial_t+\mathcal{L})H^y(t,X_t)=0$ for 
+    $H^y(t,x)=p(t,x;T,y)$.
+
+    \begin{align*}
+        \frac{\partial}{\partial t}H^y(t,x)&=\lim_{\epsilon\downarrow0}\frac{p(t,x;T,y)-p(t-\epsilon,x;T,y)}{\epsilon}\\
+        &=\lim_{\epsilon\downarrow 0} \frac{p(t,x;T,y)-\int \overbrace{p(t-\epsilon,x;t,z)}^{=e^{\epsilon L}(x,z)=\delta_{x-z}+\epsilon\mathcal{L}(x,z)}p(t,z;T,y)dz}{\epsilon}\\
+        &=-(\mathcal{L}H^y)(t,x)
+    \end{align*}
+
+    $\implies$ this is a doob-h transform with $h=h^y$.
+
+    \begin{align*}
+        \frac{d\Q^y}{d\bP}\vert_{\cF_t}=Z_t^y.
+    \end{align*}
+\end{remark}
+
+\begin{corollary}\label{cor:2.6}
+    Assume $(t,x)\mapsto p(t,x;T,y)$ is $C^{1,2}([0,T]\times \R^d)$
+    
+    $\implies$ The Doob h-transform of the original process under $\Q^y$ satisfies the SDE:
+    \begin{align*}
+            dX_t=\tilde{b}(t,X_t)dt+\sigma(t,X_t)d\tilde{B}_T
+    \end{align*}
+    where $\tilde{B}_t$ is a $\Q^y$-BM and $\tilde{b}(t,X_t)=b(t,X_t)+(\sigma\sigma^\intercal \nabla \ln h^y)(t,X_t)$.
+\end{corollary}
+
+\begin{remark}
+    Take $z\neq y$ and $\forall 0<\epsilon<|z-y|$:
+    \begin{align*}
+        \Q^y\left(\{|X_t-z|\leq \epsilon\}\right)&=\bE\left(1_{|X_t-z|\leq \epsilon}\frac{p(t,X_t;T,y)}{p(0,x_0;T,y)}\right)\\
+        &=\int dx 1_{|x-z|\leq \epsilon}p(0,x_0,t,x)\frac{p(t,x;T,y)}{p(0,x_0;T,y)}\\
+        &\stackrel{t\to T}{\longrightarrow}0
+    \end{align*}
+    $\implies \bP\left(\lim_{t\uparrow T}X_t=y\right)=\bP(X_t=y)=0$, but $\Q^y\left(\lim_{t\uparrow T} X_t=y\right)=1$
+
+    $\implies$ $\Q^y$ is singular w.r.t. $\bP$.
+\end{remark}
+
+\begin{aexample}
+    $b=\gamma\in\R^d,\sigma=1,X_0=0$ and $T=1$. Under $\bP:$
+    \[\begin{cases}
+        dX_t=\gamma dt + dB_t\\
+        X_0=0
+    \end{cases}\]
+    Under $\Q^y$?
+
+    \begin{align*}
+        h^y(t,x)=\frac{p(t,x;1,y)}{p(0,x_0,1,y)}=\text{fct}(\gamma,y)\cdot \exp\left(-\frac{(y-x)^2}{2(1-t)}\right)\exp\left((y-x)\gamma\right)
+    \end{align*}
+
+    $\implies \ln( h^y(t,x))=\ln f(\gamma,y)-\frac{(y-x)^2}{2(1-t)}+(y-x)\gamma$
+    $\implies \nabla \ln h^y(t,x)=\frac{y-x}{1-t}-\gamma$.
+
+    Under $\Q^y:$
+    \begin{align*}\marginnote{Indepdendent of $\gamma$!}
+        dX_t^k&h^y=\left(\gamma_k+\frac{y_k-X_t^k}{1-t}\right)dt + d\tilde{B}_t^k\\
+        &=\frac{Y_k-X_t^k}{1-t}dt +d\tilde{B}_t^k
+    \end{align*}
+    for $k=1,\dots,d$
+\end{aexample}
+
+\begin{lemma}\label{lem:2.7}\marginnote{Useful in practice to sample!}
+    Let $p$ be the transition density of $X$ w.r.t. $\bP$ and $p^h$ the transition density of $X$ w.r.t. $\Q^y$.
+
+    Let $h^y(t,x)=\frac{p(t,x;T,y)}{p(0,x_0;T,y)}$.
+
+    \begin{align*}\marginnote{Notice how the normalizations inside of $h^y$ cancel!}
+        \implies p^h(s,x;t,z)=\frac{1}{h^y(s,x)}p(s,x;t,z)h^y(t,z)
+    \end{align*}
+\end{lemma}
+
+\begin{proof}
+    \begin{align*}
+        p^h(s,x;t,z)dz&=\bP(X_t\in dz\mid X_s=x,X_T=y)\\
+        &\stackrel{0\leq s\leq t}{=}\frac{p(0,x_0;s,x)p(s,x;t,z)p(t,z;T,y)dz}{p(0,x_0;s,x)p(s,x;T,y)}\\
+        &=p(s,x;t,z)\frac{p(t,z;T,y)}{p(0,x_0;T,y)}\frac{1}{\frac{p(s,x;T,y)}{p(0,x_0;T,y)}}dz\qedhere
+    \end{align*}
+\end{proof}
+
+\section{Brownian motion conditioned to stay positive forever}
+
+\dhighlight{Goal:} $(B_t)_{t\geq 0}$ with $B_0=x_0\geq 0$ and condition on 
+\[\{B_t\geq 0\forall t\geq 0\}\]
+%TODO Zeichnung
+$T_x=\inf\{t\geq 0\mid B_t=x\}$ and take $0<x_0<R$.
+
+$T_0\land T_R=T_R$.
+
+Let $\tilde{T}_R\coloneqq T_0\land T_R$. Define the event $E_R=\{B_{\tilde{T}_R}=R\}=\{T_0\land T_R=T_R\}$.
+
+One verifies $\bP(E_R)=\frac{x_0}{R}\in (0,1)$.
+
+$\bP(E_R)=\bE(1_{B_{\tilde{T}_R}^{x_0}})=\underbrace{\bE(f(B_{\tilde{T}_R}^{x_0}))}_{u(x_0)}$, where 
+\[f(x)=\begin{cases}
+    1 & x= R\\
+    0 & x=0
+\end{cases}.\]
+$u$ has a link to the PDE:\marginnote{By Theorem 11.6 of the last semester} 
+\[\begin{cases}
+    \frac{1}{2}\frac{\partial^2}{\partial x^2} u(x)=0&x\in (0,R)\\
+    u(x)=f(x) & x\in \{0,R\}
+\end{cases}\]
+
+Define the conditional probability \marginnote{later $R\to\infty$}
+\[Q^R(A)\coloneqq \frac{\bP(A\cap E_R)}{\bP(E_R)}\]
+
+\begin{lemma}\label{lem:2.8}
+    Let $h(x)\coloneqq \frac{\bP_x(E_R)}{\bP_{x_0}(E_R)}=\frac{x}{x_0}$,
+    where $\bP_x$ is the unconditional law for $B_0=x$.    
+    \[Z_t=h(B_{t\cap \tilde{T}_R})\]
+    is a non-negative martingale.
+\end{lemma}
+
+\begin{proof}
+    \begin{align*}
+        \Q^R(A)&\stackrel{A\in\cF_s}{=}\frac{\bE(1_A\bE(1_{E_R}\mid \cF_s))}{\bP(E_R)}=\frac{\bE(1_A\bE(1_{E_R}\cdot 1_{\tilde{T}_R>s}\mid \cF_s))+\bE(1_A\bE(1_{E_R}1_{\tilde{T}_R\leq s}\mid\cF_s))}{\bP(E_R)}\\
+        &=\frac{1}{\bP(E_R)}\left[\bE(1_A1_{\tilde{T}_R>s}\underbrace{\bE(1_{E_R}\mid\cF_s)}_{\bP_{B_s}(E_R)})+\bE(1_A\underbrace{1_{E_R}}_{1_{B_{\tilde{T}_R}=R}}1_{\tilde{T}_R\leq s}) \right]\\
+        &=\bE(1_A1_{\tilde{T}_R>s}h(B_s))+\bE(1_A1_{\tilde{T}_R\leq s}h(B_{T_R}))\\
+        &=\bE(1_A h(B_{s\land \tilde{T}_R}))
+    \end{align*}
+    $\implies\forall A\in\cF_s: \Q^R(A)=\bE_{\bP}(1_Ah(B_{s\land \tilde{T}_R}))$
+
+    $\implies h(B_{s\land \tilde{T}_R})=\frac{d\Q^R}{d\bP}\vert_{\cF_s} \implies$ $h\in(0,\frac{R}{x_0})$ is a martingale (See construction of Girsanov).  
+\end{proof}
+
+\beginlecture{08}{07.05.24}
+
+\beginlecture{09}{14.05.24}
+
+\begin{aexample}
+    Discrete time M.C. with transition probability $P$
+
+    aperiodic and irreducible: $\exists n_0\forall n>n_0 (P)_{i,j}^n>0\implies \exists |\lambda_0|\leq 1,|\lambda_1|>|\lambda_2|>|\lambda_3|$:\[(P)^n\underbrace{\varphi_0(i)}_{>0}=\lambda_0\varphi_0(i)\]
+
+    $\lim_{n\to\infty} \underbrace{P}_{(1+L)}^n = (\varphi_0(1),\dots,\varphi_0(d))$
+
+    where $(1+L)\to e^{tL}$, for which the real eigenvalues are positive.
+
+\end{aexample}
+
+
+\section{Diffusion conditioned to stay in a domain} % should be 2.6
+
+Domain $D\subset\R^d$: bounded, open, connected.
+
+Diffusion with generator 
+\[L=\frac{1}{2}\sum_{i,j=1}^d a_{ij}\frac{\partial^2}{\partial x_i\partial x_j}+\sum_{i=1}^d b_i \frac{\partial}{\partial x_i}\] 
+$\iff$ SDE 
+\[\begin{cases}
+    dX_t=b(t,X_t)dt+\frac{1}{2}\sigma(t,X_t)dB_t\\
+    X_0=x_0
+\end{cases}\]
+$a=\sigma\sigma^\intercal$.
+
+Assume: $b,\sigma$ are continuous, $\sigma\in C^1$ and let $\tau_D=\int\{t\geq 0|X_t\notin D\}$
+
+\dhighlight{Key assumption} in Pinsky's paper:
+\begin{enumerate}
+    \item[(a)] $\bP_x(\tau_D>t)\in\C^2(D)$
+    \item[(b)] \[\begin{cases}
+        \bP_x(\tau_D>t)&=C_1\varphi_0(x)e^{-\lambda_0 t}+ o\left(e^{-\lambda_0t}\right)\\
+        \nabla \bP_x(\tau_d>t)=C_1\nabla \varphi_0(x)e^{-\lambda_0t}+o\left(e^{-\lambda_0t}\right)
+    \end{cases}\] where \[\begin{cases}
+        -L\varphi_0(x)=\lambda_0\varphi_0(x) & x\in D\\
+        \varphi_0(x)=0 & x\in\partial D
+    \end{cases}\] and $\lambda_0$ is the smallest eigenvalue of $-L$. \marginnote{in the non symmetric case take the real part first}
+    Which means $\bP(\tau_d>t)\stackrel{t\to \infty}{\to} 0$
+\end{enumerate}
+
+Want: Condition $X$ to stay in $D$ forever.
+
+\begin{enumerate}
+    \item[(1)] Condition $X_t$ to $\{X_t\in D:0\leq t\leq T\}$: Forall $A\in\cF_T$: define a measure \[\Q^T(A)\coloneqq \frac{\bP_{x_0}(A\cap \{\tau_D>T\})}{\bP_{x_0}(1_{\tau_D}>T)}=\frac{\bE_{x_0}(1_A\cdot 1_{\tau> T})}{\bE_{x_0}(1_{\tau>T})}\] 
+\end{enumerate}
+
+\begin{lemma}\label{lem:2.10}
+    $\forall s<T,A\in\cF_s$,
+    \[\Q^T(A)=\bE_{x_0}(1_A\cdot Z_s^T)\]
+    where $Z_s^T=\frac{g^{T-s}(X_{s\land \tau_D})}{g^T(x_0)}$ with $g^t(x)\coloneqq \bP_x(\tau_D>t)$.
+\end{lemma}
+
+\begin{proof}
+    Let $A\in\cF_s,s<T$:
+
+    \begin{align*}
+        \Q^T(A)&=\frac{\bE_{x_0}(1_A1_{\tau_D>T})}{g^T(x_0)}=\frac{\bE_{x_0}(1_A\bE_{x_0}(1_{\tau_D>T}|\cF_s))}{g^T(x_0)}\\
+        &\stackrel{\text{M.P.}}{=}\frac{\bE_{x_0}(1_A\bE_{x_0}(1_{\tau_D>T}|X_s))}{g^T(x_0)}\\
+        &=\frac{1}{g^T(x_0)}\left[\bE_{x_0}(1_A\underbrace{\bE_{x_0}(1_{\tau_D>T}1_{\tau_D>s}|X_s)}_{g^{T-s}(X_s)})+\bE_{x_0}(1_A\underbrace{\bE_{x_0}(1_{\tau_D>T}1_{\tau_D<s}|X_s)}_{=0})\right]\\
+        &=\frac{1}{g^T(x_0)}\left(1_A g^{T-s}(X_{s\land \tau_D})\right)
+    \end{align*}
+\end{proof}
+
+\begin{lemma}\label{lem:2.11}
+    $Z_0^T=1$ and $(Z_s^T)_{s\in [0,T]}$ is a martingale.
+\end{lemma}
+
+\begin{proof}
+    By lemma \ref{lem:2.10} $\implies Z_s^T=\frac{d\Q^T}{d\bP}\mid_{\cF_s}\to$ is a martingale.
+\end{proof}
+
+\begin{remark}
+    By construction, $\Q^T(\tau_D\leq T)=\frac{1}{g^T}(x_0)\bE_{x_0}(1_{\tau_D\leq T}1_{\tau_D>t})=0$
+\end{remark}
+
+Assume that $g^t(x)$ is $C^{1,2}$ (1 in time, 2 in space) $\implies$ apply Itô and 
+doob transform gives:
+
+\begin{proposition}\label{prop:2.12}
+    Let $X$ be a weak solution of $dX_t=b(t,X_t)dt+\sigma(t,X_t)dB_t$ under $\bP$.
+
+    $\implies$ $X$ is a weak solution of 
+    \[dX_t=\left(b(t,X_t)+\frac{a(t,X_t) \nabla g^{T-t}(X_t)}{g^{T-t}(X_t)}\right)dt +\sigma(t,X_t)d\tilde{B}_t, 0\leq t\leq T\]
+    under $\Q^T$ provided $g^t(x)>0\forall x\in D,t\geq 0$.
+\end{proposition}
+
+What happens in the $T\to\infty$ limit?
+
+By assumption (b)\marginnote{Their operator is not the same as ours. The only difference is a drift term.}
+
+$\lim_{T\to\infty}\frac{\nabla g^{T-t}(x)}{g^{T-t}(x)}=\frac{\nabla \varphi_0(x)}{\varphi_0(x)}$
+
+\begin{remark}
+    If $g\in C^{1,2}$, it satisfies the parabolic PDE 
+    \[(\star)\begin{cases}\frac{\partial}{\partial t}g^t(x)=L g^t(x) & x\in D\\ g^t(x)=0 & x\in\partial D\end{cases}\]
+    Apply Theorem 11.5 from the WS with $A=L,u(t,x=g^t(x))$: 
+    $u(0,x)=\bE_x(1_{\tau_D>0})=0,u(t,x)=\bE_x(1_{\tau_D>t})=0\forall t,x\in\partial D$.
+\end{remark}
+
+Pinsky proved that $\lim_{T\to\infty} Q^T=Q$ weak and that under $Q$ the process satisfies
+\[dX_t = \left[b(t,X_t)+a(t,X_t)\frac{\nabla \varphi_0(X_t)}{\varphi_0(X_t)} \right]dt +\sigma(t,X_t)dW_t.\]
+
+
+Why is $\bP_x(\tau_D>t)=C_1\varphi_0(x)e^{-\lambda_0 t}+o(e^{-\lambda_0t})$
+
+\begin{aremark}
+
+    This is not the case for BM conditioned to stay in $D=(0,\infty)$. Reason: Spectrum of $-L$ is $\R_+$
+
+\end{aremark}
+
+Since it satisfies the PDE $(\star)$, $g^t(x)=(e^{tL})g^0(x)$.
+
+if the spectrum of $-L$ is discrete with eigenvalues $0\leq \lambda_0<\lambda_1\leq \dots$, where 
+there is a spectral gap between $\lambda_0$ and $\lambda_1$: $\exists$ eigenfunctions $\varphi_0(x),\varphi_1(x),\dots$,
+normalized  as $\Vert \varphi_n\Vert_{L^2(D)}=1\implies +L\varphi_n(x)=-\lambda_n\varphi_n(x)$
+$\implies$ we can choose $\varphi_0,\varphi_1,\dots$ to be orthonormal: $(\varphi_i,\varphi_j)_{L^2(D)}=\delta_{ij}$. 
+
+$\implies 1=\sum_{n\geq 0}\varphi_n\varphi_n^*$, since $\varphi_n\varphi_n^*$ is the projection onto 
+the space generated by $\varphi_m$:
+\[\varphi_n\varphi_n^* f=\varphi_n (\varphi_n,f)_{L^2(D)}\]
+
+\begin{align*}
+    f(L)\varphi_n&=f(-\lambda_n)\varphi_n\\
+    g^t(x)&=(e^{tL})g^0(x)=e^{tL}1g^0(x)=\sum_{n\geq 0}e^{tL}\varphi_n(x)\varphi_n^*g^0=\sum_{n\geq 0} e^{-\lambda n t}\varphi_n(x)(\varphi_m,g^0)\\
+    &=(\varphi_0,g^0)\varphi_0(x)e^{\lambda_0t}+\underbrace{e^{-\lambda_0 t}\sum_{n\geq 0}e^{(\lambda_0-\lambda_n)t}\varphi_n(x)(\varphi_n,g^0)}_{o(e^{-\lambda_0 t})}
+\end{align*}
+
+
+\begin{example}
+    One dimension.
+
+    $L=\frac{1}{2}\frac{d^2}{dx^2}$ and $D=[0,R]$.
+
+    Solve $-L\varphi(n)(x)=\lambda_n\varphi_n(x)$ with $\varphi_n(x)=0$ for $x\in \{0,R\}$.
+
+    Solutions $\varphi_n(x)=C_1\sin\left(\frac{\pi x}{R}\cdot (n+1)\right)$
+    and 
+    $\lambda_n=\left(\frac{\pi(n+1)}{R}\right)^2\implies \lambda_0=\frac{\pi^2}{R^2}$.
+
+    For $x\in(0,R):$\begin{align*}
+        \bP_x(\tau>t)\approx \tilde{C}_1 \varphi_0(x)e^{-\frac{\pi^2 t}{R^2}}
+    \end{align*}
+
+    \[\implies dX_t=\frac{\pi}{R}\frac{\cos(\frac{\pi X_t}{R})}{\sin(\frac{\pi X_t}{R})}d+dW_t\]
+
+    as $X_t\to 0$ (or $X_t\to\R$), drift $\approx \frac{1}{x_t}$ or $(\frac{-1}{R-X_t})$.
+
+    Also: formally $R\to\infty$ in the SDE, we get $dX_t=\frac{dt}{X_t}+dW_t$, which is the SDE 
+    we derived for BM conditioned to stay $>0$ forever.
+\end{example}
+
+
+\beginlecture{10}{16.05.24}
+
+\begin{example}[Brownian Motion in a Weyl chamber]\label{ex:2.14}
+    The \dhighlight{Weyl chamber} is defined as \[W^d=\{x\in\R^d\mid x_1<x_2<\dots<x_d\}.\]
+    Given a $d$ dim. Brownian motion $(B_t)_{t\geq 0}$ with $B_0\in W^d$ what is the sde of 
+    this BM conditioned on staying in $W^d$ forever.
+
+    What is the harmonic function vanishing at $\partial W^d$?
+
+\end{example}
+
+\begin{lemma}\label{lem:2.15}
+    $h(x)\coloneqq \prod_{1\leq k <l\leq d}(x_l-x_k)$ is harmonic and satisfies 
+    \[\frac{1}{2}\sum_{k=1}^d\frac{\partial^2}{\partial x_k^2}h(x)=0,x\in W^d\]
+    and $h(x)=0$ for $x\in \partial W^d$, $h(x)>0$ for $x\in W^d$.
+\end{lemma}
+
+\begin{remark}
+    $h(x)=\det(x_k^{l-1})$
+\end{remark}
+
+\begin{proof}
+    Last two properties are clear. $h$ is a polynomial, antisymmetric in each pair $x_l-x_k$ and has 
+    lowest possible power.
+
+    $\Delta h(x)$ is still antisymmetric, but with lower power $\implies$ $\Delta h(x)=0$.
+\end{proof}
+
+The BM conditioned to stay in the Weyl chamber will satisfy the SDE:
+\begin{align*}
+    dX_t^k &= \sum_{l\neq k}\frac{dt}{X_t^l-X_t^k}+dB_t^k, & 1\leq k\leq d
+\end{align*}
+
+\section{Stationary distribution for diffusions}
+
+let $dX_t=b(X_t)dt+\sigma(X_t)dB_t$, where $b,\sigma$ are time independent with generator 
+\[L=\sum_{k=1}^db_k(x)\frac{\partial}{\partial x_k}+\frac{1}{2}\sum_{k,l=1}^da_{k,l}(x)\frac{\partial^2}{\partial x_k\partial x_l}\]
+
+
+\begin{definition}\label{def:2.16}
+    A probability measure $\mu$ \dhighlight{stationary (or invariant)} if for all $f\in C_0^\infty(\R^d)$\marginnote{or only test schwarzfunctions}
+    \[\int_{\R^d} (Lf)(x)\mu(dx)=0\]
+\end{definition}
+
+Assume that $\mu\ll$ Lebesgue, i.e., $\mu(dx)=\rho(x)dx$ for some positive function $\rho(x)\in C^2$ with $\int\rho(x)dx=1$.
+
+\begin{lemma}\label{lem:2.16b}
+    $\mu$ is stationary with density $\rho$\marginnote{this also assumes $b$ to be differentiable!}
+    \[\iff L^*\rho(x)=0\text{ almost everywhere}\]
+    where $L^*$ is the adjoint of $L$, given by 
+    \[L^* \rho(x)=\frac{1}{2}\sum_{k,l=1}^d\frac{\partial^2}{\partial x_l \partial x_l}(a_{k,l(x)\rho(x)})-\sum_{k=1}^d\frac{\partial}{\partial x_k}(b_k(x)\rho(x))\]
+\end{lemma}
+
+\begin{proof}
+    \begin{align*}
+        &\int_{\R^d}(L f)(x)\rho(x)dx=0\\
+        =&\int_{\R^d}dx_1,\dots,dx_d\rho(x)\left(\frac{1}{2}\sum_{k,l=1}^d\frac{\partial^2}{\partial x_k\partial x_l} f(x)+\sum_{k=1}^d b_k(x)\frac{\partial}{\partial x_k}f(x)\right)
+    \end{align*} 
+    \begin{align*}
+        \int_{R^{d-1}}\prod_{l\neq k} dx_l\underbrace{\int_R dx_k \rho(x)b_k(x)\frac{\partial }{\partial x_k}f(x)}_{\stackrel{\text{I.b.p}}{=}-\int_R dx_k\frac{\partial}{\partial x_k}(\rho(x)b_k(x)) \cdot f(x)}
+    \end{align*}   
+\end{proof}
+
+\begin{example}[1-dim. diffusion]\label{lem:2.17}
+    Let $L=b(x)\frac{\partial }{\partial x}+\frac{1}{2}\sigma^2(x)\frac{\partial}{\partial x^2}$ for all $x\in\ R$.
+    \[\implies L^*\rho(x)=\frac{1}{2}\frac{\partial^2}{\partial x^2}(\rho(x)\sigma^2(x))-\frac{\partial}{\partial x}(\rho(x)b(x))\stackrel{\text{wanted}}{=}0\]
+    $\implies \exists c_1$ s.t. $\frac{1}{2}\frac{\partial}{\partial x}(\underbrace{\rho(x)\sigma^2(x)}_{=g(x)})-\underbrace{\rho(x)b(x)}_{=g(x)\frac{b(x)}{\sigma^2}}=c_1$.
+
+    Let $s(x)=\int_{x_0}^xdye^{-\int_{x_0}^y dz\frac{2b(z)}{\sigma^2(z)}}$ be the \dhighlight{scale function}.
+
+    The equation for $c_1$ is equivalent to 
+    \begin{align*}
+        s'(x)\sigma^2(x)\rho(x)=c_2+2c_1s(x)
+    \end{align*}
+    for some constant $c_2$,$s'(x)e^{-\int_{x_0}^y dz\frac{2b(z)}{\sigma^2(z)}}=>0$.
+
+    s satisfies $\frac{1}{2}\sigma^2(x)s''(x)+b(x)s'(x)=0$, for the Bessel process $d=2$, $s(x)=\ln(x)$
+
+    If $s(\R)=\R$, then $c_1=0$, which implies 
+    \[\rho(x)=\frac{c_2}{\sigma^2(x)}\underbrace{e^{\int_{x_0}^x\frac{2b(y)}{\sigma^2(y)}dy}}_{\frac{1}{s'(x)}}\]
+    which satisfies positivity.
+\end{example}
+
+\begin{lemma}\label{lem:2.18}
+    If $S(\R)=\R$, then there exists stationary measure with density $\rho(x)$ as described above.
+\end{lemma}
+
+\dhighlight{Counterexample:}
+\begin{itemize}
+    \item $\sigma=1$, $x_0=0$, $b(z)=b>0$.
+\end{itemize} 
+
+$\implies s(x)=\frac{1-e^{-2bx}}{2b}\to s'(x)=e^{-2bx}$.
+
+\begin{itemize}
+    \item $s(-\infty)=-\infty$
+    \item $s(\infty)=\frac{1}{2b}$
+\end{itemize}
+
+$\implies $ Argument for $c_1=0$ does not work.
+
+\[\implies \rho(x)=\tilde{c}_1+\tilde(c)_2e^{2bx}\]
+which can't be a density, because if at least $\tilde{c}_1$ or $\tilde{c}_2$ are $\neq 0$
+$\implies$ it is not integrable.
+
+
+\begin{example}\label{ex:2.19}
+    Let $Lf(x)=\frac{1}{2}\frac{\partial^2}{\partial x^2} f(x)+b(x)\frac{\partial }{\partial x}f(x)$
+    where $b(x)=\frac{\partial}{\partial x}\ln h(x)$ for some $h(x)>0$.
+
+
+    Assume $h$ is normalized as $\int_R (h(x))^2 dx=1$.\marginnote{Implicitly assumes $h\in L^2(\R)$} 
+    $\implies$ \dhighlight{Claim:} The stationary density of the process with generator $L$ is given by 
+    $\rho(x)=(h(x))^2$.
+
+    \underline{Verify the claim:}
+
+    \begin{align*}
+        L^*\rho&(x)\stackrel{?}{=}0\\
+        &=\frac{1}{2}\frac{\partial^2}{\partial x^2} \rho(x)-\frac{\partial}{\partial x}(b(x)\rho(x))\\
+        &=\frac{1}{2}\frac{\partial^2}{\partial x^2} (h(x))^2-\frac{\partial}{\partial x}(\frac{h'(x)}{h(x)}h(x)^2)\\
+        &=\frac{\partial}{\partial x} (h(x)h'(x))-\frac{\partial}{\partial x}(h'(x)h(x))=0
+    \end{align*}
+
+    Example \ref{ex:2.13} $\implies h(x)=c\sin(\frac{\pi x}{L})$\marginnote{here $L\in\R$ is not the operator!}
+
+    \begin{align*}
+        \int_0^L h(x)^2dx=c^2\int_0^2\sin^2(\frac{\pi x}{L})dx=1\\
+        \implies c=\sqrt{\frac{2}{L}}\implies \rho(x)=\frac{2}{L}\sin^2(\frac{\pi x}{L}).
+    \end{align*}
+\end{example}
+
+
+\section{Uniqueness in law and path integral formula}
+
+Consider the SDE \[\begin{cases}
+    dX_t=b(t,X_t)dt+dB_t & \text{in }\R^d\\
+    x_0=x_0
+\end{cases}\]
+
+Assume \begin{equation*}\
+   (\star) \forall T>0 \int_0^T|b(s,X_s)|^2ds < \infty\as
+\end{equation*}.
+
+\dhighlight{Goal:} Show uniqueness in law.
+
+Consider any $(X,\mathcal{B},\bP)$ weak solution satisfying $(\star)$ 
+and define\[\tau_n\coloneqq \inf\{t\geq 0\mid \int_0^t|b(s,X_s)|^2ds\geq n\}\]
+which, by $(\star)$ goes to infinity.
+
+For each $n$, define $\Q^n:$
+
+\[\frac{d\Q^n}{d\bP}=e^{-\underbrace{\int_0^{\tau_n}b(s,X_s)dB_s}_{L_{\tau_n}}-\frac{1}{2}\int_0^{\tau_n}|b(s,X_s)|^2ds}.\]
+
+By Girsanov: $\tilde{B}_t\coloneqq B_t-\langle B,L\rangle_t=B_t+\int_0^{t\land \tau_n} b(s,X_s)ds$
+is BM w.r.t. $\Q^n$, which implies 
+
+$X_t=\tilde{B}_t$ for all $t\leq \tau_n$ w.r.t. $\Q^n$.
+
+Let events of $(X,B)$ $\cF_T$ measurable for some time $T$: are in $A_T$.
+
+\begin{align*}
+    \bE_\bP\left(1_{(X,B)\in A_T}1_{T\leq \tau_n}\right)&=\bE_{\Q^n}\left(1_{(X,\mathcal{B})\in A_T}1_{T\leq \tau_n}e^{\int_0^{\tau_n} b(s,X_s)\underbrace{dB_s}_{=dX_s-b(s,X_s)ds}+\frac{1}{2}\int_0^{\tau_n}|b(s,X_s)|^2ds}\right) \\
+    &=\bE_{\Q^n}\left(1_{(X,B)\in A_T}1_{T\leq \tau_n}e^{\int_0^{\tau_n} b(s,X_s)d X_s-\frac{1}{2}\int_0^{\tau_n}|b(s,X_s)|^2ds}\right) 
+\end{align*}
+
+$B_s$ is adapted to $X_s$ $\implies$ for some $\Phi$: $B=\Phi(X)\implies$
+
+\begin{align*}
+    \bE_{\Q^n}\left(1_{(X,\Phi(X))\in A_T}1_{T\leq \tau_n}e^{\int_0^{\tau_n} b(s,X_s)d X_s-\frac{1}{2}\int_0^{\tau_n}|b(s,X_s)|^2ds}\right)    
+\end{align*}
+
+But: Law of $X$ w.r.t. $\Q^n$ is the law of $BM$. Take $n\to\infty$, then $\Q^n\to$ Wiener measure,
+$T\to\infty \implies$ we look at every possible event, but the probability does only depend on $X$!
+
+\[\mathbb{P}((X,B)\in\mathcal{B}(\mathcal{E}^d\times\mathcal{E}^d))\]
+
+
+
 
 
