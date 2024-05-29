@@ -363,10 +363,14 @@ Define $h^y(s,x)\coloneqq \frac{p(s,x;T,y)}{p(0,x_0;T,y)}$ for $s\in [0,T),x\in\
 
     Let $h^y(t,x)=\frac{p(t,x;T,y)}{p(0,x_0;T,y)}$.
 
-    \begin{align*}\marginnote{Notice how the normalizations inside of $h^y$ cancel!}
+    \begin{align*}
         \implies p^h(s,x;t,z)=\frac{1}{h^y(s,x)}p(s,x;t,z)h^y(t,z)
-    \end{align*}
+    \end{align*}\marginnote{Notice how the normalizations inside of $h^y$ cancel!}
 \end{lemma}
+
+\begin{aremark}
+    This is the first time my numbering is different from the handwritten notes, as they contain two environments numbered 2.5.
+\end{aremark}
 
 \begin{proof}
     \begin{align*}
@@ -419,10 +423,43 @@ Define the conditional probability \marginnote{later $R\to\infty$}
     \end{align*}
     $\implies\forall A\in\cF_s: \Q^R(A)=\bE_{\bP}(1_Ah(B_{s\land \tilde{T}_R}))$
 
-    $\implies h(B_{s\land \tilde{T}_R})=\frac{d\Q^R}{d\bP}\vert_{\cF_s} \implies$ $h\in(0,\frac{R}{x_0})$ is a martingale (See construction of Girsanov).  
+    $\implies h(B_{s\land \tilde{T}_R})=\frac{d\Q^R}{d\bP}\vert_{\cF_s} \implies$ $h\in(0,\frac{R}{x_0})$ is a martingale (See construction of Girsanov)  
 \end{proof}
 
 \beginlecture{08}{07.05.24}
+
+Note that we can write $Z_t^R=\coloneqq h(B_{s\land \tilde{T}_R})=\exp(L_t-\frac{1}{2}\langle L\rangle_t)$ by choosing 
+\[L_t=\int_0^{\tilde{T}_R}\frac{h'(B_s)}{h(B_s)}dB_s\]
+since 
+\[dL_t=\frac{dZ_t^R}{Z_t^R}=\begin{cases}
+    \frac{h'(B_t)dB_t}{h(B_t)} & t<\tilde{T}_R\\
+    0 & t\geq \tilde{T}_R
+\end{cases}\]
+
+\begin{proposition}
+    Under the measure $\Q^R$, $(B_t)_{t\geq 0}$ solves the SDE 
+    \[dB_t=\frac{1_{t\tilde{T}_R}}{B_t}dt+dW_t\]
+    for some $(W_t)_{t\geq 0}$ a $\Q^R$-BM.
+\end{proposition}
+
+\begin{proof}
+    Apply Girsanov in which 
+    \[d\langle B,L\rangle_t=dB_t\cdot dL_t \stackrel{h'(x)=\frac{1}{x_0}}{1_{t<\tilde{T}_R}}\frac{1}{B_t}dt\qedhere\]
+\end{proof}
+
+Our goal was to condition the BM to stay positive forever. Sofar we have conditioned it to reach the level $R$
+before the level $0$.
+
+\begin{remark}
+    \begin{align*}
+        \Q^R(T_0<T_R)&=\bE(1_{T_0<T_R}h(B_{T_R\land T_0}))\\
+        &=\bE(1_{T_0<T_R}h(B_{T_0}))\\
+        &=\bE(1_{T_0<T_R}\underbrace{h(0)}_{=0})=0
+    \end{align*}
+    $\implies$ under the new measure $\Q^R$, the BM indeed does not reach $0$ before $R$ as we wanted.
+\end{remark}
+
+Finally we wan to take $R\to\infty$. It should
 
 \beginlecture{09}{14.05.24}
 
@@ -756,6 +793,38 @@ $T\to\infty \implies$ we look at every possible event, but the probability does 
 
 \[\mathbb{P}((X,B)\in\mathcal{B}(\mathcal{E}^d\times\mathcal{E}^d))\]
 
+
+\beginlecture{11}{28.05.24}
+
+%TODO FIX Picture / Intro
+
+One case where the path integral formula is also numerically stable:
+
+Assume that $b(x)=-\nabla V(x)$ for some smooth $V(x)$ (time independent). This is called drift of \dhighlight{gradient 
+type}.
+
+Apply Itô to $V(x)$:
+\[V(\omega_T)=V(\omega_0)+\int_0^T \nabla V(\omega_s)dw_s+\frac{1}{2}\int_0^T \Delta V(\omega_s)ds\]
+$\implies \int_0^T b(s,\omega_s)d\omega_s=-\int_0^T\nabla V(\omega_s)d\omega_s$
+
+and therefore 
+\[\bP(X\in\tilde{A}_T)=\int_{C^d}W(d\omega)\underbrace{e^{V(\omega_0)-V(\omega_T)+\frac{1}{2}\int_0^T\left[\Delta V(\omega_s)-(\nabla V(\omega_s))^2\right]ds}}_{\eqqcolon \Psi(\omega)}\]
+One application: 
+
+Let $X_0=x,f:\R^d\to\R$
+\begin{align*}
+    \underbrace{bE_x(f(X_T))}_{(T(t)f)(x)}&=\int_{\xi^d}f(\omega_T)\Psi(\omega)W_x(d\omega)
+\end{align*}
+where $W_x$ is the wiener measure starting from $x$ and $T(t)$ is the semigroup of $X$.
+
+\begin{align*}
+    |(T(t)f)(x)|\leq \Vert f e^{-V}\Vert_\infty e^{-\frac{1}{2}\int_0^t \inf_{x\in\R^d}(|\nabla V(x)|^2-\Delta V(x))ds}
+\end{align*}
+
+If $\inf_{x\in\R^d}(|\nabla V(x)|^2-\Delta V(x))\geq 2\lambda>0$ $\implies$
+\begin{align*}
+    \Vert e^{-V(x)(T(t)f)}\Vert\leq \Vert e^{-V}f\Vert_\infty e^{-\lambda t}\to\text{exponential decay}
+\end{align*}
 
 
 

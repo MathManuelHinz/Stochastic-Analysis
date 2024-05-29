@@ -1,0 +1,123 @@
+\chapter{Local times, Itô-Tanaka formula, reflected Brownian Motion}
+
+\section{Extension of Itô formula to convex functions}
+
+If $f\in C^2(\R), f(X_t)=f(X_0)+\int_0^t f'(X_s)dX_s+\frac{1}{2}\int_0^t f''(X_s)d\langle x\rangle_s$
+
+\begin{proposition}\label{prop:3.1}
+    Let $f$ be a convex function on $\R$, $X_t$ a (continuous) semimartingale, 
+    then $f(X_t)$ is a semimartingale: $\exists A_t^f$ such that $\forall t\geq 0$\marginnote{We make a choice for the left derivative, the same works for the right one, but with different processes}
+    \[f(X_t)=f(X_0)+\int_{0}^t \underbrace{f_-'}_{\text{left derivative of }f}(X_s)dX_s+A_t^f\]
+\end{proposition}
+
+\begin{remark}
+    This extends directly to the case that $f=f_1-f_2$ with $f_1,f_2$ convex (But with bounded variation and not necessarily increasing $A_t^f$)
+\end{remark}
+
+\begin{proof}[Sketch of Proof]
+    Consider a function $\rho(x)$ s.t. 
+    \begin{itemize}
+        \item $\rho(x)\geq 0$, $\rho$ smooth
+        \item $\rho(x)=0$ if $x\notin [0,1]$
+        \item $\int_0^1 \rho(x)dx=1$
+    \end{itemize}
+    For any $n\in\N$ set 
+    \[f_n(x)\coloneqq\int_\R n\rho(ny)f(x-y)dy\]
+    Verify:
+    \begin{itemize}
+        \item $f_n$ is $C^2(\R)$; $f_n''\geq 0$ (since $f$ is convex)
+        \item $f_n'(x)=\int_\R n\rho(ny)\cdot f_-'(x-y)dy$
+        \item $f_n(x)\stackrel{n\to\infty}{\to} f(x)$
+        \item $f_n'(x)\stackrel{n\to\infty}{\to} f_-'(x)$ \marginnote{left derivative since we do convolution and not correlation with $\rho$}
+    \end{itemize}
+    Itô formula to $f_n(X_t)$:
+    \[f_n(X_t)=f_n(X_0)+\int_0^t f_n'(X_s)dX_s +\underbrace{\frac{1}{2}\int_0^t f_n''(X_s)\langle X\rangle_s}_{A_t^{f_n}\in \mathcal{A}_+^0}\]
+
+    Using stopping times: If $X=\underbrace{M_+}_{\in \Mloc^0}+\underbrace{A}_{\in\cA}$
+
+    $\forall m\geq 1: T_m=\inf\{t\geq 0\mid |X_t|+\langle M \rangle_t +\int_0^t |dA_s|\geq m\}$
+
+    \[f_n(X_{t\land T_m})=f(X_0)+\underbrace{\int_0^{t\land T_m}f_n'(X_s)dX_s}_{\stackrel{n\to\infty,\bP}{\to}\int_0^{t\land T_m}f_-'(X_s)dX_s}+\underbrace{\frac{1}{2}\int_0^{t\land T_m}f_n''(X_s)d\langle M\rangle_s}_{A_{t\land T_m}^{f_n}}\]
+
+    $\implies$ set $A_t^{f,m}\coloneqq f(X_{t\land T_m})-f(X_0)-\int_0^{T_m} f_-'(X_s)dX_s$ and 
+    $A_{t\land T_m}^{f_n}\stackrel{n\to\infty,\bP}{\to}A_t^{f,m}=A_{t\land T_m}^f$; Take $m\to\infty$ and get a process $A_t^f$ since 
+    $f_n''\geq 0\implies A_t^f$ is increasing and in $\cA_0$.\qedhere
+\end{proof}
+
+Let $f(x)=|x|$. Then 
+\[f_-'(x)=\begin{cases}
+    -1 & x\leq 0\\
+    1 & x>0
+\end{cases}\]
+we therefore define 
+\[\text{sgn}(x)\coloneqq\begin{cases}
+    -1 & x\leq 0\\
+    1 & x>0
+\end{cases}\]
+
+as the left derivative of $|x|$.
+
+\begin{proposition}\label{Tanaka's formula}
+    Let $X$ be a continuous semimartingale and $a\in\R$. Then there $\exists$ increasing process 
+    $(L_t^a(X))_{t\geq 0}$ s.t.:
+    \begin{enumerate}
+        \item[(a)] $|X_t-a|=|X_0-a|+\int_{0}^t\sgn(X_s-a)dX_s+L_t^a(X)$
+        \item[(b)] $(X_t-a)^+ = (X_0-a)^++\int_0^t 1_{X_s>a}dX_s+\frac{1}{2}L_t^a(X)$
+        \item[(c)] $(X_t-a)^- = (X_0-a)^--\int_0^t 1_{X_s\leq a}dX_s+\frac{1}{2}L_t^a(X)$
+    \end{enumerate}
+    The process $L_t^a(X)$ is called the \dhighlight{local time of $X$} at \dhighlight{level $a$}.
+    For any stopping time $T$:\[L_t^a(X^T)=L_{t\land T}^a(X)\]
+\end{proposition}
+
+\begin{proof}
+    Taking $f(x)=|x-a|$ in proposition \ref{prop:3.1} yields (a). Therefore 
+    \[L_t^a(X)\coloneqq |X_t-a|-|X_0-a|-\int_0^t\sgn(X_s-a)dX_s\]
+    Applying prop. \ref{prop:3.1} to $f(x)=(x-a)^+$ and $f(x)=(x-a)^-$
+    \[\implies \exists A_t^{a,(+)},A_t^{a,(-)}\in \cA_0^+\]
+    such that 
+    \[(X_t-a)^+=(X_0-a)^+\int_0^t 1_{X_s>a}dX_s A_t^{a,(+)}\]
+    \[(X_t-a)^-=(X_0-a)^-\int_0^t 1_{X_s\leq a}dX_s A_t^{a,(-)}\]
+
+    \begin{align*}
+        X_t-a&\stackrel{\text{Itô}}{=}X_0-a+\int_0^tdX_s\\
+        X_t-a&=(X_t-a)^+-(X_t-a)^-=X_0-a+\int_0^t dX_s + A_t^{a,(+)}- A_t^{a,(-)}
+    \end{align*}
+    which holds if and only if $ A_t^{a,(+)}= A_t^{a,(-)}$.
+    Furthermore 
+    \[|X_t-a|=|X_0-a|+\int_0^1\sgn(X_s-a)dX_s+ \underbrace{A_t^{a,(+)}+ A_t^{a,(-)}}_{=L_t^a(X)}\qedhere\]
+
+\end{proof}
+
+\underline{To see:} $L_t^a(X)\to$ positive measure $dL_t^a(X)$, since $L_t^a(X)$ is increasing.
+\begin{align*}
+    \int_0^t \underbrace{f(x)}_{\geq 0}dL_s^a(X)\stackrel{\text{?}}{=}0\text{ if } f(x)>0\text{ for } x\neq a
+\end{align*}   
+
+\begin{proposition}\label{prop:3.3}
+    Let $dL_t^a(X)$ be the measure associated with the increasing process $L_t^a(X)$.
+    Then $dL_t^a(X)$ is supported on $\{s\geq 0\mid X_s=a\}$.\marginnote{But this is not necessarily the full support!}
+\end{proposition}
+
+\begin{proof}
+    Let $Y_t=|X_t-a|$.
+    \[\implies Y_t^2=(X_t-a)^2\stackrel{\text{Itô to }f(X_t)=(X_t-a)^2}{=}(X_0-a)^2+\int_0^t (X_s-a)dX_s+2\langle X\rangle_t\] 
+    \begin{align*}%TODO FIX
+        Y_t^2\stackrel{\text{Itô to }f(Y_t)&=Y_t^2}{=}(X_0-a)^2+2\int_0^t \underbrace{Y_s dY_s}_{=|X_s-a|\cdot(\sgn(X_s-a)dX_s+dL_s^a(X))} + \underbrace{\langle Y \rangle_t}_{\langle X\rangle_t\text{ by prop \ref{prop:3.1}}}\\
+        &=(X_0-a)^2+2\int_0^t(X_s-a)dX_s+2\int_0^t |X_s-a|dL_s^a(X)+\langle X\rangle_t\\
+        \implies&\int_0^t |X_s-a|dL_s^a(X)=0
+    \end{align*}
+    and therefore the support is indeed contained in $\{s\geq 0\mid X_s=a\}$
+\end{proof}
+
+\begin{remark}
+    If $f$ is convex $\implies f_-'(x)$ is increasing and left continuous.
+    Therefore there exists a unique measure $f''(dx)$ on $\R_+$ such that 
+    \[f''([a,b])=f_-'(b)-f_-'(a)\]
+    If $f\in C^2(\R)$, then $f''(dx)=f''(x)dx$, i.e. it has the density given by the second derivative.
+
+    For all convex functions $f$ with $f''(dx)=0$ for all $|x|\geq K$
+    \[\implies \exists \alpha,\beta\in\R: f(x)=\alpha+\beta x+\frac{1}{2}\int_\R |x-a|f''(da)\]
+    and $f_-'(x)=\beta+\frac{1}{2}\int_\R\sgn(x-a)f''(da)$ in a weak sense.
+\end{remark}
+
+
