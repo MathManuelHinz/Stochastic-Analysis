@@ -57,7 +57,7 @@ we therefore define
 
 as the left derivative of $|x|$.
 
-\begin{proposition}\label{Tanaka's formula}
+\begin{proposition}[Tanaka's formula]\label{prop:3.2}
     Let $X$ be a continuous semimartingale and $a\in\R$. Then there $\exists$ increasing process 
     $(L_t^a(X))_{t\geq 0}$ s.t.:
     \begin{enumerate}
@@ -102,7 +102,7 @@ as the left derivative of $|x|$.
     Let $Y_t=|X_t-a|$.
     \[\implies Y_t^2=(X_t-a)^2\stackrel{\text{Itô to }f(X_t)=(X_t-a)^2}{=}(X_0-a)^2+\int_0^t (X_s-a)dX_s+2\langle X\rangle_t\] 
     \begin{align*}%TODO FIX
-        Y_t^2\stackrel{\text{Itô to }f(Y_t)&=Y_t^2}{=}(X_0-a)^2+2\int_0^t \underbrace{Y_s dY_s}_{=|X_s-a|\cdot(\sgn(X_s-a)dX_s+dL_s^a(X))} + \underbrace{\langle Y \rangle_t}_{\langle X\rangle_t\text{ by prop \ref{prop:3.1}}}\\
+        Y_t^2\stackrel{\text{Itô to }f(Y_t)=Y_t^2}{=}&(X_0-a)^2+2\int_0^t \underbrace{Y_s dY_s}_{=|X_s-a|\cdot(\sgn(X_s-a)dX_s+dL_s^a(X))} + \underbrace{\langle Y \rangle_t}_{\langle X\rangle_t\text{ by prop \ref{prop:3.1}}}\\
         &=(X_0-a)^2+2\int_0^t(X_s-a)dX_s+2\int_0^t |X_s-a|dL_s^a(X)+\langle X\rangle_t\\
         \implies&\int_0^t |X_s-a|dL_s^a(X)=0
     \end{align*}
@@ -119,5 +119,146 @@ as the left derivative of $|x|$.
     \[\implies \exists \alpha,\beta\in\R: f(x)=\alpha+\beta x+\frac{1}{2}\int_\R |x-a|f''(da)\]
     and $f_-'(x)=\beta+\frac{1}{2}\int_\R\sgn(x-a)f''(da)$ in a weak sense.
 \end{remark}
+
+\beginlecture{12}{04.06.24}
+
+\begin{theorem}[Itô-Tanaka-formula]\label{thm:3.4}
+    If $f$ is a difference of convex functions, $X$ is a continuous semimartingale
+    \[\implies f(X_t)f(X_0)+\int_0^t f_-'(X_s)dX_s +\frac{1}{2}\int_R L_t^a(x)f''(da)\],
+    where $f''(da)$ is the measure associated with $f_-'$.
+\end{theorem}
+
+\begin{proof}[Sketch of proof]
+    (Full proof: Thm 9.6 LeGall book)
+
+    Once localized $\to$ assume $f''(da)=0$ on $[-\kappa,\kappa]^c$
+
+    \begin{align*}
+        \implies f(X_t)&=\alpha + \beta X_t+ \int_{-\kappa}^\kappa |X_s-a|f''(da)\\
+        & \stackrel{\text{prop. \ref{prop:3.2}}}{=}\alpha +\beta X_t + \frac{1}{2}\int |X_0-a|f''(da)+\frac{1}{2}\int\int_0^t \sgn(X_s-a)dX_s f''(da)+\frac{1}{2}\int L_t^a(X)f''(da)\\
+        &=\underbrace{\alpha+\beta X_0+\frac{1}{2}\int |X_0-a|f''(da)}_{=f(X_0)}+\underbrace{\beta\int_0^t dX_s+\frac{1}{2}\int_0^t\int \sgn(X_s-a)f''(da)dX_s}_{=\int_0^1 f_-'(X_sdX_s)}+\frac{1}{2}\int L_t^a f''(da)
+    \end{align*}
+
+\end{proof}
+
+
+\begin{corollary}[Occupation time formula]\label{cor:3.5}
+    Almost surely, $\forall t\geq 0$, \underline{non-negative} measurable function $\varphi$
+    \[\int_0^t\varphi(X_s)d\langle X\rangle_s=\int_\R\varphi (a)L_t^a(X)da\]
+\end{corollary}
+
+\begin{aexample}
+    $X=$BM, $\varphi(X)=1_A(X)$, $A$ Borel set in $\R$
+    \[\implies \int_0^t 1_A(X_s)ds\]
+    is the time spend by $(X_s,s\in[0,t])$ in $A$ and the RHS is\marginnote{Think $A=[a,a+\epsilon]$}
+    \[\int_A L_t^a(X)da\]
+    $\implies L_t^a$ density of time spend by Brownian motion in $a$.
+\end{aexample}
+
+\begin{proof}
+    (For $\varphi$ with bounded support)
+    
+    Find $f\in C^2$ s.t. $f''(x)=\varphi(x)$. \marginnote{Take $f$ as the twice integrated $\varphi$ on the support of $\varphi$ until $x$}
+
+    $\implies$ Itô-Tanaka-formula: 
+    \[f(X_t)=f(X_0)+\int_0^t f_-'(X_s)dX_s+\frac{1}{2}\int L_t^a(X)\varphi(a)da\]
+    By Itô-formula:
+    \[f(X_t)=f(X_0)+\int_0^t f'(X_s)dX_s+\frac{1}{2}\int_0^t\varphi(X_s)d\langle X\rangle_s\]
+    The claim follows from comparing the terms.
+\end{proof}
+
+Explicit representation of the local time:
+
+\begin{lemma}\label{lem:3.6}
+    Let $X$ be a continuous semimartingale
+
+    $\implies$ a.s. $\forall a\in\R,t\geq 0$:
+    \[L_t^a(X)=\lim_{\epsilon\downarrow 0}\frac{1}{\epsilon}\int_0^t1_{a\leq X_s\leq a+\epsilon}d\langle X\rangle_s\]
+\end{lemma}
+
+
+\begin{proof}
+    Take $\varphi(x)=\frac{1}{\epsilon}1_{[a\leq X\leq a+\epsilon]}$ in corollary \ref{cor:3.5}:\marginnote{See Thm 9.4 in LeGall for more details}
+    \[\implies \frac{1}{\epsilon}\int_0^t1_{a\leq X_s\leq a+\epsilon}d\langle X\rangle_s=\frac{1}{\epsilon}\int_a^{a+\epsilon}L_t^{\tilde{a}}(X)d\tilde{a}\stackrel{\tilde{a}\to L_t^{\tilde{a}}}{=}L_t^a(X)\qedhere\]
+\end{proof}
+
+Similarly: 
+\[\lim_{\epsilon\downarrow 0}\frac{1}{\epsilon}\int_0^t 1_{[a-\epsilon\leq X_s<a]}d\langle X\rangle_s = L_t^{a_-}(X)\]
+\[\implies \lim_{\epsilon\downarrow 0}\frac{1}{2\epsilon}\int_0^t 1_{[a-\epsilon\leq X_s\leq a+\epsilon]}d\langle X\rangle_s=\frac{1}{2}(L_t^{a_-}(X)+L_t^a(X))\]
+\begin{align*}
+    L_t^a(X)-L_t^{a_-}(X)\stackrel{\text{prop \ref{prop:3.2}}}{=}& |X_t-a|-|X_0-a|-\int_0^t \sgn(X_s-a)dX_s-(|X_t-a_-|-|X_0-a_-|-\int_0^t \sgn(X_s-a_-)dX_s)\\
+    =&2\int_0^t 1_{X_s=a}dX_s\stackrel{X_t=M_t+A_t}{=}2\int_0^t 1_{X_s=a}dA_s
+\end{align*}
+where the first two terms are equal, since $X$ is a continuous semimartingale. This then implies, if $X$ is a martingale (and therefore $A_t=0$)
+then $L_t^a(X)=L_t^{a_-}(X)\implies L_t^a(X)=\lim_{\epsilon\downarrow 0}\frac{1}{2\epsilon}\int_0^1 1_{[a-\epsilon\leq X_s\leq a+\epsilon]}d\langle X \rangle_s$.
+
+In particular, if $X$ is a BM: 
+\[L_t^{a_-}(X)\implies L_t^a(X)=\lim_{\epsilon\downarrow 0}\frac{1}{2\epsilon}\int_0^1 1_{[a-\epsilon\leq X_s\leq a+\epsilon]}ds\]
+
+\section{Brownian motion and local time}
+
+Let $B$ be a standard BM, then by Tanaka: 
+\[|B_t|=|\underbrace{B_0}_{=0}|+\int_0^t \sgn(B_s)dB_s+\underbrace{L_t}_{\coloneqq L_t^0(B)}\]
+We want to define the process $R_t=|B_t|$ be the \dhighlight{BM reflected at $0$}.
+
+We want to study $R_t$ and $S_t^B\coloneqq \sup_{0\leq s\leq t} B_s,L_t(B)$
+
+\subsection{No strong solution of the Tanaka SDE}
+
+\[(\star)=\begin{cases}
+    dX_t &= \sgn(X_t)dB_t\\
+    X_0&=0
+\end{cases}\]
+We already know: $B_t\coloneqq \int_0^t \sgn(W_s)dW_s$, where $W$ is a BM $\implies BM$ is a BM (using Levy characterization)
+and \[\int_0^t\sgn(W_s)dB_s=\int_0^t \sgn(W_s)^2dW_s=W_t\to \sgn(W_t)dB_t=dW_t\]
+and therefore $(W,B)$ is a weak solution of $(\star)$.
+
+Assume $(X,B)$ is a strong solution of $(\star)\implies dX_t=\sgn(X_t)dB_t$ with $X$ is a BM. 
+
+Itô-Tanaka-formula:
+
+\begin{align*}
+    |X_t|=\int_0^t\sgn(X_s)dX_s+L_t^0(X)\\
+    \implies \int_0^t\sgn(X_s)dX_s=|X_t|-L_t^0(X)=|X_t|-\lim_{\epsilon\downarrow 0}\frac{1}{2\epsilon}\int_0^t 1_{|X_s|\leq \epsilon}ds\in \cF_t^{|X|}
+\end{align*}
+
+But also: 
+\begin{align*}
+    \int_0^t \sgn(X_s)dX_s = \int_0^t(\sgn(X_s))^2 d B_s=B_t
+\end{align*}
+
+\[B_t=|X_t|-\lim_{\epsilon\downarrow 0}\frac{1}{2\epsilon}\int_0^t1_{|X_s|\leq \epsilon}ds\]
+$\implies B_t$ is $\cF_t^{|X|}$-measurable and therefore $B$ is $\cF^{|X|}$ measurable.
+
+
+If $(X,B)$ is a strong solution, then $X$ is measurable w.r.t. $\cF^B$.
+$\implies \cF^X\subset \cF^B\subseteq \cF^{|X|}$
+which is wrong, since we can not recall the value of $X$ knowing only its absolute value.
+
+\subsection{Reflected SDE}
+
+\begin{definition}\label{def:3.7}
+    The family $(X,l,W)$ is a weak solution of the \dhighlight{reflected SDE} (One-dimensional):
+    \[dX_t=dW_t+dl_t\]
+    if: 
+    \begin{itemize}
+        \item $W$ is a BM 
+        \item $X$ is a \underline{positive} continuous process 
+        \item $l$ is a \underline{positive non-decreasing} continuous process 
+    \end{itemize}
+    s.t. 
+    \[\int_0^\infty 1_{X_s}>0d l_s=0\]
+    The solution is called \dhighlight{strong}, if $(X,l)$ is adapted to $W$.
+\end{definition}
+
+\begin{aexample}
+    \begin{itemize}
+        \item $X_t\coloneqq |B_t|$
+        \item $W_t\coloneqq \int_0^t\sgn(B_s)dB_s$
+        \item $l_t=L_t^0(B)$
+    \end{itemize}
+    This is a weak solution of the \dhighlight{1 dimensional reflected SDE}. 
+\end{aexample}
+
 
 
