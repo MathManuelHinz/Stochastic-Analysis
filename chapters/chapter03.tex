@@ -260,5 +260,162 @@ which is wrong, since we can not recall the value of $X$ knowing only its absolu
     This is a weak solution of the \dhighlight{1 dimensional reflected SDE}. 
 \end{aexample}
 
+\beginlecture{13}{06.06.24}
+
+\begin{lemma}[Skorokhod lemma for uniqueness of reflected SDE]\label{lem:3.8}
+    Let $Y(t)$ be a continuous function with $y(0)\geq 0$. Then there exist a unique 
+    pair $(z,a)$ of functions:
+    \begin{itemize}
+        \item  both continuous
+        \item $a(0)=0,a$ is non-decreasing s.t.\begin{enumerate}
+            \item[(a)] $z(t)=y(t)+a(t)$
+            \item[(b)] $\int_0^\infty 1_{z(s)>0}da(s)=0$ 
+        \end{enumerate}
+    \end{itemize}
+    Moreover, the function $a$ has the representation
+    \[a(t)=\sup_{0\leq s\leq t}[y(s)]_-=\sup_{0\leq s\leq t}\max\{0,-y(s)\}\]
+\end{lemma}
+
+\begin{proof}
+    Postponed :)
+\end{proof}
+
+Consequence of Lemma \ref{lem:3.8}:
+
+\begin{align*}
+    l_t(\omega)\coloneqq \sup_{0\leq s\leq t}(-W_s(\omega))_+=\sup_{0\leq s\leq t}(-W_s(\omega))\eqqcolon S_t^{-W}(\omega)
+\end{align*}
+
+given $W(\omega), X_t(\omega)=W_t(\omega)+l_t(\omega)=W_t(\omega)+\sup_{0\leq s\leq t}(-W_s(\omega))$.
+
+$\implies \exists!$ strong solution of the reflected SDE.
+Notation: \marginnote{We can start with $W$ and explicitly construct a strong solution!}
+\[R_t\coloneqq |B_t|=W_t+L_t=W_t+S_t^{-W}\] 
+
+\begin{theorem}\label{thm:3.9}
+    \begin{align*}
+        \text{Law}(|B|,\underbrace{L}_{=L^0(B)})&\stackrel{(1)}{=}\text{Law}(L+W,L)\\
+        &\stackrel{(2)}{=}\text{Law}(W+S^{-W},S^{-W})\\
+        &\stackrel{(3)}{=}\text{Law}(S^{-\tilde{W}}-\tilde{W},S^{\tilde{W}})
+    \end{align*}
+    with $\tilde{W}$ a generic BM.
+\end{theorem}
+
+\begin{proof}
+    $(1)$ is from $R_t=|B_t|=W_t+L_t^{0}(B)$ (as a process)
+
+    $(2)$ by the skorokhod representation: $L_t=S_t^{-W}$
+
+    $(3)$ $W\stackrel{d}{=}-\tilde{W}$
+\end{proof}
+
+$\forall t\geq 0$:
+\marginnote{Something is wrong here? Or at the very least confusing}
+\[S_t\coloneqq \sup_{0\leq s\leq t} B_s\stackrel{(d)}{=}|B_t|\stackrel{(d)}{=}L_t^0(B)\]
+
+By the reflection principle:
+\begin{align*}
+    \bP(S_t\in dx,B_t\in dy)\stackrel{2.2\text{ LeGall}}{=} \frac{2(2x-y)}{\sqrt{2\pi t^3}}e^{-\frac{(2x-y)^2}{2t}}1_{x>0,y<x}dxdy
+\end{align*}
+and 
+\begin{align*}
+    \text{Law}(|B|)=\text{Law}(S^W-W)
+\end{align*}
+
+Two points of view:
+
+1. $B\to \R_t\coloneqq |B_t|,W_t\coloneqq\int_0^t\sgn(B_s)dB_s,L_t\coloneqq L_t^0(B)$ satisfies\[R_t=W_t+L_t\]
+
+2. Given $W_t$ ($\forall \omega$): Define $l_t\coloneqq\Phi_t(W)=\sup_{0\leq s\leq t} (-W_s),X_t=W_t+l_t$
+
+Law$(R,L)=\text{Law}(X,l)$.
+
+An alternative definition of reflected Brownian motion is \[X_t\coloneqq \underbrace{W_t+\Phi_t(W)}_{\text{\dhighlight{Skorokhod map}}}\]
+
+\begin{aremark}
+    Careful:
+    \[|W_t(\omega)|\neq W_t(\omega)+\Phi_t(W(\omega))\]
+    Or
+    \[z(t)\neq |y(t)|\]
+\end{aremark}
+
+\section{Reflected BM on a curve}
+
+In section 3.2, we have reflected BM on $g(t)=0\forall t\geq 0$.
+\[X_t=W_t+\sup_{0\leq s\leq t}(-W_s)\]
+Skorokhod lemma; from continuous function $y(t),y(0)\geq 0$:
+\[z(t)\coloneqq y(t)+\sup_{0\leq s\leq t}(y(s)-0)_-\] 
+
+Let $D_g\coloneqq \{(x,t) \mid x\geq g(t)\}$.\marginnote{$D_g$ is the space above the curve $(t,g(t))$, not sure why the coordinates are fliped tho?}
+
+Let $(W_t)_{t\geq 0}$ with $W_0\geq g(0)$, then there exists a unique, continuous non-decreasing process $L_t$ with $L_0=0$ s.t.
+\[X_t\coloneqq W_t+L_t\geq g(t)\forall t\geq 0\]
+and $L_t$ may increase only when $X_t$ is at the boundary of $D_g$.
+\[\int_0^\infty1_{(g(s),\infty)}(X_s)dL_s=0\]
+$X_t$ has the formula:
+\[L_t=\sup_{0\leq s\leq t}(W_s-g(s))_-\]
+To see this claim: Consider $\tilde{W}_t=W_t-g(t)$
+\[\implies \tilde{X}_t\coloneqq X_t-g(t)\]
+is constructed by the Skorokhod map and \[\tilde{X}_t=\tilde{W}_t+L_t\geq 0\]
+
+\begin{definition}\label{def:3.10}
+    The \dhighlight{BM reflected by a continuous function $g(t)$} with $X_0\geq g(0)$ is given by 
+    the following construction \begin{itemize}
+        \item Given $W$ a BM with $W_0=X_0\geq g(0)$, define \[X_t\coloneqq W_t+\sup_{0\leq s\leq t}(W_s-g(s))_-\]
+        \item  Alternatively with $W_0=0:$\[X_t=X_0+W_t+\sup_{0\leq s\leq t}(W_s-g(s))_-\]
+    \end{itemize}
+\end{definition}
+
+\begin{aremark}
+    Think about sticky BM, which is the limit of some random walk which stays on the boundary with some positive probability.
+
+    The exercise talks shows two reflected BMs, whose difference lies in the Weil chamber and solves the SDE for a process conditioned to be positive forever.
+\end{aremark}
+
+SDE: $dX_t=dW_t+dL_t$ or $X_t=X_0+\underbrace{W_t}_{W_0=0}+L_t^g(X)$, where 
+$L_t^g(X)$ is the local time of $X$ spend at the function $g$.
+
+\begin{aexample}\marginnote{Start with 2-dim BM then define the reflected BM...}
+    Let $B=(B_1(t),B_2(t))$ a 2-dimensional BM with $B_1(0)\leq B_2(0)$ s.t. $B_1$ is not depending on $B_2$, but $B_2$ is reflected upwards by $(B_1(t),t\geq 0)=g$
+
+    $\implies (B_1(t),\tilde{B}_2(t))\in D=\{(x_1,x_2\in\R^d\mid x_1\leq x_2)\}$
+\end{aexample}
+
+\begin{proposition}\label{prop:3.11}
+    Denote by $p_t(x,y)$ be the transition probe density of $B$:\[p_t(B_1(t)\in dy_1, \tilde{B}_2(t)\in dy_2\mid B_1(0)=0,\tilde{B}_2(0)=x_2)=p_t((x_1,x_2),(y_1,y_2))dy_1dy_2\] 
+
+    It satisfies the following equations:
+    \begin{align*}
+        \frac{1}{2}\left(\frac{\partial^2}{\partial x_1^2}+\frac{\partial^2}{\partial x_2^2}\right)p_t((x_1,x_2),(y_1,y_2))=\frac{\partial}{\partial}p_t((x_1,x_2),(y_1,y_2))
+    \end{align*}
+    for $(x_1,x_2),(y_1,y_2)\in D\setminus \partial D,t>0$.
+    \begin{align*}
+        p_t((x_1,x_2),(y_1,y_2))dy_1dy_2\stackrel{t\to0}{\to}\delta_{x}(y)
+    \end{align*}
+    as well as 
+    \[\frac{\partial}{\partial x_2}p_t(x,y)\mid_{x=y}=0\]
+
+\end{proposition}
+
+\begin{proof}\marginnote{Important information: where is the boundary condition coming from? Not immediatly obvious!}
+    Let $g$ be any smooth test function in $D$, set $f(t,x)\coloneqq \int dy g(y)p_t(x,y)$. The undefined integrals are over $D$, for Itô we assume $f\in C^2$.
+
+    (1) SDE: \[\begin{cases}
+        dB_t^1=dW_t^1\\
+        d\tilde{B}_t^2=dW_t^2+dL_t^{B^1}(\tilde{B}_2)
+    \end{cases}\]
+    By Itô: Let $0\leq t\leq T$:
+    \begin{align*}
+        &f(T-t,B-t)\\
+        &=f(T,B_0)+\int dy g(y)[-\dot{P}_{T-S}(B_s,y)ds]+\int dy g(y)\int_0^t \partial x_1 p_{T-S}(B_s,y)dW_s^1\\
+        &+\int_0^t \partial x_2 p_{T-S}(B_s,y)(dW_s^1+dL_s)\\
+        &+ \int dy g(y)\left[\frac{1}{2}\int_0^t\left(\frac{\partial^2}{\partial x_1^2}+\frac{\partial^2}{\partial x_2^2}p_{T-S}(B_s,y)ds\right)\right]
+    \end{align*}
+    (2) Martingale: Let $t\leq T$
+    \begin{align*}
+        \bE(g(B_t)\mid \cF_t)\stackrel{\text{MP}}{=}&\bE(g(B_t)\mid B_t)\\
+        &=\int dy g(y)p_{T-t}(B_t,y)=\underbrace{f(T-t,B_t)}_{\text{Martingale}}
+    \end{align*}
+\end{proof}
 
 
