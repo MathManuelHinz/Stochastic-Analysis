@@ -284,4 +284,287 @@ $\nu=0,\sigma=s^2,a=-\gamma$.
 and therefore \[X_t\coloneqq s B_t+\gamma t,\]
 where $B_t$ is a standard BM, is the Lévy process with characteristic exponent $\psi(\theta)$.
 
+\beginlecture{16}{18.06.24}
+
+\subsection{The Gamma process}
+
+
+Given $\alpha,\beta>0$, define the probability measure 
+\[\mu_{\alpha,\beta}(dx)=\frac{\alpha^\beta}{\Gamma(\beta)}x^{\beta-1}e^{-\alpha x}dx 1_{R_+\setminus\{0\}}\]
+where \[\Gamma(z)\coloneqq \int_0^\infty u^{z-1}e^{-u}du.\]
+$\mu_{\alpha,\beta}$ is the Gamma$(\alpha,\beta)$ distribution. For $\beta=1$ it is the exponential distribution.
+
+Let $X\sim X_{\alpha,\beta}$.\begin{align*}
+    \bE(e^{i\theta X})&=\int_{\R_+} e^{i\theta x}\mu_{\alpha,\beta}(dx)\\
+    &=\int_{\R_+} \frac{\alpha^\beta}{\Gamma(\beta)}x^{\beta-1}\left(e^{-\alpha}\cdot e^{i\theta} \right)^xdx \\
+    &\stackrel{(\alpha-i\theta )x \eqqcolon u}{=}\frac{\alpha^\beta}{\Gamma(\beta)}\frac{1}{(\alpha-i\theta)^\beta}\underbrace{\int_0^{\infty(\alpha-i\theta)}u^{\beta-1} e^{-u}du}_{\text{By Cauchy Residue}=\int_0^\infty u^{\beta-1}e^{-u}du}\\
+    \implies&\bE(e^{i\theta X})=\frac{1}{\left(1-\frac{i\theta}{\alpha}\right)^\beta}=\left(\frac{1}{(1-\frac{i\theta}{\alpha})^{\frac{\beta}{n}}}^{n}\right)
+\end{align*}
+$\implies X$ is infinitely divisible. 
+
+The triple $(\alpha,\sigma,\nu)$ is given by:
+\begin{itemize}
+    \item $\sigma=0$
+    \item $\nu(dx)=\beta x^{-1}e^{-\alpha x}dx$ on $\R_+\setminus \{0\}$
+    \item $a=-\int_0^1 x\nu(dx)=-\frac{\beta}{\alpha}(1-e^{-\alpha})$. This is the correction term for the indicator function!
+\end{itemize}
+
+\begin{lemma}\label{lem:4.6}
+    For $\alpha,\beta>0,z\in \mathbb{C}$ with Re$(z)\leq 0$,
+    \[\frac{1}{\left(1-\frac{z}{\alpha}\right)^\beta}=\exp\left(-\int_0^\infty (1-e^{zx})\beta x^{-1}e^{-\alpha x}dx\right)\]
+\end{lemma}
+
+Apply to $z=i\theta$ to get the above!
+
+\begin{proof}
+    Take the logarithm:
+    \begin{align*}
+        -\beta\log\left(1-\frac{z}{\alpha}\right) \stackrel{?}{=}-\int_0^\infty (1-e^{zx})\beta x^{-1}e^{-\alpha x}dx
+    \end{align*}
+    First look at $z=0$:$0=0$, which is of course true.
+
+    Now look at the derivative in $z$ (after canceling the $-\beta$ from both  sides):
+    \begin{align*}
+        -\frac{1}{\alpha-z}=\frac{-\frac{1}{\alpha}}{1-\frac{z}{\alpha}}\stackrel{?}{=}-\int_0^\infty \underbrace{x \cdot x^{-1}}_{=1} e^{-\alpha x}dx = -\int_0^\infty e^{-(\alpha-z)x}dx\stackrel{\text{Re}(\alpha-z)>0}{=}-\frac{1}{\alpha-z}
+    \end{align*}
+\end{proof}
+
+Using $z=i\theta$ in lemma \ref{lem:4.6}:
+\[\implies \Psi(\theta)=-\ln\left(\frac{1}{(1-\frac{i\theta}{\alpha})^\beta}\right)=\int_0^\infty (1-e^{i\theta x})\beta x^{-1}e^{-\alpha x}dx\to \nu(dx)\]
+
+\begin{aremark}
+    For the Gamma process is the Lévy measure $\infty$: $\int_0^\infty \nu(dx)=\infty$.
+\end{aremark}
+
+Properties: 
+\begin{itemize}
+    \item $0\leq s\leq t$ $X_t\stackrel{d}{=}X_t=X_s+\tilde{X}_{t-s}$, where $\tilde{X}_{t-s}$ is an independent copy of $X_{t-s}$
+    \item $X_s<X_t$ a.s. for $s<t$ (the Lévy measure is on $\R>0$)
+    \item it is \underline{not} a compound Poisson process (since it does not have finite Lévy measure) 
+\end{itemize}
+
+\section{Some properties of the jumps}
+
+For compound poisson process:
+\[N_t(B)\coloneqq \text{\# jumps of size }B \text{ in the time interval }[0,t]\]
+$N_t(B)\sim\Poi(t\nu(B))$ for $B\in \mathcal{B}(\R\setminus\{0\})$. $t\mapsto N_t(B)$ is a Poisson process
+with parameter / intensity / rate $\lambda=\nu(B)$.
+
+\begin{aremark}
+    Suppose you want ot simulate the poisson process. Sample exponential random variables, by sampling uniformly form (0,1) and then transform them by $-\log$.
+\end{aremark}
+
+Let $T_0=0$, \[T_{k+1}=\inf\{\xi_t>T_k\mid N_t(\R_{>0})>N_{T_k}(\R_{>0})\}\]
+This implies $T_{k+1}-T_k\sim\exp(\nu(\mathcal{R_{>0}}))$. The jump sizes of the 
+compound Poisson process $X_t$ are distributed as:
+\[\mathcal{P}\left(X_{T_1}-X_{T_1^-}\in dy\right)=\frac{\nu(dy)}{\int_{\R\setminus\{0\}} \nu(dx)}\]
+
+Argument for almost sure no step at time $0$: $\mathcal{P}(N_t(\R_{>0})\geq 2)=O(t^2)$.
+
+\begin{align*}
+    \implies \bP(N_t(\R_{>0})=1)&=e^{-t\nu(\R_+)}t\nu(\R_+)=t\nu(\R_+)+O(t^2)\\
+    \bP(N_t(\R_{>0})=0)&=1-t\nu(\R_+)+O(t^2)
+\end{align*}
+
+\begin{align*}
+    \frac{\bP(N_t(B)=1\cap N_t(\R_+)=1)}{\bP(N_t(R_+)=1)}\approx\frac{t\nu(B)}{t\nu(\R_+)}
+\end{align*}
+
+Case $\int_{\R\setminus \{0\}}\nu(dx)=\infty$.
+
+Problem: First jump $\sim\exp(\nu(\R\setminus\{0\}))=0$\marginnote{a bit informal}
+
+$\implies$ The notion of first, second,\dots, jumps does not make sense: $\inf\{t>0\mid X_t-X_{t^-}\neq 0\}=0\as$.
+
+Let $A\subset\R\setminus\{0\}$ s.t. $\nu(A)<\infty$. This implies the first jump of size $A$, $T_1^A$ is well defined with 
+$T_1^A \sim\exp(\nu(A))$:
+
+\[\implies \bP(X_{T_1^A}-X_{T_1^A-}\in dy)=\frac{\nu(dy)}{\nu(A)}\]
+$\implies$ take $A^0=(1,\infty),A^1(\frac{1}{2},1], A^2=(\frac{1}{4},\frac{1}{2}]$
+
+$\implies$ Construct Lévy process (compound poisson processes) by restricting the jumps to the ones of size $A^n:(X_t^n)_{t\geq 0}$
+\[X_t\coloneqq \sum_{n\geq 0} X_t^n\]
+where $X_t^0,X_t^1,\dots$ are independent. The $(X_t^n)$ are compound poisson processes with jumps in $A^n$: $T_k^{A_n}\sim\exp(\nu(A^n))$ with jumps of size $\frac{\nu(dy)}{\nu(A^n)}$
+
+$\implies (X_t)_{t\geq 0}$ is a Lévy process with Levy measure $\nu$ ($\sigma=0$).
+
+\begin{aremark}
+    We use that the sum of independent Lévy processes is still a Lévy process, since the exponential characteristic is the sum of the exponential characteristics
+\end{aremark}
+
+By theorem \ref{thm:4.2} we can decompose:
+\[\Psi(\theta)=\underbrace{(ia\theta+\frac{1}{2}\sigma^2\theta^2)}_{=\Psi^{(1)}(\theta)}+\underbrace{\nu(\R\setminus\{(-1,1)\})\int_{|x|\geq 1}(1-\exp(i\theta x))\frac{\nu(dx)}{\nu(\R\setminus\{(-1,1)\})}}_{=\Psi^{(2)}(\theta)}+\underbrace{\int_{0<|x|<} (1-\exp(i\theta x)+i\theta x)dx}_{=\Psi^{(3)}(\theta)}\]
+
+\begin{theorem}[Lévy-Itô decomposition]\label{thm:4.7}
+Given $a\in\R\sigma>0,\nu$ a measure on $\R\setminus\{0\}$ s.t. $\int_{\R\setminus\{0\}}(1\land x^2)\nu(dx)<\infty$
+
+$\implies \exists(\Omega,\cF,\bP)$ on which 3 independent Lévy processes $X^{(1)},X^{(2)},X^{(3)}$
+with characteristic exponents $\Psi^{(1)}(\theta),\Psi^{(2)}(\theta),\Psi^{(3)}(\theta)$ are defined.
+Then $X_t\coloneqq X^{(1)}+X^{(2)}+X^{(3)}$ is a Lévy process with characteristic exponent $\Psi(\theta).$
+
+\begin{itemize}
+    \item $X_t^{(1)}$ is a BM with drift: $X_t^{(1)}=\sigma B_t-at,t\geq 0$, where $B_t$ is a standard BM 
+    \item $X_t^{(2)}$ is a compound Poisson process 
+    \item $X_t^{(3)}$ is constructed as above
+    \item $\int_{0<|x|<1} (1-\exp(i\theta x))\nu(dx)=\sum_{n\geq 0}\lambda_n\int_{2^{-(n+1)}\leq |x|<2^{-n}} F_n(dx)+i\theta\lambda_n\int_{2^{-(n+1)}\leq |x|<2^{-n}} x F_n(dx)$, where 
+        $\lambda_N=\nu(2^{-(n+1)}\leq |x|<2^{-n})$, $F_n(dx)=\frac{1}{\lambda_n}\nu(dx)$.
+\end{itemize}
+
+\end{theorem}
+
+Next lecture has useful information about simulations!
+
+\beginlecture{17}{20.06.24}
+
+\begin{remark}
+    Càdlàg paths have at most countably many jumps.
+\end{remark}
+
+Why do we have the condition $\int (1\land x^2)\nu(dx)<\infty$?
+
+$\bP(|X_t|\geq M)\leq ?$ s.t. $\stackrel{M\to\infty}{\to} 0$. 
+
+\[X_t^n=\sum_{k=1}^{\infty} \xi_k 1_{k\leq N_t(A^n)}\]
+Take $\nu$ supported on $(0,1]$ and $A_n=\left(\frac{1}{2^n},\frac{1}{2^{n-1}}\right]$, $\nu(A_n)<\infty$\marginnote{The computation uses independence, not true for higher moments!}
+\begin{align*}
+    \bP(|X_t|\geq M)&\stackrel{\text{Chebyshev}}{\leq} \frac{\Var(X_t)}{M^2}\\
+    \Var(X_t)&=\sum_{i=1}^\infty\Var(X_t^n)=\sum_{n=1}^\infty\underbrace{\sum_{m=0}^\infty \bP(N_t(A_n)=m)\cdot m}_{\bE(\#\text{ jumps of size in }A_n)=t\nu(A_n)} \cdot \underbrace{\Var(\xi_1^n)}_{\leq \bE((\xi_1^n)^2)=\int_{A_n}\frac{x^2\nu(dx)}{\nu(A_n)}}\\
+    &\leq t\sum_{n=1}^\infty \int_{A_n} x^2\nu(dx)=t\int_{(0,1]}x^2 \nu(dx)<\infty
+\end{align*}
+
+$X_t$ is bounded a.s., for all given $t$\marginnote{no divergence in finite time}
+
+\section{Some properties of Poisson processes}
+
+\begin{lemma}[Superposition]\label{lem:4.8}
+    Let $(X_t^k)_{t\geq 0},k=1,\dots,N$ independent Poisson processes with intensity $\lambda_k>0$.
+
+    Then $(Y_t)_{t\geq 0}=X_t^1+\dots+X_t^N$ is a Poisson process with intensity $\lambda=\lambda_1+\dots+\lambda_n$.\marginnote{Also true for $N=\infty$, if $\lambda<\infty$}
+\end{lemma}
+
+\begin{proof}
+    Follows by computing the characteristic exponents / functions
+\end{proof}
+
+\begin{aremark}
+    Why is it called \dhighlight{Superposition}?
+
+    Instead of jumps look at the events of the jumps for each $X_t^1$. If you take the union (superimpose the pictures), you get the jump times of $Y$. Not related to quantum mechanics.
+\end{aremark}
+
+\begin{lemma}[Thining property]\label{lem:4.9}
+    Let $(X_t)_{t\geq 0}$ be a poisson process with intensity $\lambda$ and a $p\in [0,1]$ fixed.
+
+    Construct two processes $(X_t^1)_{t\geq 0},(X_t^2)_{t\geq 0}$ as follows:
+    \begin{itemize}
+        \item Each jump of $X_t$ is randomly and independently assigned to be a jump of $X_t^1$ with probability $p$ and if not assigned to $X_t^1$ it is assigned to $X_t^2$.
+        \item Then $(X_t^1)$ is a Poisson process with intensity $p\lambda$
+        \item $(X_t^2)$ is a Poisson process with intensity $(1-p)\lambda$
+        \item and they are independent
+    \end{itemize}
+\end{lemma}
+
+\begin{proof}[Simplified proof]\marginnote{Just showing independence, other things are easy to check}
+    \begin{align*}
+        \bP(X_t^1=k,X_t^2=l)&=\mathbb{P}(X_t^1=k,X_t^1+X_t^2=k+l)\\
+        &=\bP(\underbrace{X_t^1+ X_t^2}_{X_t}=k+l)\bP(X_t^1=k\mid \underbrace{X_t^1+ X_t^2}_{X_t}=k+l)\\
+        &=\frac{e^{-\lambda t}(\lambda t)^{k+l}}{(k+l)!}\begin{pmatrix}
+            l+k\\k
+        \end{pmatrix}p^k (1-p)^l\\
+        &=\frac{e^{-\lambda p t}(\lambda p t)^k}{k!}\frac{e^{-\lambda(1-p)t}(\lambda (1-p)l)^l}{l!}\qedhere
+    \end{align*}
+\end{proof}
+
+\begin{aremark}
+    Let $X_t=X_t^1-X_t^2$, $X_t^1$ is a Poisson process with intensity $p$ and $X_t^2$ is a poisson process with intensity $1-p$. Therefore 
+    has intensity\footnote{intensity: expected number of jumps per unit time} $1$\marginnote{This is not a Poisson process, since it might be negative!}    
+\end{aremark}
+
+How do we simulate this?
+
+Simple solution: generate two Poisson process, by generating exponential variables ($\sim \exp(p),\sim\exp(1-p)$). This yields to lists of jumping timings, which we can join (after sorting).
+
+What do we do if we have not two, but many of them?
+
+Draw many exponential variables $\sim\exp(1)$, then for each time choose a random poisson process, which you want to attribute the jump to.
+
+For two we get the drift: $\bE(X_t)=t(p(1-p))=(t(2p-1))$
+
+two random walks $X_t, \tilde{X}_t$ as above with $X_0<\tilde{X}_0$, add constraint $X_t<\tilde{X}_t$ meaning that jumps which would violate the condition are suppressed.
+
+For all $x\in Z$ associate a random poisson process $N_t^x$ with intensity $1$.\marginnote{When we draw poisson processes, they look different from reality, normally we would expect clumping!}
+
+For intensity $\frac{1}{2}$: First with probability 1/2 we throw away the jump and then we flip a coin.
+
+Again, we simulate one process with intensity as the sum of the intensities, then we split randomly!
+
+\begin{aremark}
+    Some problems with infinitely many processes, jumps at 0?
+\end{aremark}
+
+
+\begin{aremark}\marginnote{Not asked in the exam}
+    Lévy process with $\Psi(\theta)=ia\theta+\frac{1}{2}i\theta^2\sigma^2+\int_{R}(1-e^{i\theta x}+i\theta x1_{|x|<1})\nu(dx)$
+    Has generator 
+    \[(L f)(x)=\frac{1}{2}\sigma^2\frac{d^2}{dx^2}f(x)-a\frac{d}{dx}f(x)+\int_\R\left[f(x+y)-f(x)-y\frac{d}{dx}f(x)1_{|x|<1}\right]\nu(dy)\]
+    for $f\in C_0^\infty(\R)$.
+\end{aremark}
+
+For poisson processes with intensity $\lambda$:
+\[(L f)(x)=\lambda(f(x+1)-f(x)).\]
+A way of defining $L$:
+\[(Lf)(x)\coloneqq \lim_{t\downarrow 0}\frac{\bE\left(f(X_t)\mid X_0=0\right)-f(x)}{t}\]
+As $t\downarrow 0$:
+\begin{align*}
+    \bP(X_t=x+1\mid X_0=x)&=\lambda t + O(t^2)\\
+    \bP(X_t=x+1\mid X_0=x)&=1- \lambda t + O(t^2)\\
+    \bP(X_t\notin{x,x+1}\mid X_0=x)&=O(t^2)\\
+    \implies & \frac{1}{t}\bE(f(X_t)\mid X_0=x)=(1-\lambda)f(x)+\lambda f(x+1)+(t)\stackrel{t\to 0}{=}\lambda(f(x+1)-f(x))
+\end{align*}
+
+Consider a $d$-dimensional Poisson process with intensity $\lambda$, i.e. 
+
+$X_t=(X_t^1,\dots,X_t^d)$ where the components are Poisson processes with intensity $\lambda$ and independent.
+
+$\implies$ Generator 
+\[Lf(x)=\sum{k=1}^d L_kf(x),\ L_k f(x_1,\dots,x_d)=\lambda(f(\dots,x_k+1,\dots)-f(\dots,x_k,\dots))=\lambda(f(x+e_k)-f(x))\]
+
+Let $X_0=(X_0^1,\dots,X_0^t)\in W_d=\{x\in \Z^d\mid x_1<x_2<\dots<x_d\}$
+
+Want: Process $X_t$ conditioned to stay forever in $W_d$.
+
+
+\begin{lemma}\label{lem:4.10}
+    Let\marginnote{Like for BM!} \[h(x)\coloneqq \prod_{1\leq k<kl\leq d} (X_l-X_k),\]
+    $h$ satisfies 
+    \begin{enumerate}
+        \item[(a)] $h(x)=0$ for $x\in \partial W_d$ (two of the $x_i$ are equal)
+        \item[(b)] $h(x)>0$  for $x \in W_d$
+        \item[(c)] $Lh(x)=0$ for $x\in W_d$  
+    \end{enumerate}
+\end{lemma}
+
+\begin{remark}
+    To prove use $h(x)=\det(X_k^{j-1})_{1\leq k,j\leq d}$ or $e^{tL}h(x)=h(x),\ t>0$.
+\end{remark}
+
+This conditioned process has generator:
+\[L^h f(x)=\frac{1}{h(x)}(L(hf))(x)=Lf(x)+\sum_{k=1}^d\frac{\nabla_k h(x)}{h(x)},\ \nabla_k g(x)\coloneqq g(x+e_k)-g(x)\]
+Let $x,y\in W_d$:\begin{align*}
+    P_t(x,y)=\frac{h(y)}{h(x)}\bP(\tilde{X}(t)=y,T>t\mid \tilde{X}_0=x)
+\end{align*}
+where $\tilde{X}(t)$ are independent components and $T$ is the hitting time $\inf\{s\geq 0\mid \tilde{X}(s)\notin W_d\}$.
+
+\begin{lemma}[Karlin-McGregor formula]\label{lem:4.11}
+    \begin{align*}
+        \bP(\tilde{X}(t)=y,T>t\mid \tilde{X}(0)=x)=\det(\varphi_t(x_i,y_j)_{1\leq i,j\leq d})
+    \end{align*}    
+    where \marginnote{Notice, we only need to compute the interactions of two particles!}
+    \[\varphi_t(x,y)=\varphi_t(0,y-x)=\bP(X_t^1=y\mid X_0^1=x)=\frac{e^{-\lambda t}(\lambda t)^{y-x}}{(y-x)!}1_{y\geq x}.\]
+\end{lemma}
+
+Special case: $\tilde{X}(0)=(0,1,\dots,d-1)$ the lemma \ref{lem:4.11} implies 
+\[\bP(X_t=x)=\text{const}(h(x))^2\prod_{k=1}^d \frac{e^{-\lambda t}(\lambda t)^{x_k}}{x_k!}\]
+Analogue of BM conditioned to stay in the continuous Weyl chamber, $B(0)=0$, is 
+\[\bP(B(t)\in dx)=\text{const} (h(x))^2\prod_{k=1}^d\left(\frac{e^{-\frac{x_k^2}{2t}}}{\sqrt{2\pi t}}dx_k\right)\]
 
