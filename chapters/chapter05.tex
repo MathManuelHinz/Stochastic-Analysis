@@ -1,0 +1,277 @@
+\chapter{The Kardar-Parisi-Zhang (KPZ) equation}\beginlecture{18}{25.06.24}
+
+\section{Heuristic derivation}
+
+\dhighlight{Want:} describe the evolution of an interface \[x\mapsto h(x,t)\in\R\ x\in\R,t\geq 0\] where the growth is given by some local process
+
+The analogue in $0$-dimensions would be \[h(t)\stackrel{t\in\Z}{=}\sum_{k=1}^t X_k,\] where the $X_k$ are iid r.v. with bounded variation. We know: 
+\[\frac{h(t)}{t}\stackrel{\as}{\to}\mu\in\R (\text{law of large numbers})\] and 
+\[\frac{h(t)-\mu t}{\sigma}t^{\frac{1}{2}}\stackrel{\bP}{\to}\mathcal{N}(0,1)\text{ (CLT)}\]
+We call the first case \dhighlight{Macroscopic} and the second case \dhighlight{Fluctuations} or \dhighlight{mesoscopic}.
+
+From a macroscopic point of view:
+\[\implies \delta_t h =v(\partial_x h)\] for some function $v$ (Hamitten-Jacobi equation).
+
+\dhighlight{Question:} How to add noise?
+
+Consider some discrete examples
+
+\dhighlight{Ballistic deposition:} $\forall x\in\Z$: independent Poisson process (intensity 1), $h(x,t)\in \Z,t\geq 0$
+
+If at time $t$, there is a jump of the PP at site $x$, either 
+\begin{enumerate}
+    \item[(a)] add it on top of $h(x,t)$: $h(x,t)\to h(x,t)+1$
+    \item[(b)] stick to one of the neighboring sites if they are higher: $h(x,t)\to\max\{h(x+1,t),h(x-1,t)\}$
+    
+\end{enumerate}We can use one Poisson process like previously for a finite window.
+
+For the evolution:\[h(x,t)=\max\{h(x,t_-),h(x-1,t_-),h(x+1,t_-)\}\]
+
+\dhighlight{Question:} How fast do the fluctuations grow?
+
+Simulations shows 
+\[\sqrt{\Var_x(h(x,t))}\approx t^{\frac{1}{3}}\text{ for large }t\]
+If there would not be any interaction between sites $\stackrel{\text{CLT}}{\to}t^{\frac{1}{2}}\implies$ Stickiness reduces the fluctuations.
+
+Influence of Stickiness is two-fold:
+\begin{enumerate}
+    \item[(a)] growth is depending on the slope (of the starting / boundary condition / the previous state?) $\to$ already modelled by $v(\partial_x h)$
+    \item[(b)] some regularization going on $\to $ simplest regularization in the continuum $\to$ Heat equation:\[\partial_t h =\partial_x^2h\]
+                $\implies \partial_t h=v(\partial_x h)+\partial_x^2 h$ 
+\end{enumerate}
+
+\dhighlight{Question:} What kind of noise should we consider?
+
+Simplest would be to consider \highlight{Gaussian noise}, without correlation in space and time (like in the discrete model). 
+
+\dhighlight{Informally:} the space-time white noise $\xi(x,t)$ is the centered \dhighlight{Gaussian process} with 
+variance $\bE(\xi(x,t)\xi(y,t))=\delta(x-y)\delta(t-s)$
+
+\begin{aremark}[WARNING]
+    $\xi$ is not a function, but a distribution!
+\end{aremark}
+
+\begin{definition}\label{def:5.1}
+    The \dhighlight{space time white noise $\xi$} is the Gaussian process satisfying 
+    \[\forall \varphi_1(x,t),\varphi_2(x,t)\in C_0^\infty\]
+    \marginnote{This is a bit informally wirtten, since $\xi$ is a distribution and not absolutely continuous w.r.t. Lebesgue}
+    \begin{align*}
+        \implies \bE\left(\int dxdt \varphi_1(x,t)\xi(x,t)\right)=0 \text{ centered}
+    \end{align*}
+    and 
+    \[\bE\left(\int\varphi_1 (x,t)\xi(x,t)dxdt\cdot\int\varphi_2(y,s)\xi(y,s)dyds\right)=\int \varphi_1(x,t)\varphi_2(x,t)dxdt\]
+\end{definition}
+
+\begin{aremark}
+    Careful: $\bE(\xi(x,t)^2)=\infty$. Pointwise this makes no sense!
+\end{aremark}
+
+$\implies$ We would get:
+\[\partial_t h = \partial_x^2 h + v(\partial_x h)+\xi\]
+Physicists argued: small $\partial_x h$
+\begin{itemize}
+    \item $v(\partial_x h)\approx v(0)+v'(0)\partial_x h + \frac{1}{2}v''(0)(\partial_x h)^2 +\dots$
+    \item The first two terms can be removed wlog, since \[\partial_t h = v(0)\to h_0+v(0)t\implies h(x,t)+v(0)t\eqqcolon \tilde{h}(x,t)\]
+        $\implies \partial_t\tilde{h} = \partial_x^2 \tilde{h}+ v'(0)\partial_x \tilde{h}+\dots$
+    \item Physics should not depend on the reference system we use!    
+\end{itemize}
+Then \dhighlight{KPZ equation:}
+\[\partial_t h = \partial_x^2 h +(\partial_x h)^2 +\xi\]
+Or by keeping track of physical constants:
+\[\partial_t h = \nu\partial_x^2 h +\lambda(\partial_x h)^2 +\sqrt{D}\xi\]
+
+\dhighlight{Problem:} $|\partial_x h|$ is NOT SMALL!!!
+
+Locally, $h$ is like a Brownian motion $\to \partial_x h$ is a distribution!
+\[\int \varphi(x)\partial_x h(x)dx=-\int \varphi' h(x)dx\]
+\[\int \varphi(x)(\partial_x h(x))^2dx\stackrel{????}{=}-\int \varphi' h(x)dx\]
+
+\section{White noise}
+
+\begin{example}\label{ex:5.2}
+    Let $S$ be a nice subset of $\R^d$ and $e_1,\dots$ an orthonormal basis of $L^2(S)$.\marginnote{These might be eigenvectors of some operator}
+    Let $\xi_1,\dots,$ iid $\mathcal{N}(0,1)$ r.v. 
+    \[\implies\xi(x)=\sum_{n\geq 1}\xi_n e_n(x)\]
+    is a white noise on $S$.
+\end{example}
+
+\begin{proof}
+    Let $\varphi_1,\varphi_2:S\to\R$ be test functions.
+    \begin{align*}
+        \bE\left(\int_S \varphi_1\xi(x)dx\right)&=\bE\left(\int_S \varphi_1\sum_{n\geq 1}\xi_ne_n(x)dx\right)=\sum_{n\geq 1}\bE(\underbrace{\xi_n}_{\bE(\xi)=0}\int_S\varphi_1 e_n(x)dx=0)
+    \end{align*}
+    and 
+    \begin{align*}
+        \bE\left(\int_S\varphi_1(x) \xi(x)dx\int_S\varphi_2(y)\xi(y)dy\right)&=\sum_{n,m\geq 1}\bE(\xi_n\xi_m)\int_S\int_S \varphi_1(x)\varphi_2(y)e_n(x)e_m(y)dxdy\\
+        &=\int dx dy \varphi_1(x)\varphi_2(y)\underbrace{\sum_{n\geq 1}e_n(x)e_m(x)}_{=1_{x=y}}=\int dx\varphi_1(x)\varphi_2(y).
+    \end{align*}
+\end{proof}
+
+\begin{aremark}
+    For orthonormal systems:
+    \[f(x)=\sum_{n\geq 1} e_n(x)(e_n,f)=\int dy f(y)\underbrace{\sum_{n\geq 1} e_n(x)e_n(y)}_{=\delta(x-y)}\]
+\end{aremark}
+
+\begin{example}\label{ex:5.3}
+    Let $S=\R_+$ and $\xi$ white noise on $S$. 
+    \[\implies B(t)=\int_S 1_{[0,t)}(s)\xi(s)ds\]
+    is a Brownian motion.
+\end{example}
+
+
+\beginlecture{19}{27.06.24}
+
+\begin{lemma}\label{lem:5.4}
+    Let $\xi$ be a white noise on $\R\times\R_+$. Then 
+    \[\xi(x,t)\stackrel{d}{=}\epsilon^{\frac{z+1}{2}}\xi(\epsilon^{1}x,\epsilon^{z}t)\]
+    where $z$ is called the \dhighlight{dynamical exponent} (in time).
+\end{lemma}
+
+\begin{proof}
+    \begin{align*}
+        \bE(\left(\int \varphi_1(x,t)\xi(x,t)dxdt\int \varphi_2(y,s)\xi(y,s)dyds\right))\stackrel{\text{def}}{=}\int \varphi_1(x,t)\varphi_2(x,t)dxdt 
+    \end{align*}
+    But also
+    \begin{align*}
+        &\bE\left(\int \phi_1(x,t)\epsilon^{\frac{z+1}{2}}\xi(\epsilon x,\epsilon^z t)dxdt\int \phi_2(y,s)\epsilon^{\frac{z+1}{2}}\xi(\epsilon y,\epsilon^z s)dyds  \right)\\
+        &=\epsilon^{z+1}\bE\left(\varphi_1(\epsilon^{-1}x,\epsilon^{-z}t)\xi(x,t)dxdt\epsilon^{-(z+1)}\varphi_2(\epsilon^{-1}y,\epsilon^{-z}s)\xi(y,s)dyds\epsilon^{-(z+1)}\right)\\
+        &=\epsilon^{-(z+1)}\int\varphi_1(\epsilon^{-1}x,\epsilon^{-z}t)\varphi_2(\epsilon^{-1}x,\epsilon^{-z}t)dxdt\\
+        &=\int\varphi_1(x,t)\varphi_2(x,t)dxdt
+    \end{align*}
+    using $\tilde{x}=\epsilon x \mapsto x$ and $t=\epsilon^zt\mapsto t$.
+\end{proof}
+
+\section{The 1:2:3 scaling}
+Start with \[\partial_t h =\nu\partial_x^2h+\lambda(\partial_x h)^2+ \sqrt{D}\xi.\]
+Let us see that wlog we can set $\nu=\lambda=\frac{1}{2},D=1$. Define 
+\[\tilde{h}(x,t)\coloneqq \alpha h(\gamma x,\beta t)\]
+which implies 
+\[\partial_t \tilde{h}(x,t)=\beta \alpha\dot{h}(\gamma x,\beta t)\]
+using
+\begin{itemize}
+    \item $\partial_t  = \frac{1}{\alpha\beta}\partial_t \tilde{h}$
+    \item $\partial_x h = \frac{1}{\alpha\gamma}\partial_x\tilde{h}$
+    \item $\partial_x^2 h = \frac{1}{\alpha\gamma^2}\partial_x^2\tilde{h}$
+\end{itemize}
+we get 
+\begin{align*}
+    \partial_t \tilde{h} &= \alpha\beta\partial_t h \\
+    &=\alpha\beta\left[\nu\frac{1}{\alpha\gamma^2}\partial_x^2\tilde{h}+\lambda\frac{1}{\alpha^2\gamma^2}(\partial_x \tilde{h})^2 +\sqrt{D}\frac{1}{\sqrt{\beta\gamma}}\xi\right]\\
+    &=\underbrace{\frac{\beta \nu}{\gamma^2}}_{=\frac{1}{2}}\partial_x^2\tilde{h}+\underbrace{\frac{\lambda\beta}{\alpha\gamma^2}}_{=\frac{1}{2}}(\partial_x \tilde{h})^2+\underbrace{\sqrt{D}\alpha\sqrt{\frac{\beta}{\gamma}}}_{=1}\xi 
+\end{align*}
+
+which implies $\alpha=\frac{\lambda}{\nu},\beta=\frac{2\nu^5}{D^2\lambda^4},\gamma=\frac{2\nu^3}{D\lambda^2}$.
+The standard choice we will use below is 
+\[\partial_t h = \frac{1}{2}\partial_x^2 h + \frac{1}{2}(\partial_x h)^2+\xi\]
+which is the \dhighlight{KPZ equation}.
+
+Start with $\partial_t h = \frac{1}{2}\partial_x^2 h +\frac{1}{2}(\partial_x h)^2+\xi$. Define 
+\[h_\epsilon(x,t)\coloneqq \underbrace{\epsilon^b}_{T^{-b/z}x} h(\underbrace{\epsilon^{-1}x}_{x T^{1/z}},\underbrace{\epsilon^{-z}t}_{\eqqcolon tT})\]
+\[h_\epsilon(x,1)\coloneqq \epsilon^b h(\epsilon^{-1}x,\epsilon^{-z}1)\]
+If $b,z$ choosen s.t. $\lim_{\epsilon\downarrow 0} h_\epsilon(x,1)$ is well defined ( and non-trivial), then 
+the Fluctuations of $h$ at large time $T$ is $O(T^{b/z})$ and correlations are non-trivial over distances $O(T^\frac{1}{z})$.
+
+Discrete model: Picture here \dots 
+
+If $(p-q)T^c\to 0$ the height converges to the height of KPZ eq.
+
+Stationary measure for the increment are simple random walks. 
+
+Under scaling: One gets BM increments. If one starts with a 2-sided BM, more precisely
+\[h(x,0)=\sqrt{2}B(x)\implies h(x,t)-h(0,t)\stackrel{d}{=}\sqrt{2}B(x)\]
+
+And therefore $b=\frac{1}{2}$.
+
+\begin{itemize}
+    \item $\partial_t h = \epsilon^{z-b}\partial_t h_\epsilon$
+    \item $\partial_x h=\epsilon^{1-b}\partial_t h_\epsilon$
+    \item $\partial_x^2 h = \epsilon^{2-b}\partial_x^2 h_\epsilon$
+    \item $xi(x,\epsilon^{-1},t\epsilon^{-z})\stackrel{d}{=}\epsilon^{\frac{z+1}{2}}\xi(x,t)$
+\end{itemize}
+
+$h_\epsilon$ solves
+\begin{align*}
+    \implies \partial_t h_\epsilon &= \frac{1}{2}\epsilon^{2-z}\partial_x h_\epsilon + \frac{1}{2}\epsilon^{2-z-b}(\partial_x h_\epsilon)^2 + \epsilon^{b-\frac{z+1}{2}+\frac{1}{2}}\xi\\
+    &\stackrel{b=\frac{1}{2}}{=}\frac{1}{2}\epsilon^{2-z}\partial_x^2 h_\epsilon + \frac{1}{2}\epsilon^{\frac{3}{2}-z}(\partial_x h_\epsilon)^2+\epsilon^{1-\frac{z}{2}}\xi
+\end{align*}
+
+The nonlinear term $\frac{1}{2}\epsilon^{\frac{3}{2}-z}(\partial_x h_\epsilon)^2$ is still relevant, but not $\to\infty$. This gives the idea 
+$z=\frac{3}{2}$.
+
+\[\partial_t h_\epsilon = \frac{1}{2}\epsilon^{\frac{1}{2}}\partial_x^2 h_\epsilon + \frac{1}{2}(\partial_x h_\epsilon)^2 + \epsilon^{\frac{1}{4}}\xi\]
+
+$\implies$ at large time $t$, fluctuations of $h(x,t)\approx t^{\frac{1}{3}}$, correlations in space $\approx t^\frac{2}{3}$.
+
+\dhighlight{Question: Are the $\epsilon^{\frac{1}{2}}$ and $\epsilon^{\frac{1}{4}}$ terms relevant as $\epsilon\to 0$?}
+
+1.: $\partial_t h_\epsilon = \frac{1}{2}(\partial_x h_\epsilon)^2$ is not well-posed.
+with the term $\sqrt{\epsilon}\partial_x^2 h_\epsilon$
+\[\implies \partial_t h = \frac{1}{2}(\partial_x h)^2+\frac{1}{2}\sqrt{\epsilon}\partial_x^2h\]
+which is the viscocity solution. Then taking take $\epsilon\to 0$ gives \[h(x,t)=\sup_{y}(h(y,0)-\frac{(x-y)^2}{2t})\]
+
+If you start with $h_\epsilon(x,0)=\sqrt{2}B(x)\implies h(x,t)$ has some explicit expression. This solution 
+do not satisfy $h(x,t)-h(x,0)\stackrel{d}{=}\sqrt{2}B(x)$. Therefore $\epsilon^{\frac{1}{4}}\xi$ is relevant as $\epsilon\to 0$.
+
+\section{The linearized case: Edwards-Wilkinsen equation}
+
+Let $\lambda=0\implies$
+
+\begin{equation}\label{Edwards-Wilkinsen}
+    \begin{cases}
+        \partial_t h  &= \frac{1}{2}\partial_x^2 h+\xi\\
+        h(x,0)&=h_0(x)
+    \end{cases}
+\end{equation}
+It is linear!
+\begin{remark}
+    \[\begin{cases}
+        \frac{\partial}{\partial t}h &= Ah +f\\
+        h(0)&=h_0
+    \end{cases}\implies\]
+    denote by $\tilde{h}(t)\coloneqq e^{At}h_0$ as the solution with $f=0$. The variation of constant formula gives:
+    \[h(t)=e^{At}h_0+\int_0^te^{A(t-s)}f(s)ds\]
+
+Without $\Xi$: $h(x,t)=\int_\R P_t(x-y)h_0(y)dy,P_t(x)=\frac{e^{-\frac{x^2}{2t}}}{\sqrt{2\pi t}}$
+\[\implies h(x,t)=\int_\R P_t(x-y)h_0(y)dy+\int_0^t\int_\R P_{t-s}(x-y)\xi(y,s)dyds\]
+\end{remark}
+
+Scaling of EW:
+
+\[h_\epsilon(x,t)\coloneqq \epsilon^{\frac{1}{2}}h(\epsilon^{-1}x,\epsilon^{-z}t)=\epsilon^{\frac{1}{2}}h(\epsilon^{-1}x,\epsilon^{-2}t)\]
+yields ( with the same calculations as before, which leads to $z=2$) 
+\[\partial_t h_\epsilon = \frac{1}{2}\epsilon^{2-z}\partial_x^2 h_\epsilon+\epsilon^{1-\frac{z}{2}}\xi=\frac{1}{2}\partial_x^2 h_\epsilon+\xi\]
+Therefore, at large time $t$, fluctuations will be $O(t^{\frac{b}{z}})=O(t^{\frac{1}{4}})$. The nonlinear term in the KPZ increases the size of the fluctuations!
+
+\section{The Cole-Hopf transformation}\marginnote{This sadly only works in $1$ dimension}
+We have: $\partial_t h=\frac{1}{2}\partial_x^2 h +\frac{1}{2}(\partial_x h )^2+\xi$
+
+\begin{lemma}\label{lem:5.5}
+    Assume that $h$ solves
+    \[\partial_t h = \frac{1}{2}\partial_x^2h + \frac{1}{2}(\partial_x h)^2+V\]
+    with $V$ some nice $V$ in $(x,t)$.
+
+    Then $z=e^h$ solves 
+    \[\partial_t z = \frac{1}{2}\partial_x^2 z + zV\]
+\end{lemma}
+
+\begin{proof}
+    $h=\ln(z)$, and therefore 
+    \begin{align*}
+        \frac{1}{2}\frac{(\partial_x z)^2}{z^2}+\frac{1}{2}\left(\frac{\partial_x^2 z}{z}-\frac{(\partial_x z)^2}{z^2}\right)+V=\partial_t h= \frac{1}{z}\partial_t z
+    \end{align*}
+\end{proof}
+
+Suppose that we regularize $\xi$ in space:
+\[\xi\to\xi_\epsilon\coloneqq \int dy \rho_\epsilon(x-y)\xi(y,t)\]
+where $\rho_\epsilon=\frac{e^{\frac{-x^2}{2\epsilon}}}{\sqrt{2\pi \epsilon}}$.
+
+Solve $\partial_t z = \frac{1}{2}\partial_x^2 z + z\xi_\epsilon$. Set $h(x,t)\coloneqq \ln(z(x,t)).$
+
+%TODO_ Number
+Exercise: In the above setting, h solves:
+\[\partial_t h = \frac{1}{2}\partial_x^2 h + \left(\frac{1}{2}(\partial_x h)^2-\frac{C}{\epsilon}\right)+\xi_\epsilon\]
+for some explicit $C$.
+
+If one solves $\partial_t z = \frac{1}{2}\partial_x^2 z + z\xi$ and define $h(x,t)\coloneqq \ln(z(x,t))$.
+This is called the \dhighlight{Cole-Hopf solution of the KPZ eq.}.
+
