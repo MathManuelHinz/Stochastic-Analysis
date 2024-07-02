@@ -275,3 +275,113 @@ for some explicit $C$.
 If one solves $\partial_t z = \frac{1}{2}\partial_x^2 z + z\xi$ and define $h(x,t)\coloneqq \ln(z(x,t))$.
 This is called the \dhighlight{Cole-Hopf solution of the KPZ eq.}.
 
+\beginlecture{20}{02.07.24}
+
+Exam:
+\begin{itemize}
+    \item Speak about topic we choose (freely): 15 min discussion
+    \item He will not talk about us about the last part 
+    \item Talk the rest of the time about the rest of the lecture
+\end{itemize}
+
+If we are smooth enough, the $C$ in the Cole-Hopf-equation will be $0$.
+
+In order to have a limit for $\epsilon\to0$:
+\[h(x,t)\coloneqq \tilde{h}(x,t)-\frac{c}{\epsilon}t\]
+$\xi_\epsilon$ is still centered Gaussian with covariance:
+\begin{align*}
+    \bE(\xi_\epsilon(x,t)\xi_\epsilon(y,s))&=\bE\left(\int_\R d\tilde{x}\rho_\epsilon(x-\tilde{x})\xi(\tilde{x},t)\int_\R d\tilde{y}\rho_\epsilon(y-\tilde{y})\xi(\tilde{y},s)\right)\\
+    &=\delta(t-s)\cdot\underbrace{\int_{R}d\tilde{x}\rho_\epsilon(x-\tilde{x})\rho_\epsilon(y-\tilde{x})}_{\eqqcolon C_\epsilon(x-y)}
+\end{align*}
+
+In particular, $C_\epsilon(0)=\frac{1}{\sqrt{2\pi}\epsilon}=\frac{c}{\epsilon}$.
+
+Let $z=^\epsilon$ be the solution of 
+\[(\star)\ \partial_tz=\frac{1}{2}\partial_x^2 z+ z\cdot \xi_\epsilon\]
+\begin{itemize}
+    \item One checks $z^\epsilon\stackrel{\epsilon\to0}{\to}z$ uniformly on compact sets.
+    \item $z(x,t)>0$ (starting from $z(x,0)>0$), then define $h(x,t)=\ln(z(x,t))$
+    \item Define $h^\epsilon\coloneq \ln z^\epsilon(x,t)$. it solves the following equation:\[\partial_x h^\epsilon=\frac{1}{2}\partial_x^2h^\epsilon+\frac{1}{2}(\partial_x h^\epsilon)^2-C_\epsilon(0)+\xi_\epsilon\]
+    \item In differential notation \[d z^\epsilon = \frac{1}{2}\partial_x^2 z^\epsilon dt+z^\epsilon \underbrace{\xi_\epsilon dt}_{=d\xi_\epsilon}\]
+\end{itemize}
+
+Therefore \begin{align*}
+    dh^\epsilon&=d\ln z^\epsilon\stackrel{\text{Itô}}{=}\frac{1}{z^\epsilon}dz^\epsilon-\frac{1}{2}\frac{1}{(z^\epsilon)^2}(dz^\epsilon)^2\\
+    &=\frac{1}{2}\frac{1}{z^\epsilon}\partial_x^2z^\epsilon dt +d\xi_\epsilon-\frac{1}{2}(d\xi_\epsilon)^2\\
+    &=\frac{1}{2}\partial_x^2 h^\epsilon dt + \frac{1}{2}(\partial_x h^\epsilon)^2dt + d\xi_\epsilon-\frac{1}{2}C_\epsilon(0) dt
+\end{align*}
+
+which implies 
+\[\partial_t h^\epsilon = \frac{1}{2}\partial_x^2 h^\epsilon+\frac{1}{\epsilon}\left((\partial_x h^\epsilon)^2-C_\epsilon(0)\right)+\xi_\epsilon\]
+
+The Cole-Hopf solution of the KPZ equation is 
+\[h(x,t)=\ln(z(x,t))\]
+where $z$ solves \[\begin{cases}
+    \partial_t z &= \frac{1}{2}\partial_x^2 z +z\cdot\xi \\
+    z(x,0)&=e^{h(x,0)}
+\end{cases}\]
+
+The difficulty in the multiplicative \dhighlight{stochastic heat equation (SHE)} is the term $z\xi$.
+Still it is much better than squaring a distribution.
+
+Since $h(x,t)$ will be locally BM, $z(x,t)=e^{h(x,t)}$ is also locally gaussian. In the integral form:
+\[z\xi\to \int_0^t z\underbrace{\xi ds}_{\approx dB_s}\]
+
+\subsection{Mild solutions}
+
+\begin{definition}\label{def:5.7}
+    Let $\begin{cases}
+        \partial_t z&=\frac{1}{2}\partial_x^2 z + z\cdot \xi \\
+        z(x,0)&=z_0(x)
+    \end{cases}$ be $(\star)$. $z$ is a \dhighlight{mild solution} of $(\star)$, if 
+    \[z(x,t)=\int_R P_t (x-y)z_0(y)dy+\int_0^tds\int_\R dy P_{t-s}(x-y)z(y,s)\xi(y,s)\ (A)\]
+    where $z$ is predictable and 
+    \[\int_0^tds\int_\R (P_{t-s}(x-y))^2\bE(z(y,s))^2<\infty\ (B)\]
+\end{definition}
+
+\begin{theorem}\label{thm:5.8}
+    Suppose that $\sup_{x\in\R}\bE(z_0^2(x))<\infty$. Then there exists a unique, progressively measurable $z(x,t)$ satisfying 
+    (A) and (B).
+\end{theorem}
+
+\begin{proof}
+    Let $z^0(x,t)=0$. Define iteratively $z^{n+1}(x,t)=\int_\R P_t(x-y)z_0(y)dy+\int_0^t ds \int_\R P_{t-s}(x-y)z^n(y,s)\xi(y,s)$.
+    Let $\delta z^{n}(x,t)=z^{n+1}(x,t)-z^n(x,t)$.
+    \begin{align*}
+        \delta z^{n+1}=\int_0^t ds\int_\R dy P_{t-s}(x-y)\delta z^m(y,s)\xi(y,s)
+    \end{align*}
+
+    \begin{align*}
+        \bE\left(|\delta z^{n+1}|^2\right) = \int_0^tds\int_\R dy (P_{t-s}(x-y))^2\bE(\vert \delta z^n(y,s)\vert^2).
+    \end{align*}
+    Define $f^n(t)\coloneqq \sup_{\stackrel{x\in\R}{0\leq s\leq t}}\bE(\vert \delta z^n(x,s)\vert^2)$. Assume that $f^n(t)<\infty$ 
+    
+    For $n=0$ it is true: $\delta z^1(x,t)=z^1(x,t)=\int_\R P_t(x-y)z_0(y)dy$ and therefore 
+    \[\bE\left(\left\vert \int_\R P_t(x-y)z_0(y)\right\vert^2\right)\stackrel{\text{Jensen}}{\leq}\bE\left(\int_\R P_t(x-y)|z_0(y)|^2dy\right)=\int_\R P_t(x-y)\bE(|z_0(y)|^2)dy\leq \sup_{y\in\R}\bE(|z_0(y|^2)\]
+    Now we bound $f^{n+1}$:
+    \begin{align*}
+        f^{n+1}(t)&=\sup_{\stackrel{x\in\R}{0\leq s \leq t}}\int_0^sd\tilde{s} \int_\R dy (P_{t-\tilde{s}}(x-y))^2 f^n(\tilde{s})\\
+        &\leq \sup_{0\leq s\leq t}\int_0^s d\tilde{s} f^n(\tilde{s})\frac{C}{\sqrt{s-\tilde{s}}}\\
+        &\leq \int_0^t d\tilde{s}\frac{f^n(\tilde{s})}{\sqrt{t-\tilde{s}}}C_2\leq \tilde{C}\int d\tilde{s}\int_0^{\tilde{s}}du \frac{f^{n-1}(u)}{\sqrt{t-\tilde{s}}\sqrt{\tilde{s}-u}}\\
+        &=C_3 \int_0^t du f^{n-1}(u)\underbrace{\int_u^t d\tilde{s}\frac{1}{\sqrt{\tilde{s}-u}}\sqrt{t-\tilde{s}}}_{\leq C_4}\\
+        &\implies f^{n+1}(t)\leq \hat{C}\int_0^t du f^{n-1}(u)\leq (\hat{C})^2\int_0^t du \int_0^ud u -f^{n-3}(u)\\
+        &\implies f^{2n}(t)\leq (\hat{C})^n \frac{t^n}{n!}\sup_{y\in\R} \bE(|z_0(y)|^2) \stackrel{n\to\infty}{\to} 0
+    \end{align*}
+    where the convergence happens very fast! There there exists a solution $z$ satisfying (A) and (B)
+\end{proof}
+
+For $z_0=e^{h_0(x)},h_0(x)=B(x)1_{x\geq 0}$, we can not use \ref{thm:5.8}! Our result is a bit to stiff.
+
+\begin{lemma}\label{lem:5.9}
+    Let $z(x,t)$ satisfy (A) and (B) and 
+    \[\bE\left(\left\vert\sup_{A\subseteq [-n,n]}\int_A z_0(x)dx\right\vert\right)\leq ce^{cn}\text{ for some }c\in(0,\infty)\]
+    Then there exists $\tilde{c}<\infty$, $\bE(z^2(x,t))\leq \frac{\tilde{c}}{\sqrt{t}}e^{\tilde{c}(t+|x|)}$ for all $x\in\R,t>0$.
+
+\end{lemma}
+
+   In the special case $z_0(x)=\delta_0(x)$, there exists $c=c(T)$ s.t.$\bE(z^2(x,t))\leq c(P_t(x))^2$ for all $0<t\leq T$, where $P_t=\frac{1}{\sqrt{2\pi t}}e^{\frac{-x^2}{2t}}$
+
+We want to know: What is $\bP(z(x,t)\leq s)$ for a fixed $x$?
+
+
+
