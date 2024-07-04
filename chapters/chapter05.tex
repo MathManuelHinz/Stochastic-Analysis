@@ -383,5 +383,161 @@ For $z_0=e^{h_0(x)},h_0(x)=B(x)1_{x\geq 0}$, we can not use \ref{thm:5.8}! Our r
 
 We want to know: What is $\bP(z(x,t)\leq s)$ for a fixed $x$?
 
+\beginlecture{21}{04.07.24}
+
+\begin{align*}
+    \bE\left(\left\vert \int_0^t X_s\underbrace{\xi_sds}_{dB_s}\right\vert^2\right)&=\bE\left(\int_0^t X_s^2ds\right)\\
+    &=\int_0^t\bE(X_s^2)ds
+\end{align*}
 
 
+\begin{align*}
+    \bE\left(\left\vert \int_0^t ds \int dy p_{t-s}(x-y)\delta z^n(y,s)\xi(y,s)\right\vert^2\right)&\stackrel{?}{=}\int_0^t ds \int dy (P_{t-s}(x-y))^2\bE(\left\vert \delta z^n(y,s)\right\vert^2)
+\end{align*}
+
+And a correction to the iteration from last time:
+\[f^n(t)\sup_{x}\sup_{0\leq s\leq t}\bE\left(\vert \delta z^n(x,s)\vert^2\right)\]
+instead consider 
+\[g_n(t)=\sup_{x}\bE\left(\vert \delta z^n(x,s)\vert^2\right)\]
+
+\dhighlight{End of correction}
+
+
+\dhighlight{Question: $\bP(h(0,t)\leq s)=?$}
+
+\section{Feynman-Kac representation}
+
+\begin{equation}
+    \begin{cases}
+        u(x,0) &= f(x)\\
+        \partial_t u=\frac{1}{2}\partial_x^2 u + V(x,t)u
+    \end{cases}
+\end{equation}
+
+If $V$ is nice enough (e.g. bounded) $\implies$ (see lecture 20) a solution is 
+\[u(x,t)=\bE_x\left(f(B_t)e^{\int_0^t V(t-s,B_s)}ds\right)\]
+for some BM $(B_t)_{t\geq 0}$starting in $x$ and $\tilde{B}$ running backwards with $B_t=x$:
+\begin{align*}
+    u(x,t)&=\bE_x\left(f(\tilde{B}_0)e^{\int_0^t V(s,\tilde{B}_s)}ds\right)
+\end{align*}
+\dhighlight{Formally:} $z(x,t)=\bE_x(z(0,B_0))\cdot e^{\int_0^t \xi(s,B_s)ds}$ with $B$ BM from time $t$ to time $0$ with $B_t=x$.
+
+Issue of this: 
+\begin{align*}
+    e^{\int_0^t\xi(s,B_s)ds}&)\sum_{n\geq 0}\frac{1}{N!}\int_0^tds_1\dots,\int_0^t ds_n\xi(s_1,B_{s_1})\dots\xi(s_n,B_{s_n})
+\end{align*}
+
+We have to be careful about the diagonal, to avoid squaring the distribution $\xi(s,B_s)$.
+
+
+\begin{align*}
+    e^{\int_0^t\xi(s,B_s)ds}&=\sum_{n\geq 0}\frac{1}{n!}\int_0^tds_1\dots\int_0^t ds_n\xi(s_1,B_{s_1})\dots\xi(s_n,B_{s_n})\\
+    &=\sum_{n\geq 0}\frac{1}{n!}\int_{0<s_1<\dots<s_n<t}d_{s_1}\dots ds_n\xi(s_1,B_{s_1})\dots\xi(s_n,B_{s_n})
+\end{align*}
+
+\begin{align*}
+    \implies z(x,t)=\sum_{n\geq 0}\int_\R dy \int_{0<s_1<\dots< s_n<t}d_{s_1}\dots d_{s_n}\prod_{k=1}^N \int dx_k\xi(x_k,s_k)P_{x,t}(y,0,x_1,s_1,\dots,x_n,s_n)z(y,0)
+\end{align*}
+
+\subsection{A discrete example}
+
+Take for example $\Z^2$ as time $\times $ space. Starting in $(x,t)$ 
+look at a random walk with path $\pi$ with nearest neighbor steps. To each $(i,j)\in \Z^2$-> iid random variable $\omega(i,j)$
+\[\implies Z(x,n)\coloneqq \bE\left(z(0,x_0)e^{-\beta\sum_{k=1}^n \omega(k,x_k)}\right)\]
+
+We can imagine many other discretizations.
+
+\section{Moments of the multiplicative SHE}
+
+\[\bE(e^{-\lambda z(x,t)})=?\]
+if $z(x,t)\geq 0$,, the laplace transform above is well defined.
+\[=\bE\left(\sum_{n\geq 0}\frac{(-\lambda)^2}{n!}z(x,t)^n\right)\stackrel{?}{=}\sum_{n\geq 0}\frac{(-\lambda)^n}{n!}\bE(z(x,t)^n)\]
+which is useful, since $\bE(z(x,t)^n)$ has explicit expressions:
+
+\dhighlight{Strategy to compute these moments:} Start with noise $\xi_\epsilon=\rho_{\epsilon}*\xi$, with $\rho_\epsilon(x,t)=\epsilon^{-1}\rho(\epsilon^{0.5}x,\epsilon^{0.5}t)$, where $\rho$ is even, smooth, compactly supported non-negative function with
+\[\int\rho(x,t)dxdt=1.\]
+
+Then $z^\epsilon(x,t)=\bE_x\left(z(0,B_0)e^{\int_0^txi_\epsilon(s,B_s)ds}e^{-C_\epsilon t}\right)$ and 
+\[z^\epsilon(x,t)\to z(x,t)\text{ nicely}\]
+As $\epsilon\to 0$
+\[\bE((z(x,t))^n)=\bE_{(x,\dots,x)}\left(e^{-\frac{1}{2}\sum_{i<j}\int_0^t\sgn(B_i-B_j)(dB_i-dB_j)}F(B(t))\right)\]
+for some $n$-dimensional BM, $B_i(0)=x$ and 
+\[F(B)=e^{\frac{1}{2}\sum_{i<j}|B_i-B_j|}\prod_{i=1}^nz_0(B_i)\]
+Using antisymmetry:
+\begin{align*}
+    \sum_{i<j}\int_0^t\sgn(B_i-B_j)(dB_i-dB_j)&=\sum_{i=1}^N\sum_{j\neq i}\int_0^t\sgn(B_i-B_j)\underbrace{dB_i}_{=dB_t^i}\\
+    \bE(e^{-\frac{1}{2}\sum_{i=1}^n\left(\sum_{j\neq i} \int_0^t \sgn(B_i-B_j)dB_i\right)})&=\bE\left(e^{\frac{1}{8}\sum_{i=1}^n\int_0^t\sum_{j\neq i}\underbrace{(\sgn(B_i-B_j)^2)}_{=1}}\right)ds
+\end{align*} 
+Trick:
+\[\sum_{i=1}^n\left(\sum_{j\neq i}\sgn(B_i-B_j)\right)^2=\frac{1}{3}n(n^2-1)\]
+
+$\implies \bE(z^n(x,t))\approx e^{\frac{n^3}{24}}$. We then get 
+\begin{align*}
+    \sum_{n\geq 0}\frac{(-\lambda)^n}{n!}\underbrace{\bE\left(z(x,t)^n\right)}_{\approx e^{\frac{1}{24}n^3}}\to \text{not ok}
+\end{align*}
+$\implies$ The moments grow to fats and they do not determine the distribution of $z(x,t)$.
+there is some $f$:
+\[e^{t^3}=\int dz e^{zt}f(z)\]
+
+\section{The q-TASEP}
+
+The solution of the multiplicative SHE with $z_0(x)=\delta_0(x)$ is 
+\[z(x,t)=\bE_x\left(   \delta_0(B_0)e^{\int_0^t \xi(s,B_s)ds}\right)\]
+Fix $q\in(0,1)$.
+
+\dhighlight{TASEP=Totally Asymmetric Exclusion Process}
+
+\begin{itemize}
+    \item \highlight{Configuration space:} particle $n$ at time $t$ is at position $x_n(t)$ with $x_{n+1}(t)<x_n(t)$ for all $t,n$.
+    \item \highlight{Dynamics:} each particle tries to jump to its right by one ($+1$) with \highlight{rate} 1. The jump takes place only if the arrival site is empty.
+\end{itemize}
+
+\subsection{q-TASEP}
+
+here the jump rate of particle $n$ is given by \[1-q^{X_{n-1}(t)-X_n(t)-1}.\]
+
+Consider the \highlight{initial condition} $X_n(0)=-n,n\geq 1$.
+
+\dhighlight{Height function:}
+\[\begin{cases}
+    h(0,0)=0&h(0,t)=2(\text{\# particles which jumped from  to  during }[0,t])\\
+    h(x+1,t)-h(x,t)&=1 
+\end{cases}\]
+
+\[=\begin{cases}
+    h(0,0)&=h(0,t)=2(\text{\# particles which jumped from  to  during }[0,t])\\
+    \begin{cases}
+        1 & \not\exists \text{ particle at time }t\\ 
+        -1 & \exists \text{ particle at time }t
+\end{cases}\end{cases}
+\]
+
+One can compute: (using Macdonald polynomials)
+\begin{align*}
+    \bE\left(q^{l\cdot \underbrace{(x_n(t)+n)}_{\lambda_n(t=x_n(t)-n)}}\right)
+\end{align*} 
+$x_n(0)=-n\implies x_n(t)+n\geq 0$
+\[0\leq q^(l\cdot \lambda_n(t))\leq n\]
+
+\dhighlight{Introduce:} $(x;q)_\infty\coloneqq \prod_{k\geq 0}(1-x^k)$
+
+\dhighlight{Generating function}\[\bE\left(\frac{1}{(\zeta q^{\lambda_n(t)};q)_\infty}\right)\stackrel{\text{Re}\zeta<0}{=}\bE\left(\sum_{l\geq 0}\frac{q^{l\cdot \lambda_n(t)\xi^l}}{(1-q)\cdot\dots\cdot (1-q^l)}\right)\stackrel{|\zeta|<1}{=}\sum_{l\geq 0}\frac{\zeta^l}{(1-q)\cdot\dots\cdot (1-q^l)}\bE(q^{l\cdot \lambda_n(t)})\]
+
+\highlight{magically} (algebra is the magician)
+\begin{align*}
+    \sum_{l\geq 0}\frac{\zeta^l}{(1-q)\cdot\dots\cdot (1-q^l)}\bE(q^{l\cdot \lambda_n(t)})&=\det(1+K_{\zeta,n})_{L^2(\mathbb{C})}
+\end{align*}
+where $K_\zeta$ is an operator and we use the Fredholm determinant
+\begin{align*}
+    \coloneqq \sum_{m\geq 0}\frac{1}{m!}\int_{\mathbb{C}}dz_1\dots\int_{\mathbb{C}}d z_n\det[K_{\zeta,n}(z_i,z_j)]_{1\leq i,j\leq m}
+\end{align*}
+which is \highlight{purely analytic}, there is no randomness involved!
+
+Next steps:
+
+$q\to 1$ limit will lead to a semi-discrete polymov model $\to$ solution $z(x,t)$
+
+
+\begin{aremark}
+    We can sometimes drop the condition $|\zeta|<1$ if the rhs is well defined, since we have to analytic functions which agree on an open set.
+\end{aremark}
