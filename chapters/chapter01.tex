@@ -100,7 +100,7 @@ In the last semester we proved:
     \end{equation} or more generally $X_0=Y$, where 
     \begin{equation*}
         \text{sgn}(x)=\begin{cases}
-            1& x>0\\-1 x\leq 0
+            1& x>0\\-1 &x\leq 0
         \end{cases}
     \end{equation*}
     Let $W$ be a BM with $W_0=Y$. Define 
@@ -151,7 +151,7 @@ In the last semester we proved:
 
 \begin{example}[Non-uniqueness of law, non pathwise uniqueness, with solutions]
     \[\begin{cases}
-        dX_t &= 1_{X_z}dB_t\\
+        dX_t &= 1_{X_t\neq 0}dB_t\\
         x_0&=0
     \end{cases}\]
     Then \[X_t=0\forall t\geq 0\] and
@@ -211,7 +211,7 @@ In the last semester we proved:
     \end{align*}
 
 \end{example}
-
+1
 \begin{theorem}[Yamada,Watanabe]\label{thm:1.12}
     Let $dX_t=b(X_t)dt+\sigma(X_t)dB_t$ 
     and assume that there exist both a increasing function $\rho(u)\geq 0$ s.t. $|\sigma(x)-\sigma(y)|\leq \rho(|x-y|)\forall x,y\in\R$
@@ -231,7 +231,7 @@ In the last semester we proved:
 
 \section{Weak solutions and martingale problems}
 
-Let $(X_t)_{t\geq 0}$ be a weka solution of the SDE \[\begin{cases}
+Let $(X_t)_{t\geq 0}$ be a weak solution of the SDE \[\begin{cases}
     dX_t&=b(t,X_t)dt+\sigma(t,X_t)dB_t\\X_0&=0
 \end{cases}\]
 on $(\Omega,\cF,(\cF_t)_{t\geq 0},\bP)$. 

@@ -8,49 +8,29 @@ With $t_{n+1}-t_{n}$ are iid., $\sim\exp(\lambda)$ (here it is the parameter, NO
 
 \[\mathbb{P}(N_{t+\epsilon}=y+1|N_t=y)=\lambda\epsilon+O(\epsilon^2)\]
 
-\begin{center} % TODO: FIX
-    \begin{tabular}{|c|c|}\hline
-        BM  & Poisson process\\\hline
-        & Monotone increasing\\\hline
+\begin{center}
+    \begin{tabular}{cc|c}
+        &\dhighlight{BM}  & \dhighlight{Poisson process}\\\hline
+        (a) & $t\mapsto B_t$ is continuous& $t\mapsto N_t$ is $\mathbb{P}$. a.s. \dhighlight{cadlag}\\
+        (b) & $\bP(B_0=0)=1$& $\bP(N_0=0)=1$\\
+        (c) & For $0\leq s\leq t: B_t-B_s\stackrel{d}{=}B_{t-s}$& For $0\leq s\leq t: N_t-N_s\stackrel{d}{=}N_{t-s}$\\
+        (d) & For $0\leq s\leq t: B_t-B_s$ is independent of $\{B_u,u\leq s\}$&  For $0\leq s\leq t: N_t-N_s$ is independent of $\{N_u,u\leq s\}$\\
+        (e) & $\forall t>0:B_t\sim \mathcal{N}(0,t)$   &  $\forall t>0:N_t\sim \Poi(\lambda t)$   \\
     \end{tabular}
 \end{center}
 
-BM:
-
-A real valued process $B=(B_t)_t$ satisfying:\begin{enumerate}
-    \item[(a)] $t\mapsto B_t$ is continuous
-    \item[(b)] $\bP(B_0=0)=1$
-    \item[(c)] For $0\leq s\leq t: B_t-B_s\stackrel{d}{=}B_{t-s}$
-    \item[(d)] For $0\leq s\leq t: B_t-B_s$ is independent of $\{B_u,u\leq s\}$
-    \item[(e)] $\forall t>0B_t\sim \mathcal{N}(0,t)$   
-\end{enumerate}
-
-Poisson process: 
-
-A process $N=(N_t)$ with values in $D$ is called a Poisson process with parameter $\lambda>0$, if 
-\begin{enumerate}
-    \item[(a)] $t\mapsto N_t$ is $\mathbb{P}$. a.s. \dhighlight{cadlag}.
-    \item[(b)] $\bP(N_0=0)=1$
-    \item[(c)] For $0\leq s\leq t: N_t-N_s\stackrel{d}{=}M_{t-s}$
-    \item[(d)] For $0\leq s\leq t: N_t-N_s$ is independent of $\{N_u,u\leq s\}$
-    \item[(e)] $\forall t>0N_t\sim \Poi(\lambda t)$   
-\end{enumerate}
-
 Notice how b,c,d are the same!
 
-Differences:
+\dhighlight{Differences:}
 
-BM: 
-\begin{itemize}
-    \item continuous paths 
-    \item unbounded variation
-\end{itemize}
+\begin{center}
+    \begin{tabular}{c|c}
+        \dhighlight{BM}  & \dhighlight{Poisson process}\\\hline
+        continuous paths & pure jump process\\
+        unbounded variation& bounded variation\\
+    \end{tabular}
+\end{center}
 
-PP: 
-\begin{itemize}
-    \item pure jump process
-    \item bounded variation
-\end{itemize}
 
 Common features: 
 
@@ -58,6 +38,8 @@ Common features:
     \item both have càdlàg trajectories
     \item stationary, independent increments
 \end{itemize}
+
+This motivates the following definition:
 
 \begin{definition}[Lévy Process]\label{def:4.1}
     A process $X=(X_t)_{t\geq 0}$ defined on $(\Omega,\cF,\bP)$ is a \dhighlight{Lévy process}, if:
@@ -70,8 +52,10 @@ Common features:
 \end{definition}
 
 \begin{remark}
-    Lévy processes are Markov processes.
+    Lévy processes are Markov processes ( by c and d).
 \end{remark}
+
+How wide is the class of Lévy processes? We first notice a connection with infinitely divisible distributions:
 
 \begin{definition}\label{def:4.2}
     A real-valued random variable $X$ has a \dhighlight{infinitely divisible distribution}, if 
@@ -80,12 +64,14 @@ Common features:
     $\exists$ prob. measure $\mu_n$ s.t. $\mu=(\mu_n)^{*n}$, i.e. the $n$-fold convolution. 
 \end{definition}
 
+If $X_t$ is a Lévy process, then $X_t$ is infinitely divisible (as a random variable), since:
+
 \begin{remark}\marginnote{We can change the definition to $\bE(e^{iuX})=e^{-\psi(u)}$ to avoid taking logarithms of complex numbers.}
     Setting $\psi(u)=-\log(\bE(e^{iuX}))$, for $u\in \R$, $\implies \psi$ is called the \dhighlight{charateristic exponent of $X$}.
     If $X$ is infinitely divisible, then 
     \begin{align*}
         \bE(e^{iuX})&=\bE(e^{iu(X_1^n+\dots+X_n^b)})\\
-        &=\bE(e^{iuX})^n \\
+        &=\bE(e^{iuX_1^n})^n \\
         &\implies \psi(u)=n\psi_n(u),
     \end{align*} 
     where $\psi_n$ is the characteristic exponent of $X_1^n$.
@@ -94,10 +80,10 @@ Common features:
 \begin{theorem}[Lévy-Khintchine formula]\label{thm:4.2}
     A probability law $\mu$ of real valued real random variable is infinitely divisible with
     characteristic exponent
-    \[\psi(u\theta)=-\log\int_\R e^{i\theta x}\mu(dx)\]
-    if and only if $\exists$ a triple $(a,\sigma,\nu)$, $a\in\R,\sigma>0$,$\mu$ a measure supported on \marginnote{$\nu$ does not have to have finite measure!}
-    $\R\setminus\{0\}$ satisfying $\int_\R (1\land x^2)\nu d(x)<\infty$ s.t.
-    \[\psi(\theta)=ia\theta+\frac{1}{2}\theta^2\sigma^2+\int_R(1-e^{i\theta x}+i\theta x 1_{|x|< 1})\nu(dx)\] 
+    \[\psi(\theta)=-\log\int_\R e^{i\theta x}\mu(dx)\]
+    if and only if $\exists$ a triple $(a,\sigma,\nu)$, $a\in\R,\sigma>0$,$\nu$ a measure supported on \marginnote{$\nu$ does not have to have finite measure!}
+    $\R\setminus\{0\}$ satisfying $\int_\R (1\land x^2)\nu(dx)<\infty$ s.t.
+    \[\psi(\theta)=ia\theta+\frac{1}{2}\theta^2\sigma^2+\int_\R(1-e^{i\theta x}+i\theta x 1_{|x|< 1})\nu(dx)\] 
 \end{theorem}
 
 \begin{aremark}
@@ -113,10 +99,22 @@ Common features:
     The 1 in the indicator function is arbitrary, tho other choices yield other formulas!
 \end{aremark}
 
+\begin{aremark}
+
+    The decomposition given by the Lévy-Khintchine formula will imply that each Lévy process is a sum of 
+    three independent processes:
+    \begin{enumerate}
+        \item A deterministic drift ($a$)
+        \item A Brownian motion ($\sigma$)
+        \item A pure jump process ($\nu$)
+    \end{enumerate}
+
+\end{aremark}
+
 \subsection{Relation of infinitely divisible processes with Levy processes}
 
 Let $X$ be a Levy process, $\forall t>0$, $X_t$ is infinitely divisible, since 
-\[(\star) \text{ }X_{t}=X_{\frac{t}{n}}+\left(X_{\frac{2t}{n}}-X_{\frac{t}{n}}\right)+\dots+\left(X_{t}-X_{\frac{t(n-1)}{n}}\right)\]
+\[(\star) \text{ }X_t=X_{\frac{t}{n}}+\underbrace{\left(X_\frac{2t}{n}-X_\frac{t}{n}\right)}_{\frac{d}{=}X_\frac{t}{n}}+\dots+\underbrace{\left(X_t-X_\frac{(n-1)t}{n}\right)}_{\frac{d}{=}X_\frac{t}{n}}\]
 For all $\theta\in\R,\geq 0$: $\psi_t(\theta)\coloneqq -\ln(\bE(e^{i\theta X_t}))$
 \[\stackrel{(\star)}{\implies}\forall m,n\geq 1: \frac{m}{m}\psi_1(\theta)=\frac{1}{m}\psi_m(\theta)=\frac{n}{m}\psi_{\frac{m}{n}}(\theta)\]
 and therefore for $t\geq 0$ rational: $\psi_t(\theta)=t\psi_1(\theta)$.
@@ -127,17 +125,21 @@ For Lévy process:
     We refer to $\psi(\theta)\coloneqq \psi_1(\theta)$ to be the characteristic exponent of the Lévy process.
 \end{definition}
 
+Does the reverse also hold? Yes:
+
 \begin{theorem}\label{thm:4.4}
     Let $a\in\R,\sigma\geq 0,\nu$ a measure supported on $\R\setminus\{0\}$ s.t. \[\int_\R (1\land x^2)\nu(dx)<\infty\]
-    Define \[\psi(\theta)\coloneqq ia\theta+\frac{1}{2}\sigma^2\theta^2+\int_\R (1-e^{i\theta x}+i\theta x)1_{|x|<1}\nu(dx)\]
+    Define \[\psi(\theta)\coloneqq ia\theta+\frac{1}{2}\sigma^2\theta^2+\int_\R (1-e^{i\theta x}+i\theta x1_{|x|<1})\nu(dx)\]
     $\implies$ then there exists a Lévy process with characteristic exponent $\psi(\theta)$.
 \end{theorem}
+
+If we restrict to $\R_+$ we get the this related statement, which is easier to proof:
 
 \begin{proposition}\label{Prop:4.5}
     Let $F$ be a distribution function on $\R_+$. Then $F$ is the distribution function of an infinitely 
     divisible law
     
-    $\iff$ $\forall\lambda >0: F^\mathcal{L}(\lambda)=\int_0^\infty e^{-\lambda x}F(dx)=e^{-c\lambda-\int_0^\infty (1-e^{-\lambda x})\mu(dx)}$,
+    $\iff$ $\forall\lambda >0: F^\mathcal{L}(\lambda)\coloneqq \int_0^\infty e^{-\lambda x}F(dx)=e^{-c\lambda-\int_0^\infty (1-e^{-\lambda x})\mu(dx)}$,
     where $c\in\R$, $\mu$ is a measure on $(0,\infty)$, s.t. $\int_0^\infty (1\land x)\mu(dx)<\infty$. 
 \end{proposition}
 
@@ -188,14 +190,15 @@ For Lévy process:
 
 \beginlecture{15}{13.06.24}
 
-
 Question: What are $a,\sigma,\nu$? Is there a relation between $\nu$ and the jumps of the Lévy process?
 
 \section{Examples}
 
 \subsection{Poisson process}
 
-Let $\lambda>0$ and $X\sim\Poi(\lambda)$,
+Let $\lambda>0$ and $X\sim\Poi(\lambda)$
+\marginnote{i.e. $X$ is concentrated on $\{0,1,\dots,\}$ with $P(X=k)=\frac{e^{-\lambda}\lambda^k}{k!}$}
+
 \begin{align*}
     \bE(e^{i\theta X})&=\sum_{n\geq 0}e^{-\theta n}\frac{e^{-\lambda}\lambda^n}{n!}\\
     &=e^{-\lambda}e^{\lambda e^{i\theta}}\\
@@ -204,7 +207,7 @@ Let $\lambda>0$ and $X\sim\Poi(\lambda)$,
 
 $\implies X$ is infinitely divisible.
 
-To get the right characteristic exponent \[-\log\bE(e^{i\theta X})=e^{-\lambda}e^{\lambda e^{i\theta}}\]
+To get the right characteristic exponent \[\psi(\theta)=-\log\bE(e^{i\theta X})=\lambda(1-e^{i\theta})\]
 which means $\psi(  \theta)=\lambda(1-e^{i\theta})$.
 
 Take $a=0,\sigma=0,\nu(dx)=\lambda\delta_1(x)$, then $\psi(\theta)=(1-e^{i\theta}\lambda)$.
@@ -223,13 +226,13 @@ with distribution $F$ on $\R\setminus\{0\}$.
 
 Let $X=\coloneqq \sum_{k=1}^N\xi_k$:
 \begin{align*}
-    \implies \bE\left(e^{i\theta X}\right)&=\sum_{n\geq 0}\bE\left(e^{i\theta(\xi_1+\dots+\xi_n)}\right)\frac{e^{-\lambda \lambda^n}}{n!}\\
+    \implies \bE\left(e^{i\theta X}\right)&=\sum_{n\geq 0}\bE\left(e^{i\theta(\xi_1+\dots+\xi_n)}\right)\frac{e^{-\lambda} \lambda^n}{n!}\\
     &=\sum_{n\geq 0}\frac{e^{-\lambda} \lambda^n}{n!}\left(\int e^{i\theta X}F(dx)\right)^n \\
     &=e^{-\lambda}e^{\lambda\int e^{i\theta X}F(dx)}=e^{-\lambda \int F(dx)}e^{\lambda\int e^{i\theta X}F(dx)}\\
     &=e^{-\underbrace{\lambda\int (1-e^{i\theta X})F(dx)}_{=\psi(\theta)}}
 \end{align*}
 
-$\implies$ $X$ is infinitely divisible with $\psi(\theta)$ having $\sigma=0,\nu(dx)=\lambda F(dx),a=-\int{|x|<1} x F(dx)$
+$\implies$ $X$ is infinitely divisible with $\psi(\theta)$ having $\sigma=0,\nu(dx)=\lambda F(dx),a=-\int_{|x|<1} x F(dx)$
 
 How to get the process?
 \marginnote{We can think of a poisson process sa the set of jumping points (times). This is sometimes called poisson jump process}
@@ -258,7 +261,7 @@ $(X_t)_t$ is a Lévy process $\implies (\tilde{N}_t(B))$ has stationary independ
 $\tilde{N}_{t+s}(B)-\tilde{N}_(B)\stackrel{d}{=}\tilde{N}_t(B)$ for all $t,s\geq 0$ and $B$.
 
 Therefore $(\tilde{N}_t(B))_t$ is a Lévy process with jumps of size $+1$, $\tilde{N}_0(B)=0$, which implies $\tilde{N}_t(B)$ is a poisson process.
-The parameter of $\tilde{N}_t(B)$ is \[\bE(\tilde{N}_t(B))=\underbrace{t\cdot \lambda}_{=\bE(N_t)}\bP(\xi\in B)=t\underbrace{\lambda\int_B F(dx)}_{=\nu(dx)}=t\nu(B).\]
+The parameter of $\tilde{N}_t(B)$ is implied by\[\bE(\tilde{N}_t(B))=\underbrace{t\cdot \lambda}_{=\bE(N_t)}\bP(\xi\in B)=t\underbrace{\lambda\int_B F(dx)}_{=\nu(dx)}=t\nu(B).\]
 $\implies \nu(B)$ is the parameter of $\tilde{N}_t(B)$\footnote{As a process, not as a r.v.}.
 
 \begin{aremark}
@@ -333,7 +336,7 @@ Using $z=i\theta$ in lemma \ref{lem:4.6}:
 \[\implies \Psi(\theta)=-\ln\left(\frac{1}{(1-\frac{i\theta}{\alpha})^\beta}\right)=\int_0^\infty (1-e^{i\theta x})\beta x^{-1}e^{-\alpha x}dx\to \nu(dx)\]
 
 \begin{aremark}
-    For the Gamma process is the Lévy measure $\infty$: $\int_0^\infty \nu(dx)=\infty$.
+    For the Gamma process the Lévy measure is $\infty$: $\int_0^\infty \nu(dx)=\infty$.
 \end{aremark}
 
 Properties: 
@@ -355,11 +358,11 @@ with parameter / intensity / rate $\lambda=\nu(B)$.
 \end{aremark}
 
 Let $T_0=0$, \[T_{k+1}=\inf\{\xi_t>T_k\mid N_t(\R_{>0})>N_{T_k}(\R_{>0})\}\]
-This implies $T_{k+1}-T_k\sim\exp(\nu(\mathcal{R_{>0}}))$. The jump sizes of the 
+This implies $T_{k+1}-T_k\sim\exp(\nu(\mathbb{R}_{> 0}))$. The jump sizes of the 
 compound Poisson process $X_t$ are distributed as:
-\[\mathcal{P}\left(X_{T_1}-X_{T_1^-}\in dy\right)=\frac{\nu(dy)}{\int_{\R\setminus\{0\}} \nu(dx)}\]
+\[\bP\left(X_{T_1}-X_{T_1^-}\in dy\right)=\frac{\nu(dy)}{\int_{\R\setminus\{0\}} \nu(dx)}\]
 
-Argument for almost sure no step at time $0$: $\mathcal{P}(N_t(\R_{>0})\geq 2)=O(t^2)$.
+Argument for almost sure no step at time $0$: $\bP(N_t(\R_{>0})\geq 2)=O(t^2)$.
 
 \begin{align*}
     \implies \bP(N_t(\R_{>0})=1)&=e^{-t\nu(\R_+)}t\nu(\R_+)=t\nu(\R_+)+O(t^2)\\
@@ -370,7 +373,7 @@ Argument for almost sure no step at time $0$: $\mathcal{P}(N_t(\R_{>0})\geq 2)=O
     \frac{\bP(N_t(B)=1\cap N_t(\R_+)=1)}{\bP(N_t(R_+)=1)}\approx\frac{t\nu(B)}{t\nu(\R_+)}
 \end{align*}
 
-Case $\int_{\R\setminus \{0\}}\nu(dx)=\infty$.
+Case $\int_{\R\setminus \{0\}}\nu(dx)=\infty$:
 
 Problem: First jump $\sim\exp(\nu(\R\setminus\{0\}))=0$\marginnote{a bit informal}
 
@@ -393,7 +396,7 @@ $\implies (X_t)_{t\geq 0}$ is a Lévy process with Levy measure $\nu$ ($\sigma=0
 \end{aremark}
 
 By theorem \ref{thm:4.2} we can decompose:
-\[\Psi(\theta)=\underbrace{(ia\theta+\frac{1}{2}\sigma^2\theta^2)}_{=\Psi^{(1)}(\theta)}+\underbrace{\nu(\R\setminus\{(-1,1)\})\int_{|x|\geq 1}(1-\exp(i\theta x))\frac{\nu(dx)}{\nu(\R\setminus\{(-1,1)\})}}_{=\Psi^{(2)}(\theta)}+\underbrace{\int_{0<|x|<} (1-\exp(i\theta x)+i\theta x)dx}_{=\Psi^{(3)}(\theta)}\]
+\[\Psi(\theta)=\underbrace{(ia\theta+\frac{1}{2}\sigma^2\theta^2)}_{=\Psi^{(1)}(\theta)}+\underbrace{\nu(\R\setminus\{(-1,1)\})\int_{|x|\geq 1}(1-\exp(i\theta x))\frac{\nu(dx)}{\nu(\R\setminus\{(-1,1)\})}}_{=\Psi^{(2)}(\theta)}+\underbrace{\int_{0<|x|<1} (1-\exp(i\theta x)+i\theta x)dx}_{=\Psi^{(3)}(\theta)}\]
 
 \begin{theorem}[Lévy-Itô decomposition]\label{thm:4.7}
 Given $a\in\R\sigma>0,\nu$ a measure on $\R\setminus\{0\}$ s.t. $\int_{\R\setminus\{0\}}(1\land x^2)\nu(dx)<\infty$
@@ -406,8 +409,8 @@ Then $X_t\coloneqq X^{(1)}+X^{(2)}+X^{(3)}$ is a Lévy process with characterist
     \item $X_t^{(1)}$ is a BM with drift: $X_t^{(1)}=\sigma B_t-at,t\geq 0$, where $B_t$ is a standard BM 
     \item $X_t^{(2)}$ is a compound Poisson process 
     \item $X_t^{(3)}$ is constructed as above
-    \item $\int_{0<|x|<1} (1-\exp(i\theta x))\nu(dx)=\sum_{n\geq 0}\lambda_n\int_{2^{-(n+1)}\leq |x|<2^{-n}} F_n(dx)+i\theta\lambda_n\int_{2^{-(n+1)}\leq |x|<2^{-n}} x F_n(dx)$, where 
-        $\lambda_N=\nu(2^{-(n+1)}\leq |x|<2^{-n})$, $F_n(dx)=\frac{1}{\lambda_n}\nu(dx)$.
+    \item \[\int_{0<|x|<1} (1-\exp(i\theta x))\nu(dx)=\sum_{n\geq 0}\lambda_n\int_{2^{-(n+1)}\leq |x|<2^{-n}} F_n(dx)+i\theta\lambda_n\int_{2^{-(n+1)}\leq |x|<2^{-n}} x F_n(dx)\], where 
+        $\lambda_n=\nu(2^{-(n+1)}\leq |x|<2^{-n})$, $F_n(dx)=\frac{1}{\lambda_n}\nu(dx)$.
 \end{itemize}
 
 \end{theorem}
@@ -450,7 +453,7 @@ $X_t$ is bounded a.s., for all given $t$\marginnote{no divergence in finite time
     Why is it called \dhighlight{Superposition}?
 
     Instead of jumps look at the events of the jumps for each $X_t^1$. If you take the union (superimpose the pictures), you get the jump times of $Y$. Not related to quantum mechanics.
-\end{aremark}
+\end{aremark} 
 
 \begin{lemma}[Thining property]\label{lem:4.9}
     Let $(X_t)_{t\geq 0}$ be a poisson process with intensity $\lambda$ and a $p\in [0,1]$ fixed.
@@ -477,7 +480,7 @@ $X_t$ is bounded a.s., for all given $t$\marginnote{no divergence in finite time
 
 \begin{aremark}
     Let $X_t=X_t^1-X_t^2$, $X_t^1$ is a Poisson process with intensity $p$ and $X_t^2$ is a poisson process with intensity $1-p$. Therefore 
-    has intensity\footnote{intensity: expected number of jumps per unit time} $1$\marginnote{This is not a Poisson process, since it might be negative!}    
+    $X_t$ has intensity\footnote{intensity: expected number of jumps per unit time} $1$\marginnote{This is not a Poisson process, since it might be negative!}    
 \end{aremark}
 
 How do we simulate this?
